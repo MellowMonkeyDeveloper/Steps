@@ -1,0 +1,21 @@
+@import "../styles/base";
+
+.button {
+  color: map-get($map: $colors, $key: primaryBrand);
+}
+
+.buttonIconBrandStandard {
+  background-color: map-get($map: $colors, $key: secondaryBrand);
+  @include center-flexbox;
+  @include padding-button;
+}
+.buttonIconDarkStandard {
+  background-color: map-get($map: $light-colors, $key: secondaryDark);
+  @include center-flexbox;
+  @include padding-button;
+}
+.buttonIconLightStandard {
+  background-color: map-get($map: $light-colors, $key: secondaryLight);
+  @include center-flexbox;
+  @include padding-button;
+}

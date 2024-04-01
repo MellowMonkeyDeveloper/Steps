@@ -1,0 +1,221 @@
+<<<<<<< HEAD
+$primaryDark: rgb(36, 36, 36);
+$secondaryDark: rgb(43, 43, 43);
+$thirdDark: rgb(51, 51, 51);
+$fourthDark: #ffd700;
+$fontDark: white;
+$darkColors: (
+  primaryDark: $primaryDark,
+  secondaryDark: $secondaryDark,
+  thirdDark: $thirdDark,
+  fourthDark: $fourthDark,
+  fontDark: $fontDark
+);
+$primaryLight: rgb(241, 241, 241);
+$secondaryLight: rgb(235, 235, 235);
+$thirdLight: rgb(230, 230, 230);
+$fourthLight: rgb(36, 196, 102);
+$fontLight: black;
+$lightColors: (
+  primaryLight: $primaryLight,
+  secondaryLight: $secondaryLight,
+  thirdLight: $thirdLight,
+  fourthLight: $fourthLight,
+  fontLight: $fontLight
+);
+$successStatus: green;
+$errorStatus: rgb(202, 90, 25);
+$warningStatus: yellow;
+$notificationStatus: rgb(18, 132, 224);
+$statusColor: (
+  success: $successStatus,
+  error: $errorStatus,
+  warning: $warningStatus,
+  notification: $notificationStatus,
+);
+$margin-lite: 5px;
+$margin-medium: 10px;
+$margin-heavy: 15px;
+$padding-lite: 5px;
+$padding-medium: 10px;
+$padding-heavy: 15px;
+
+$margin: (
+  marginLite: $margin-lite,
+  marginMedium: $margin-medium,
+  marginHeavy: $margin-heavy,
+);
+
+$padding: (
+  paddingLite: $padding-lite,
+  paddingMedium: $padding-medium,
+  paddingHeavy: $padding-heavy,
+);
+
+$w25: 25%;
+$w40: 40%;
+$w50: 50%;
+$w75: 75%;
+$w90: 90%;
+$w100: 100%;
+
+$width: (
+  w25: $w25,
+  w40: $w40,
+  w50: $w50,
+  w75: $w75,
+  w90: $w90,
+  w100: $w100,
+);
+
+$br-light: 5px;
+$br-medium: 10px;
+$br-heavy: 15px;
+$br-circle: 50%;
+
+$border-radius: (
+  brLight: $br-light,
+  brMedium: $br-medium,
+  brHeavy: $br-heavy,
+  brCircle: $br-circle,
+);
+
+$bw-light: 1px;
+$bw-medium: 2.25px;
+$bw-heavy: 3.5px;
+$border-width: (
+  bwLight: $bw-light,
+  bwMedium: $bw-medium,
+  bwHeavy: $bw-heavy,
+);
+@mixin center-box {
+=======
+$primary-color: blue;
+$secondary-color: #000;
+$third-color: #000;
+$warning-color: yellow;
+$danger-color: red;
+$success-color: green;
+
+$dark-primary-color: #000;
+$dark-secondary-color: #000;
+$dark-third-color: #000;
+$dark-warning-color: yellow;
+$dark-danger-color: red;
+$dark-success-color: green;
+
+$light-primary-color: #000;
+$light-secondary-color: #000;
+$light-third-color: #000;
+$light-warning-color: yellow;
+$light-danger-color: red;
+$light-success-color: green;
+
+$font-family-primary: sans-serif;
+$font-family-secondary: "Arial", sans-serif;
+$base-size: 16px;
+$font-color-primary: black;
+$font-color-secondary: white;
+
+$padding-primary: 8px;
+$padding-secondary: 16px;
+$padding-third: 24px;
+
+$margin-primary: 8px;
+$margin-secondary: 16px;
+$margin-third: 24px;
+$padding: (
+  primaryPadding: $padding-primary,
+  secondaryPadding: $padding-secondary,
+  thirdPadding: $padding-third,
+);
+$margin: (
+  primaryMargin: $margin-primary,
+  secondaryMargin: $margin-secondary,
+  thirdMargin: $margin-third,
+);
+$colors: (
+  primaryBrand: $primary-color,
+  secondaryBrand: $secondary-color,
+  thirdBrand: $third-color,
+  warningBrand: $warning-color,
+  dangerBrand: $danger-color,
+  successBrand: $success-color,
+);
+$dark-colors: (
+  primaryDark: $dark-primary-color,
+  secondaryDark: $dark-secondary-color,
+  thirdDark: $dark-third-color,
+  warningDark: $dark-warning-color,
+  dangerDark: $dark-danger-color,
+  successDark: $dark-success-color,
+);
+$light-colors: (
+  primaryLight: $light-primary-color,
+  secondaryLight: $light-secondary-color,
+  thirdLight: $light-third-color,
+  warningLight: $light-warning-color,
+  dangerLight: $light-danger-color,
+  successLight: $light-success-color,
+);
+$font: (
+  primary: $font-family-primary,
+  secondary: $font-family-secondary,
+  baseSize: $base-size,
+  primarColor: $font-color-primary,
+  secondaryColor: $font-color-secondary,
+);
+
+@mixin center-flexbox {
+>>>>>>> 9712cd39c29c53c7d80407f522345524b1d6031b
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+<<<<<<< HEAD
+$ls-light: 1.02px;
+$ls-medium: 1.06px;
+$ls-heavy: 1.1px;
+$letter-spacing: (
+  lsLite: $ls-light,
+  lsMed: $ls-medium,
+  lsHeavy: $ls-heavy
+);
+
+@mixin container($width, $key) {
+  display: flex;
+  width: map-get($map: $width, $key: $key);
+  @include center-box;
+}
+
+@mixin button($padding, $medium, $lite){
+    padding-top: map-get($map: $padding, $key: $lite);
+    padding-bottom: map-get($map: $padding, $key: $lite);
+    padding-left: map-get($map: $padding, $key: $medium);
+    padding-right: map-get($map: $padding, $key: $medium);
+}
+
+@mixin light-button($light, $background, $color){
+    @include button($padding, paddingMedium, paddingLite);
+    background-color: map-get($map: $light, $key: $background);
+    color: map-get($map: $light, $key: $color);
+    border: none;
+    border-radius: $br-light
+}
+
+@mixin dark-button($dark, $background, $color){
+    @include button($padding, paddingMedium, paddingLite);
+    background-color: map-get($map: $dark, $key: $background);
+    color: map-get($map: $dark, $key: $color);
+    border: 1px solid black;
+    border-radius: $br-light;
+    letter-spacing: 1.05px;
+}
+=======
+@mixin padding-button {
+  padding-top: map-get($map: $padding, $key: primaryPadding);
+  padding-left: map-get($map: $padding, $key: secondaryPadding);
+  padding-right: map-get($map: $padding, $key: secondaryPadding);
+  padding-bottom: map-get($map: $padding, $key: primaryPadding);
+}
+>>>>>>> 9712cd39c29c53c7d80407f522345524b1d6031b

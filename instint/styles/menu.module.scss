@@ -1,0 +1,49 @@
+@import './base';
+
+.section{
+    background-color: rgba(0, 0, 0, 0.37);
+    height: 100vh;
+    position: fixed;
+    z-index: 0;
+    display: flex;
+    width: 100vw;
+    justify-content: flex-start;
+}
+.containerDark{
+    background-color: map-get($map: $darkColors, $key: thirdDark);
+    display: flex;
+    flex-direction: column;
+    width: 33%;
+    align-items: center;
+}
+.containerLight{
+    background-color: map-get($map: $lightColors, $key: thirdLight);
+    display: flex;
+    flex-direction: column;
+    width: 33%;
+    align-items: center;
+}
+.headerContainer{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+.textDark{
+    font-family: sans-serif;
+    text-decoration: none;
+    color: map-get($map: $darkColors, $key: fontDark)
+}
+.textLight{
+    font-family: sans-serif;
+    text-decoration: none;
+    color: map-get($map: $lightColors, $key: fontLight)
+}
+.linkContainer{
+    margin: $margin-medium;
+}
+.linkContainer:hover .textLight{
+    color: $fourthLight
+}
+.linkContainer:hover .textDark{
+    color: $fourthDark
+}

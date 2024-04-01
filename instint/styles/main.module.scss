@@ -1,0 +1,97 @@
+@import './base';
+
+.containerDark{
+    @include container($width, w100);
+    background-color: map-get($map: $darkColors, $key: primaryDark);
+    flex-direction: row;
+    flex-wrap: wrap;
+    min-height: 100vh
+}
+.containerLight{
+    @include container($width, w100);
+    background-color: map-get($map: $lightColors, $key: primaryLight);
+    flex-direction: row;
+    flex-wrap: wrap;
+    min-height: 100vh;
+}
+
+.dashboardCardDark{
+    @include container($width, w40);
+    flex-direction: column;
+    align-items: center;
+    background-color: $thirdDark;
+    border-radius: $br-light;
+    margin: 5px;
+}
+.dashboardCardLight{
+    @include container($width, w40);
+    flex-direction: column;
+    align-items: center;
+    background-color: $thirdLight;
+    border-radius: $br-light;
+    margin: 5px;
+}
+.dashboardButtonDark{
+    @include dark-button($darkColors, secondaryDark, fontDark);
+    width: 150px;
+    height: 50px;
+    cursor: pointer;
+}
+.dashboardButtonDark:hover{
+    background-color: $fourthDark;
+}
+.dashboardButtonDark:active{
+    background-color: black;
+    box-shadow: inset 1px 1px 3px rgb(97, 97, 97);
+}
+.dashboardButtonLight{
+    @include light-button($lightColors, secondaryLight, fontLight);
+    width: 150px;
+    height: 50px;
+}
+.iconDark{
+    height: 150px;
+    width: 150px;
+}
+.iconLight{
+    height: 150px;
+    width: 150px;
+}
+.buttonContainer{
+    padding-bottom: $padding-heavy;
+}
+.topContainer{
+
+}
+.headerContainer{
+    display: flex;
+    justify-content: center;
+}
+.textDark{
+    font-family: sans-serif;
+    color: $fontDark;
+    letter-spacing: $ls-medium;
+}
+.textLight{
+    font-family: sans-serif;
+    color: $fontLight;
+    letter-spacing: $ls-medium;
+}
+.howitworksContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: $w75;
+}
+.p{
+    line-height: 26.05px;
+    text-indent: 5%;
+}
+.tldrContainer{
+    display: flex;
+    justify-content: flex-start;
+    width: 90%;
+}
+.li{
+    margin: $margin-heavy;
+}

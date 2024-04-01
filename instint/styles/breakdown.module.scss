@@ -1,0 +1,65 @@
+@import "./base";
+
+.containerDark {
+  width: 95%;
+  outline: map-get($map: $border-width, $key: bwMedium) solid $fourthDark;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: $thirdDark;
+  margin-top: $margin-heavy;
+  border-radius: $br-medium;
+}
+.containerLight {
+  width: 95%;
+  outline: map-get($map: $border-width, $key: bwMedium) solid $fourthLight;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: $thirdLight;
+  margin-top: $margin-heavy;
+  border-radius: $br-medium;
+}
+.headerContainer {
+  display: flex;
+  width: $w75;
+}
+.headerDark {
+  font-family: sans-serif;
+  margin-left: $margin-heavy;
+  color: map-get($map: $darkColors, $key: fontDark);
+}
+.headerLight {
+  font-family: sans-serif;
+  margin-left: $margin-heavy;
+  color: map-get($map: $lightColors, $key: fontLight);
+}
+.keyboardContainer{
+
+  justify-content: space-evenly;
+  display: flex;
+  width: $w25;
+}
+.completedDark{
+   margin-right: $margin-medium;
+   color: map-get($map: $statusColor, $key: notification);
+}
+.completedLight{
+ margin-right: $margin-medium;
+ color: map-get($map: $statusColor, $key: notification);
+
+}
+.deletedDark{
+ margin-right: $margin-medium;
+ color: map-get($map: $statusColor, $key: error);
+}
+.deletedLight{
+ margin-right: $margin-medium;
+ color: map-get($map: $statusColor, $key: error);
+}
+.keyboardDark{
+  color: map-get($map: $darkColors, $key: fourthDark)
+}
+.keyboardLight{
+  color: map-get($map: $lightColors, $key: fourthLight)
+}

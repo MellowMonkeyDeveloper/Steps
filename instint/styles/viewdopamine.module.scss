@@ -1,0 +1,18 @@
+@import './base';
+
+.containerDark{
+    display: flex;
+    width: $w100;
+    background-color: $primaryDark;
+    flex-direction: column;
+    min-height: 100vh;
+    align-items: center;
+}
+.containerLight{
+    display: flex;
+    width: $w100;
+    background-color: $primaryLight;
+    flex-direction: column;
+    min-height: 100vh;
+    align-items: center;
+}

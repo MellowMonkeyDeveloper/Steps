@@ -1,0 +1,31 @@
+@import './base';
+
+.menuContainer{
+    @include container($width, w25);
+}
+.containerDark{
+    @include container($width, w100);
+    margin: 0px;
+    padding: 0px;
+    flex-direction: row;
+    background-color: $thirdDark;
+    border-bottom: 1px solid $secondaryDark
+}
+.containerLight{
+    @include container($width, w100);
+    margin: 0px;
+    padding: 0px;
+    flex-direction: row;
+    background-color: $thirdLight;
+    border-bottom: 1px solid $secondaryLight
+}
+.infoContainer{
+    @include container($width, w75);
+    justify-content: flex-end;
+}
+.lightModeContainer{
+    margin-right: map-get($map: $margin, $key: marginHeavy);
+}
+.imageContainer {
+    margin-right: map-get($map: $margin, $key: marginHeavy);
+}

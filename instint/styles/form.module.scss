@@ -1,0 +1,51 @@
+@import "./base";
+
+.containerDark {
+  @include container($width, w100);
+  background-color: $secondaryDark;
+  flex-direction: column;
+  margin-top: $margin-lite;
+  outline: 1px solid $fourthDark
+}
+.containerLight {
+  @include container($width, w100);
+  background-color: $secondaryLight;
+  flex-direction: column;
+  margin-top: $margin-lite;
+}
+.formDark {
+  @include container($width, w90);
+  flex-direction: column;
+  border-radius: $br-light;
+  font-family: sans-serif;
+  color: $fontDark;
+  padding: $padding-heavy;
+}
+.formLight {
+  @include container($width, w90);
+  flex-direction: column;
+  border-radius: $br-light;
+  color: $fontLight;
+  padding: $padding-heavy;
+}
+.inputContainer {
+  width: $w100;
+  justify-content: flex-start;
+  display: flex;
+  margin: $margin-lite;
+}
+
+.textDark{
+    font-family: sans-serif;
+    color: map-get($map: $darkColors, $key: fontDark);
+    letter-spacing: $ls-medium;
+}
+.textLight{
+    font-family: sans-serif;
+    color: map-get($map: $lightColors, $key: fontLight);
+    letter-spacing: $ls-medium;
+}
+.textareaContainer{
+    display: flex;
+    flex-direction: column;
+}

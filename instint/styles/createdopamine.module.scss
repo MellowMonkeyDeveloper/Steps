@@ -1,0 +1,14 @@
+@import './base';
+
+.containerDark{
+    @include container($width, w100);
+    background-color: $primaryDark;
+    flex-direction: column;
+    height: 100vh;
+}
+.containerLight{
+    @include container($width, w100);
+    background-color: $primaryLight;
+    flex-direction: column;
+    height: 100vh;
+}

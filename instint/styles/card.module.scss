@@ -1,0 +1,6 @@
+@import '../styles/base';
+
+.buttonContainer{
+    @include center-flexbox;
+    width: 100%;
+}

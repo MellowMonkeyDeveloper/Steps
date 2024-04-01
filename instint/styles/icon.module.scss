@@ -1,0 +1,17 @@
+@import '../styles/base';
+
+.iconBrandStandard{
+    color: map-get($map: $colors, $key: secondaryBrand);
+    height: 20px;
+    width: 20px;
+}
+.iconDarkStandard{
+    color: map-get($map: $dark-colors, $key: secondaryDark);
+    height: 20px;
+    width: 20px;
+}
+.iconLightStandard{
+    color: map-get($map: $light-colors, $key: secondaryLight);
+    height: 20px;
+    width: 20px;
+}

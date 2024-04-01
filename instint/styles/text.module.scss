@@ -1,0 +1,17 @@
+@import '../styles/base';
+
+.textBrandStandard{
+    font-family: $font-family-primary;
+    font-size: $base-size;
+    color: $font-color-primary;
+}
+.textDarkStandard{
+    font-family: $font-family-primary;
+    font-size: $base-size;
+    color: $font-color-primary;
+}
+.textLightStandard{
+    font-family: $font-family-primary;
+    font-size: $base-size;
+    color: $font-color-secondary;
+}
