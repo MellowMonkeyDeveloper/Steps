@@ -37,6 +37,7 @@ export default function CreateForm({
     dopamineTitle,
     stridesTitle,
     stepsTitle,
+    csrfToken,
     setUpdateData,
   } = useWrapper();
   const [formData, setFormData] = useState<any>({
@@ -64,11 +65,12 @@ export default function CreateForm({
     if (postModel === "Dopamine") {
       if (apiMethod === "POST") {
         try {
-          const response = await fetch("/api/post/dopamine", {
+          const response = await fetch(`/api/post/dopamine?csrf=${csrfToken}`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
+            credentials: 'include',
             body: JSON.stringify(formData),
           });
           const fetchResponse = await response.json();

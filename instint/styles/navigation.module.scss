@@ -19,6 +19,12 @@
     background-color: $thirdLight;
     border-bottom: 1px solid $secondaryLight
 }
+.profileContainer{
+    display: flex;
+    flex-direction: row;
+    width: 40%;
+    justify-content: space-around
+}
 .infoContainer{
     @include container($width, w75);
     justify-content: flex-end;

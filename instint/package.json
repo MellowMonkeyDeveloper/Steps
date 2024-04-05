@@ -15,13 +15,9 @@
     "@meshsdk/react": "^1.1.10-beta.3",
     "@mui/icons-material": "^5.15.10",
     "@mui/material": "^5.15.10",
-<<<<<<< HEAD
     "axios": "^1.6.7",
     "next": "^14.1.0",
-    "next-auth": "^4.24.6",
-=======
-    "next": "13.4.0",
->>>>>>> 9712cd39c29c53c7d80407f522345524b1d6031b
+    "next-auth": "^4.24.7",
     "react": "^18",
     "react-dom": "^18"
   },

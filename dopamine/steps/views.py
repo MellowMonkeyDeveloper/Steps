@@ -2,27 +2,72 @@ from django.shortcuts import render
 
 # Create your views here.
 # views.py
+from django.utils.encoding import force_str, force_bytes
 from rest_framework import generics, status
 from rest_framework.response import Response
-from .models import Dopamine, Strides, Steps
+from .models import Dopamine, Strides, Steps, CustomUser
 from rest_framework.filters import SearchFilter
-from .serializers import DopamineSerializer, PasswordResetSerializer, StridesSerializer, StepsSerializer
+from .serializers import (
+    DopamineSerializer,
+    PasswordResetSerializer,
+    StridesSerializer,
+    StepsSerializer,
+    UserSerializer,
+)
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.mail import send_mail
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from rest_framework.views import APIView
+from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.middleware.csrf import get_token
+from django.http import JsonResponse
+from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth import logout
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from rest_framework.authtoken.models import Token
+from rest_framework.authentication import TokenAuthentication
+
+def csrf_token(request):
+    token = get_token(request)
+    return JsonResponse({"csrfToken": token})
+
+
+@csrf_exempt
+def logout_view(request):
+    logout(request)
+    return JsonResponse({"message": "Logged out successfully"})
+
 
 class DopamineListCreateAPIView(generics.ListCreateAPIView):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(DopamineListCreateAPIView, self).dispatch(request, *args, **kwargs)
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
     queryset = Dopamine.objects.all()
     serializer_class = DopamineSerializer
     
+    def perform_create(self, serializer):
+        print(self.request.user)
+        user_instance = self.request.user 
+        serializer.save(user=user_instance)
+
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+
 
 class DopaminePatchExistingView(generics.RetrieveUpdateAPIView):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(DopaminePatchExistingView, self).dispatch(request, *args, **kwargs)
+
     queryset = Dopamine.objects.all()
     serializer_class = DopamineSerializer
     lookup_field = "title"
@@ -46,7 +91,12 @@ class DopaminePatchExistingView(generics.RetrieveUpdateAPIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+
 class DopaminePatchStridesView(generics.RetrieveUpdateAPIView):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(DopaminePatchStridesView, self).dispatch(request, *args, **kwargs)
+
     queryset = Dopamine.objects.all()
     serializer_class = DopamineSerializer
     lookup_field = "title"
@@ -75,6 +125,10 @@ class DopaminePatchStridesView(generics.RetrieveUpdateAPIView):
 
 
 class DopaminePatchStepsView(generics.RetrieveUpdateAPIView):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(DopaminePatchStepsView, self).dispatch(request, *args, **kwargs)
+
     queryset = Dopamine.objects.all()
     serializer_class = DopamineSerializer
     lookup_field = (
@@ -114,6 +168,10 @@ class DopaminePatchStepsView(generics.RetrieveUpdateAPIView):
 
 
 class DopamineRetrieveAPIView(generics.ListAPIView):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(DopamineRetrieveAPIView, self).dispatch(request, *args, **kwargs)
+
     queryset = Dopamine.objects.all()
     serializer_class = DopamineSerializer
     permission_classes = [IsAuthenticated]
@@ -124,6 +182,10 @@ class DopamineRetrieveAPIView(generics.ListAPIView):
 
 
 class StridesPatchExistingView(generics.RetrieveUpdateAPIView):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(StridesPatchExistingView, self).dispatch(request, *args, **kwargs)
+
     queryset = Dopamine.objects.all()
     serializer_class = DopamineSerializer
     lookup_field = (
@@ -165,6 +227,10 @@ class StridesPatchExistingView(generics.RetrieveUpdateAPIView):
 
 
 class StepsPatchExistingView(generics.RetrieveUpdateAPIView):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(StepsPatchExistingView, self).dispatch(request, *args, **kwargs)
+
     queryset = Dopamine.objects.all()
     serializer_class = DopamineSerializer
     lookup_field = (
@@ -210,28 +276,41 @@ class StepsPatchExistingView(generics.RetrieveUpdateAPIView):
             return Response(steps_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+
 class UserRegistration(APIView):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(UserRegistration, self).dispatch(request, *args, **kwargs)
+
     def post(self, request):
         email = request.data.get("email")
         password = request.data.get("password")
-        if User.objects.filter(email=email).exists():
+        if CustomUser.objects.filter(email=email).exists():
             return Response(
                 {"error": "Email already exists"}, status=status.HTTP_400_BAD_REQUEST
             )
-        User.objects.create_user(email=email, password=password)
+        user = CustomUser.objects.create_user(email=email, password=password)
+        user.save()
         return Response(
             {"message": "User created successfully"}, status=status.HTTP_201_CREATED
         )
 
 
 class UserLogin(APIView):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(UserLogin, self).dispatch(request, *args, **kwargs)
+
     def post(self, request):
         email = request.data.get("email")
         password = request.data.get("password")
+        print(email, password)
         user = authenticate(request, email=email, password=password)
+        print(user)
         if user:
             login(request, user)
-            return Response({"message": "Login successful"}, status=status.HTTP_200_OK)
+            token, created = Token.objects.get_or_create(user=user)
+            return Response({"token": token.key, "message": "Login successful"}, status=status.HTTP_200_OK)
         else:
             return Response(
                 {"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED
@@ -239,24 +318,29 @@ class UserLogin(APIView):
 
 
 class ForgotPassword(APIView):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(ForgotPassword, self).dispatch(request, *args, **kwargs)
+
     def post(self, request):
         email = request.data.get("email")
         try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
+            user = CustomUser.objects.get(email=email)
+        except CustomUser.DoesNotExist:
             return Response(
                 {"error": "User not found"}, status=status.HTTP_404_NOT_FOUND
             )
-
-        token = PasswordResetTokenGenerator().make_token(user)
+        token_generator = PasswordResetTokenGenerator()
+        uid = urlsafe_base64_decode(force_bytes(user.pk))
+        token = token_generator.make_token(user)
         # Send the reset password link with the token to the user's email
         # Example: reset_password_link = f"https://example.com/reset-password/{token}"
         # Use your own logic to send emails
-        resetlink = f"https://dopaminegoals.com/resetpassword/{token}"
+        resetlink = f"https://dopaminegoals.com/resetpassword/{uid}/{token}"
         send_mail(
             "Reset your password",
             f"Use this link to reset your password: {resetlink}",
-            "hart.edward91@gmail.com",
+            "dopaminesteps@gmail.com",
             [email],
             fail_silently=False,
         )
@@ -264,43 +348,53 @@ class ForgotPassword(APIView):
             {"message": "Reset password email sent"}, status=status.HTTP_200_OK
         )
 
+
 class PasswordResetAPIView(APIView):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(PasswordResetAPIView, self).dispatch(request, *args, **kwargs)
+
     def get(self, request, uidb64, token):
         try:
             # Decode UID from base64 and get the user
             uid = force_str(urlsafe_base64_decode(uidb64))
-            user = User.objects.get(pk=uid)
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = CustomUser.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
             user = None
-        
+
         # Verify the token and the user
-        if user is not None and PasswordResetTokenGenerator().check_token(user, token):
+        token_generator = PasswordResetTokenGenerator()
+        if user is not None and token_generator.check_token(user, token):
             # Display the password reset form or send the password reset token to the frontend
-            return Response({'uid': uidb64, 'token': token}, status=status.HTTP_200_OK)
+            return Response({"uid": uidb64, "token": token}, status=status.HTTP_200_OK)
         else:
             # Invalid token or user, display an error message
-            return Response({'error': 'Invalid token or user'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "Invalid token or user"}, status=status.HTTP_400_BAD_REQUEST
+            )
 
     def post(self, request):
         serializer = PasswordResetSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        uidb64 = serializer.validated_data.get('uid')
-        token = serializer.validated_data.get('token')
-        new_password = serializer.validated_data.get('new_password')
-        
+        uidb64 = serializer.validated_data.get("uid")
+        token = serializer.validated_data.get("token")
+        new_password = serializer.validated_data.get("new_password")
+
         try:
             # Decode UID from base64 and get the user
             uid = force_str(urlsafe_base64_decode(uidb64))
-            user = User.objects.get(pk=uid)
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = CustomUser.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
             user = None
-        
+
         # Verify the token and the user
         if user is not None and PasswordResetTokenGenerator().check_token(user, token):
             # Handle password reset
             user.set_password(new_password)
             user.save()
-            return Response({'message': 'Password reset successful'}, status=status.HTTP_200_OK)
+            return Response(
+                {"message": "Password reset successful"}, status=status.HTTP_200_OK
+            )
         else:
             # Invalid token or user, display an error message
             return

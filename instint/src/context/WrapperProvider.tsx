@@ -11,8 +11,8 @@ import { useStyleRegistry } from "styled-jsx";
 
 // Create a new context
 interface WrapperContext {
-  snackStatus: 'Success' | 'Error';
-  setSnackStatus: Dispatch<SetStateAction<'Success' | 'Error'>>;
+  snackStatus: "Success" | "Error";
+  setSnackStatus: Dispatch<SetStateAction<"Success" | "Error">>;
   snackShow: boolean;
   setSnackShow: Dispatch<SetStateAction<boolean>>;
   colorMode: boolean;
@@ -31,6 +31,8 @@ interface WrapperContext {
   setUpdateData: Dispatch<SetStateAction<boolean>>;
   showMenu: boolean;
   setShowMenu: Dispatch<SetStateAction<boolean>>;
+  csrfToken: string;
+  setCsrfToken: Dispatch<SetStateAction<string>>;
   postModel: "Dopamine" | "Strides" | "Steps";
   setPostModel: Dispatch<SetStateAction<"Dopamine" | "Strides" | "Steps">>;
 }
@@ -44,22 +46,26 @@ interface ContextProviderProps {
 const WrapperProvider = ({ children }: ContextProviderProps) => {
   // Define state or any necessary variables
   const [colorMode, setColorMode] = useState<boolean>(false);
-  const [updateData, setUpdateData] = useState<boolean>(false)
+  const [updateData, setUpdateData] = useState<boolean>(false);
   const [deleteModal, setDeleteModal] = useState<boolean>(false);
   const [dopamineTitle, setDopamineTitle] = useState<string>("");
   const [stridesTitle, setStridesTitle] = useState<string>("");
   const [stepsTitle, setStepsTitle] = useState<string>("");
-  const [showMenu, setShowMenu] = useState<boolean>(false)
-  const [deleteItem, setDeleteItem] = useState<boolean>(false)
-  const [snackStatus, setSnackStatus] = useState<'Success' | 'Error'>('Error');
+  const [showMenu, setShowMenu] = useState<boolean>(false);
+  const [deleteItem, setDeleteItem] = useState<boolean>(false);
+  const [snackStatus, setSnackStatus] = useState<"Success" | "Error">("Error");
   const [snackShow, setSnackShow] = useState<boolean>(false);
   const [postModel, setPostModel] = useState<"Dopamine" | "Strides" | "Steps">(
     "Dopamine"
   );
   useEffect(() => {
-    console.log(dopamineTitle, stridesTitle)
-  }, [dopamineTitle, stridesTitle])
+    console.log(dopamineTitle, stridesTitle);
+  }, [dopamineTitle, stridesTitle]);
+  const [csrfToken, setCsrfToken] = useState<string>("");
+
   const wrapperContextValue: WrapperContext = {
+    csrfToken,
+    setCsrfToken,
     showMenu,
     setShowMenu,
     snackStatus,

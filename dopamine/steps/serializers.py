@@ -1,10 +1,9 @@
 # serializers.py
 from rest_framework import serializers
-from .models import Dopamine, Strides, Steps, User
+from .models import Dopamine, Strides, Steps, CustomUser
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
-from django.contrib.auth.models import User
 from rest_framework import serializers
 
 
@@ -19,10 +18,22 @@ class StridesSerializer(serializers.ModelSerializer):
         model = Strides
         fields = '__all__'
 
+
+    
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['email', 'password']
+        extra_kwargs = {'password': {'write_only': True}}
+    
+    def create(self, validated_data):
+        user = CustomUser.objects.create_user(**validated_data)
+        return user
+
 class DopamineSerializer(serializers.ModelSerializer):
     strides = StridesSerializer(many=True, required=False)
     steps = StepsSerializer(many=True, required = False)
-
+    user = UserSerializer()
     class Meta:
         model = Dopamine
         fields = '__all__'
@@ -37,13 +48,7 @@ class DopamineSerializer(serializers.ModelSerializer):
             for stride_data, stride in zip(representation['strides'], instance.strides.all())
         ]
         return representation
-    
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['email', 'password']
-        extra_kwargs = {'password': {'write_only': True}}
-        
+
 class PasswordResetSerializer(serializers.Serializer):
     uid = serializers.CharField()
     token = serializers.CharField()
@@ -57,8 +62,8 @@ class PasswordResetSerializer(serializers.Serializer):
         # Validate UID
         try:
             uid = force_str(urlsafe_base64_decode(uid))
-            user = User.objects.get(pk=uid)
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = CustomUser.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
             raise serializers.ValidationError({'error': 'Invalid user'})
 
         # Validate token

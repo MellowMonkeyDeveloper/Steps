@@ -10,7 +10,9 @@ from .views import (
     StridesPatchExistingView,
     UserLogin,
     UserRegistration,
-    ForgotPassword
+    ForgotPassword,
+    csrf_token,
+    logout_view
 )
 
 urlpatterns = [
@@ -54,5 +56,12 @@ urlpatterns = [
         'login/', UserLogin.as_view(), name='login'
     ),path(
         'forgot-password/', ForgotPassword.as_view(), name='forgot-password'
+    ),
+    
+    path(
+        'csrf/', csrf_token, name='csrf_token'
+    ),
+    path(
+        'logout/', logout_view, name='logout'
     )
    ]
