@@ -1,11 +1,11 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
-from .models import CustomUser
+from django.conf import settings
 
-@receiver(post_save, sender=CustomUser)
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
+    print("Signal triggered with instance:", instance)
+    print("Created:", created)
     if created:
-        Token.objects.filter(user=instance).delete()
         Token.objects.create(user=instance)
-post_save.connect(create_auth_token, sender=CustomUser)

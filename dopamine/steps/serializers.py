@@ -1,10 +1,11 @@
 # serializers.py
 from rest_framework import serializers
-from .models import Dopamine, Strides, Steps, CustomUser
+from .models import Dopamine, Strides, Steps
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 from rest_framework import serializers
+from django.conf import settings
 
 
 class StepsSerializer(serializers.ModelSerializer):
@@ -22,31 +23,28 @@ class StridesSerializer(serializers.ModelSerializer):
     
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CustomUser
-        fields = ['email', 'password']
+        model = settings.AUTH_USER_MODEL
+        fields = ['email', 'password', 'username']
         extra_kwargs = {'password': {'write_only': True}}
-    
-    def create(self, validated_data):
-        user = CustomUser.objects.create_user(**validated_data)
-        return user
+   
 
 class DopamineSerializer(serializers.ModelSerializer):
     strides = StridesSerializer(many=True, required=False)
     steps = StepsSerializer(many=True, required = False)
-    user = UserSerializer()
     class Meta:
         model = Dopamine
         fields = '__all__'
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['strides'] = [
-            {
-                **stride_data,
-                'steps': StepsSerializer(stride.steps.all(), many=True).data
-            }
-            for stride_data, stride in zip(representation['strides'], instance.strides.all())
-        ]
+        if 'strides' in representation:
+            representation['strides'] = [
+                {
+                    **stride_data,
+                    'steps': StepsSerializer(stride.steps.all(), many=True).data
+                }
+                for stride_data, stride in zip(representation['strides'], instance.strides.all())
+            ]
         return representation
 
 class PasswordResetSerializer(serializers.Serializer):
@@ -62,8 +60,8 @@ class PasswordResetSerializer(serializers.Serializer):
         # Validate UID
         try:
             uid = force_str(urlsafe_base64_decode(uid))
-            user = CustomUser.objects.get(pk=uid)
-        except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
+            user = settings.AUTH_USER_MODEL.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError,  settings.AUTH_USER_MODEL.DoesNotExist):
             raise serializers.ValidationError({'error': 'Invalid user'})
 
         # Validate token

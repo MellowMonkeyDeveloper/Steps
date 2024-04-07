@@ -41,10 +41,9 @@ INSTALLED_APPS = [
     "steps",
     "rest_framework",
     "corsheaders",
-    "oauth2_provider",
     'rest_framework.authtoken'
 ]
-
+AUTH_USER_MODEL = 'steps.CustomUser'
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -104,7 +103,6 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
-AUTH_USER_MODEL = 'steps.CustomUser'
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/

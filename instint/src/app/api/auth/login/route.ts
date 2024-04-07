@@ -13,20 +13,7 @@ export async function POST(request: Request) {
       credentials: "include",
       body: JSON.stringify(json),
     });
-    const cookiesString = await response.headers.get('Set-Cookie')
-    console.log(await response.headers)
-    // Split the cookies string into individual cookies
-    const cookiesArray = cookiesString?.split(", ");
-
-    // Find the cookie containing the session ID
-    const sessionCookie = cookiesArray?.find((cookie) =>
-      cookie.startsWith("sessionid=")
-    );
-
-    // Extract the session ID from the session cookie
-    const sessionId = sessionCookie?.split("=")[1].split(";")[0];
-
-    console.log(sessionId);
+    
 
     const data = await response.json();
     console.log(data);

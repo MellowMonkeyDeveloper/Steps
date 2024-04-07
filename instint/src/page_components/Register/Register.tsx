@@ -1,14 +1,17 @@
 "use client";
 
+import { useWrapper } from "@/context/WrapperProvider";
 import { useEffect, useState } from "react";
 
 export default function Register() {
-  const [submit, setSubmit] = useState<any>();
+  const [username, setUsername] = useState<any>();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const {setCsrfToken} = useWrapper()
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formObject = {
+      username: username,
       email: email,
       password: password,
     };
@@ -21,6 +24,7 @@ export default function Register() {
             body: JSON.stringify(formObject)
         })
         const data = await response.json()
+        setCsrfToken(data.token)
         console.log(response, data)
     }
     postRegister()
@@ -33,6 +37,10 @@ export default function Register() {
     console.log(e.target.value);
     setPassword(e.target.value);
   };
+  const handleUsername = (e: ChangeEventHandler<HTMLInputElement>) => {
+    console.log(e.target.value);
+    setUsername(e.target.value);
+  };
   return (
     <section>
       <div>
@@ -41,6 +49,9 @@ export default function Register() {
         </div>
         <div>
           <form onSubmit={handleSubmit} action="submit">
+            <label htmlFor="username">
+              <input onChange={handleUsername} placeholder="username" type="text" id="username" name="username" required />
+            </label>
             <label htmlFor="email">
               Email
               <input

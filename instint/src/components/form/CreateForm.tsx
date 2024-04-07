@@ -85,12 +85,12 @@ export default function CreateForm({
         }
       } else if (apiMethod === "PATCH" && update !== "Existing") {
         try {
-          const response = await fetch("/api/update/dopamine/add/strides", {
+          const response = await fetch(`/api/update/dopamine/add/strides?token=${csrfToken}`, {
             method: "PATCH",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ dopamineTitle, formData }),
+            body: JSON.stringify({key: dopamineTitle,strides: formData }),
           });
           const fetchResponse = await response.json();
           console.log(fetchResponse);
@@ -117,7 +117,7 @@ export default function CreateForm({
       }
     } else if (postModel === "Strides" && update === "Existing") {
       try {
-        const response = await fetch("/api/update/dopamine/existing/strides", {
+        const response = await fetch(`/api/update/dopamine/existing/strides?token${csrfToken}`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -136,7 +136,7 @@ export default function CreateForm({
       }
     } else if (postModel === "Strides" && update !== "Existing") {
       try {
-        const response = await fetch("/api/update/dopamine/add/strides", {
+        const response = await fetch(`/api/update/dopamine/add/strides?token=${csrfToken}`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -156,7 +156,7 @@ export default function CreateForm({
       }
     } else if (postModel === "Steps" && update === "Existing") {
       try {
-        const response = await fetch("/api/update/dopamine/existing/steps", {
+        const response = await fetch(`/api/update/dopamine/existing/steps?token=${csrfToken}`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -176,7 +176,7 @@ export default function CreateForm({
       }
     } else if (postModel === "Steps" && update !== "Existing") {
       try {
-        const response = await fetch("/api/update/dopamine/add/steps", {
+        const response = await fetch(`/api/update/dopamine/add/steps?token=${csrfToken}`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",

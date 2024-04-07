@@ -4,7 +4,7 @@ import {
   KeyboardArrowDown,
   KeyboardArrowUp,
 } from "@mui/icons-material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Breakdown from "../dropdown/Breakdown";
 import styles from "../../../styles/breakdownmoreinfo.module.scss";
 import { useWrapper } from "@/context/WrapperProvider";
@@ -24,6 +24,9 @@ export default function BreakdownMoreInfo({
     console.log(data)
     setPostModel(type)
   };
+  useEffect(() => {
+    console.log(data)
+  }, [])
   return (
     <section
       className={colorMode ? styles.containerDark : styles.containerLight}

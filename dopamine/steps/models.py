@@ -2,21 +2,22 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission, BaseUserManager
 from rest_framework.authtoken.models import Token
 from django.core.exceptions import ObjectDoesNotExist
+from django.conf import settings
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, email, password=None, **extra_fields):
+    def create_user(self, email,username, password=None, **extra_fields):
         """
         Creates and saves a User with the given email and password.
         """
         if not email:
             raise ValueError('The Email field must be set')
         email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
+        user = self.model(email=email, username=username, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, password=None, **extra_fields):
+    def create_superuser(self, email,username, password=None, **extra_fields):
         """
         Creates and saves a superuser with the given email, username, and password.
         """
@@ -28,13 +29,12 @@ class CustomUserManager(BaseUserManager):
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
 
-        return self.create_user(email, password, **extra_fields)
-
+        return self.create_user(email,username, password, **extra_fields)
+    
 class CustomUser(AbstractUser):
-    username = None
     email = models.EmailField(unique=True)
     
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
     objects = CustomUserManager()
     # Add any additional fields you may need for your user model
@@ -56,7 +56,7 @@ class CustomUser(AbstractUser):
     
 
 class Dopamine(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, default=None)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1)
     title = models.CharField(max_length=255, unique=True)
     deadline = models.DateField()
     completed = models.BooleanField()
@@ -64,12 +64,12 @@ class Dopamine(models.Model):
     motivation = models.CharField(max_length=400)
 
     @classmethod
-    def create_dopamine(cls,user_email, user, title, deadline, completed, description, motivation):
+    def create_dopamine(cls,username, title, deadline, completed, description, motivation):
         """
         Create a new Dopamine instance associated with the given user.
         """
+        user_instance = settings.AUTH_USER_MODEL.objects.get(username=username)
         try:
-            user_instance = CustomUser.objects.get(email=user_email)
             return cls.objects.create(
                 user=user_instance,
                 title=title,
@@ -100,7 +100,7 @@ class Dopamine(models.Model):
 
 
 class Strides(models.Model):
-    dopamine = models.ForeignKey(Dopamine, on_delete=models.CASCADE)
+    dopamine = models.ForeignKey('Dopamine', on_delete=models.CASCADE)
     strides_title = models.CharField(max_length=255, unique=True)
     strides_deadline = models.DateField()
     strides_completed = models.BooleanField()
@@ -155,7 +155,7 @@ class Strides(models.Model):
 
 
 class Steps(models.Model):
-    strides = models.ForeignKey(Strides, on_delete=models.CASCADE)
+    strides = models.ForeignKey('Strides', on_delete=models.CASCADE)
     steps_title = models.CharField(max_length=255, unique=True)
     steps_deadline = models.DateField()
     steps_completed = models.BooleanField()

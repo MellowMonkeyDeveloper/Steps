@@ -2,10 +2,12 @@ from django.shortcuts import render
 
 # Create your views here.
 # views.py
+from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.utils.encoding import force_str, force_bytes
 from rest_framework import generics, status
 from rest_framework.response import Response
-from .models import Dopamine, Strides, Steps, CustomUser
+from .models import Dopamine, Strides, Steps
 from rest_framework.filters import SearchFilter
 from .serializers import (
     DopamineSerializer,
@@ -34,10 +36,6 @@ from django.utils.decorators import method_decorator
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
 
-def csrf_token(request):
-    token = get_token(request)
-    return JsonResponse({"csrfToken": token})
-
 
 @csrf_exempt
 def logout_view(request):
@@ -49,14 +47,17 @@ class DopamineListCreateAPIView(generics.ListCreateAPIView):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(DopamineListCreateAPIView, self).dispatch(request, *args, **kwargs)
+
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
+    print(authentication_classes)
     queryset = Dopamine.objects.all()
     serializer_class = DopamineSerializer
-    
+
     def perform_create(self, serializer):
+        print(IsAuthenticated)
         print(self.request.user)
-        user_instance = self.request.user 
+        user_instance = self.request.user
         serializer.save(user=user_instance)
 
     def post(self, request, *args, **kwargs):
@@ -72,6 +73,7 @@ class DopaminePatchExistingView(generics.RetrieveUpdateAPIView):
     serializer_class = DopamineSerializer
     lookup_field = "title"
     permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
     def patch(self, request, title, *args, **kwargs):
         try:
@@ -91,12 +93,12 @@ class DopaminePatchExistingView(generics.RetrieveUpdateAPIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 class DopaminePatchStridesView(generics.RetrieveUpdateAPIView):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(DopaminePatchStridesView, self).dispatch(request, *args, **kwargs)
-
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
     queryset = Dopamine.objects.all()
     serializer_class = DopamineSerializer
     lookup_field = "title"
@@ -128,7 +130,8 @@ class DopaminePatchStepsView(generics.RetrieveUpdateAPIView):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(DopaminePatchStepsView, self).dispatch(request, *args, **kwargs)
-
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
     queryset = Dopamine.objects.all()
     serializer_class = DopamineSerializer
     lookup_field = (
@@ -171,7 +174,8 @@ class DopamineRetrieveAPIView(generics.ListAPIView):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(DopamineRetrieveAPIView, self).dispatch(request, *args, **kwargs)
-
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
     queryset = Dopamine.objects.all()
     serializer_class = DopamineSerializer
     permission_classes = [IsAuthenticated]
@@ -185,7 +189,8 @@ class StridesPatchExistingView(generics.RetrieveUpdateAPIView):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(StridesPatchExistingView, self).dispatch(request, *args, **kwargs)
-
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
     queryset = Dopamine.objects.all()
     serializer_class = DopamineSerializer
     lookup_field = (
@@ -230,7 +235,8 @@ class StepsPatchExistingView(generics.RetrieveUpdateAPIView):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(StepsPatchExistingView, self).dispatch(request, *args, **kwargs)
-
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
     queryset = Dopamine.objects.all()
     serializer_class = DopamineSerializer
     lookup_field = (
@@ -276,23 +282,28 @@ class StepsPatchExistingView(generics.RetrieveUpdateAPIView):
             return Response(steps_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 class UserRegistration(APIView):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(UserRegistration, self).dispatch(request, *args, **kwargs)
 
     def post(self, request):
+        print(request.data)
+        username = request.data.get("username")
         email = request.data.get("email")
         password = request.data.get("password")
-        if CustomUser.objects.filter(email=email).exists():
+        
+        User = get_user_model()
+        if User.objects.filter(email=email).exists():
             return Response(
                 {"error": "Email already exists"}, status=status.HTTP_400_BAD_REQUEST
             )
-        user = CustomUser.objects.create_user(email=email, password=password)
-        user.save()
+        user = User.objects.create_user(
+            username=username, email=email, password=password
+        )
+        token, _ = Token.objects.get_or_create(user=user)
         return Response(
-            {"message": "User created successfully"}, status=status.HTTP_201_CREATED
+            {"token": token.key, "message": "User created successfully"}, status=status.HTTP_201_CREATED
         )
 
 
@@ -304,13 +315,17 @@ class UserLogin(APIView):
     def post(self, request):
         email = request.data.get("email")
         password = request.data.get("password")
+        username = request.data.get('username')
         print(email, password)
-        user = authenticate(request, email=email, password=password)
+        user = authenticate(request, email=email, username=username, password=password)
         print(user)
         if user:
             login(request, user)
             token, created = Token.objects.get_or_create(user=user)
-            return Response({"token": token.key, "message": "Login successful"}, status=status.HTTP_200_OK)
+            return Response(
+                {"token": token.key, "message": "Login successful"},
+                status=status.HTTP_200_OK,
+            )
         else:
             return Response(
                 {"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED
@@ -325,8 +340,8 @@ class ForgotPassword(APIView):
     def post(self, request):
         email = request.data.get("email")
         try:
-            user = CustomUser.objects.get(email=email)
-        except CustomUser.DoesNotExist:
+            user = settings.AUTH_USER_MODEL.objects.get(email=email)
+        except settings.AUTH_USER_MODEL.DoesNotExist:
             return Response(
                 {"error": "User not found"}, status=status.HTTP_404_NOT_FOUND
             )
@@ -358,8 +373,8 @@ class PasswordResetAPIView(APIView):
         try:
             # Decode UID from base64 and get the user
             uid = force_str(urlsafe_base64_decode(uidb64))
-            user = CustomUser.objects.get(pk=uid)
-        except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
+            user = settings.AUTH_USER_MODEL.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, settings.AUTH_USER_MODEL.DoesNotExist):
             user = None
 
         # Verify the token and the user
@@ -383,8 +398,8 @@ class PasswordResetAPIView(APIView):
         try:
             # Decode UID from base64 and get the user
             uid = force_str(urlsafe_base64_decode(uidb64))
-            user = CustomUser.objects.get(pk=uid)
-        except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
+            user = settings.AUTH_USER_MODEL.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, settings.AUTH_USER_MODEL.DoesNotExist):
             user = None
 
         # Verify the token and the user

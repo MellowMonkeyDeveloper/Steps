@@ -2,6 +2,8 @@ import axios from "axios";
 export const dynamic = "force-dynamic"; // defaults to auto
 import type { NextApiRequest, NextApiResponse } from "next";
 export async function PATCH(request: Request) {
+    const {searchParams} = new URL(request.url)
+    const token = searchParams.get('token')
     const collectData = await request.json()
     console.log(collectData)
     const dopamine = encodeURIComponent(collectData.dopamine)
@@ -21,7 +23,8 @@ export async function PATCH(request: Request) {
       `http://localhost:8000/steps/api/existing/dopamine/${dopamine}/strides/${stride}/steps/${step}/`, {
         method: 'PATCH',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${token}`
         },
         body: JSON.stringify(patchData)
       });

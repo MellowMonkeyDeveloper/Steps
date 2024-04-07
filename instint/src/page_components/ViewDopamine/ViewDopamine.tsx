@@ -8,33 +8,40 @@ import DopamineBreakdown from "@/components/cards/DopamineBreakdown";
 import styles from "../../../styles/viewdopamine.module.scss";
 export default function ViewDopamine() {
   const [dataArray, setDataArray] = useState<any[]>([]);
+  const { csrfToken } = useWrapper();
   const [details, setDetails] = useState<boolean>(false);
   const [completed, setCompleted] = useState<boolean>(false);
   const [deleted, setDeleted] = useState<boolean>(false);
   const { colorMode, updateData } = useWrapper();
   async function gatherDopamine() {
     try {
-        const response = await fetch("/api/get/dopamine");
+      const response = await fetch(`/api/get/dopamine?token=${csrfToken}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-        // Check if response is successful
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
+      // Check if response is successful
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
 
-        // Parse JSON data from response body
-        const data = await response.json();
-        setDataArray(data)
-        // Log the parsed JSON data
-        console.log(data);
+      // Parse JSON data from response body
+      const data = await response.json();
+      console.log(data)
+      setDataArray(data);
+      // Log the parsed JSON data
+      console.log(data);
     } catch (error) {
-        // Handle errors
-        console.error('There was a problem with the fetch operation:', error);
+      // Handle errors
+      console.error("There was a problem with the fetch operation:", error);
     }
-}
+  }
 
   useEffect(() => {
     gatherDopamine();
-    
+    console.log(dataArray)
   }, [updateData]);
   return (
     <section
@@ -42,10 +49,7 @@ export default function ViewDopamine() {
     >
       {dataArray.map((item: any) => (
         <>
-          <DopamineBreakdown
-            data={item}
-          />
-
+          <DopamineBreakdown data={item} />
         </>
       ))}
     </section>

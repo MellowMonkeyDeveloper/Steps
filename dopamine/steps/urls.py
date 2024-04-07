@@ -11,7 +11,6 @@ from .views import (
     UserLogin,
     UserRegistration,
     ForgotPassword,
-    csrf_token,
     logout_view
 )
 
@@ -58,9 +57,6 @@ urlpatterns = [
         'forgot-password/', ForgotPassword.as_view(), name='forgot-password'
     ),
     
-    path(
-        'csrf/', csrf_token, name='csrf_token'
-    ),
     path(
         'logout/', logout_view, name='logout'
     )
