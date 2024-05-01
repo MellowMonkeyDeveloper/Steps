@@ -6,7 +6,7 @@ export async function GET(request: Request) {
   const token = searchParams.get('token')
   try {
     const response = await fetch(
-      "http://localhost:8000/steps/api/hyper/dopamine", {
+      "http://localhost:8000/steps/api/get/dopamine", {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

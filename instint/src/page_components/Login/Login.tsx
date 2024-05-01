@@ -7,7 +7,7 @@ export default function Login() {
   const [useranme, setUsername] = useState<any>();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const {setCsrfToken} = useWrapper()
+  const {setCsrfToken, setUserID} = useWrapper()
     const {csrfToken} = useWrapper()
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     console.log(csrfToken)
@@ -28,6 +28,7 @@ export default function Login() {
         const data = await response.json()
         console.log(data)
         setCsrfToken(data.token)
+        setUserID(data.userID)
     }
     postRegister()
 };

@@ -1,13 +1,8 @@
 # urls.py
 from django.urls import path
 from .views import (
-    DopamineListCreateAPIView,
-    DopaminePatchStridesView,
-    DopamineRetrieveAPIView,
-    DopaminePatchExistingView,
-    DopaminePatchStepsView,
-    StepsPatchExistingView,
-    StridesPatchExistingView,
+    DopamineRetrieveView,
+    DopamineCreateView,
     UserLogin,
     UserRegistration,
     ForgotPassword,
@@ -16,36 +11,14 @@ from .views import (
 
 urlpatterns = [
     path(
-        "api/dopamine/",
-        DopamineListCreateAPIView.as_view(),
+        "api/create/dopamine/",
+        DopamineCreateView.as_view(),
         name="dopamine-list-create",
     ),
+    
     path(
-        "api/existing/dopamine/<str:title>/",
-        DopaminePatchExistingView.as_view(),
-        name="dopamine-patch-existing",
-    ),path(
-        "api/existing/dopamine/<str:title>/strides/<str:strides_title>/",
-        StridesPatchExistingView.as_view(),
-        name="strides-patch-existing",
-    ),path(
-        "api/existing/dopamine/<str:title>/strides/<str:strides_title>/steps/<str:steps_title>/",
-        StepsPatchExistingView.as_view(),
-        name="steps-patch-existing",
-    ),
-    path(
-        "api/create/steps/dopamine/<str:title>/strides/<str:strides_title>/",
-        DopaminePatchStepsView.as_view(),
-        name="dopamine-create-steps",
-    ),
-    path(
-        "api/dopamine/<str:title>/",
-        DopaminePatchStridesView.as_view(),
-        name="dopamine-update-destroy",
-    ),
-    path(
-        "api/hyper/dopamine",
-        DopamineRetrieveAPIView.as_view(),
+        "api/get/dopamine",
+        DopamineRetrieveView.as_view(),
         name="dopamine-retrieve",
     ),
     path(

@@ -1,6 +1,6 @@
 # serializers.py
 from rest_framework import serializers
-from .models import Dopamine, Strides, Steps
+from .models import Dopamine, Strides, Steps, ToDo
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
@@ -8,44 +8,44 @@ from rest_framework import serializers
 from django.conf import settings
 
 
-class StepsSerializer(serializers.ModelSerializer):
+class ToDoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ToDo
+        fields = "__all__"
+
+
+class StepsSerializer(ToDoSerializer):
     class Meta:
         model = Steps
-        fields = '__all__'
+        fields = "__all__"
 
-class StridesSerializer(serializers.ModelSerializer):
-    
+
+class StridesSerializer(ToDoSerializer):
+
     class Meta:
         model = Strides
-        fields = '__all__'
+        fields = "__all__"
 
 
-    
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = settings.AUTH_USER_MODEL
-        fields = ['email', 'password', 'username']
-        extra_kwargs = {'password': {'write_only': True}}
-   
+        fields = ["email", "password", "username"]
+        extra_kwargs = {"password": {"write_only": True}}
+
 
 class DopamineSerializer(serializers.ModelSerializer):
-    strides = StridesSerializer(many=True, required=False)
-    steps = StepsSerializer(many=True, required = False)
+    todo = ToDoSerializer()
     class Meta:
         model = Dopamine
-        fields = '__all__'
+        fields = "__all__"
+    
+    def create(self, validated_data):
+        todo_data = validated_data.pop('todo')
+        todo = ToDo.objects.create(**todo_data)
+        dopamine = Dopamine.objects.create(todo = todo, **validated_data)
+        return dopamine
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        if 'strides' in representation:
-            representation['strides'] = [
-                {
-                    **stride_data,
-                    'steps': StepsSerializer(stride.steps.all(), many=True).data
-                }
-                for stride_data, stride in zip(representation['strides'], instance.strides.all())
-            ]
-        return representation
 
 class PasswordResetSerializer(serializers.Serializer):
     uid = serializers.CharField()
@@ -53,21 +53,26 @@ class PasswordResetSerializer(serializers.Serializer):
     new_password = serializers.CharField(min_length=8)  # Adjust min_length as needed
 
     def validate(self, data):
-        uid = data.get('uid')
-        token = data.get('token')
-        new_password = data.get('new_password')
+        uid = data.get("uid")
+        token = data.get("token")
+        new_password = data.get("new_password")
 
         # Validate UID
         try:
             uid = force_str(urlsafe_base64_decode(uid))
             user = settings.AUTH_USER_MODEL.objects.get(pk=uid)
-        except (TypeError, ValueError, OverflowError,  settings.AUTH_USER_MODEL.DoesNotExist):
-            raise serializers.ValidationError({'error': 'Invalid user'})
+        except (
+            TypeError,
+            ValueError,
+            OverflowError,
+            settings.AUTH_USER_MODEL.DoesNotExist,
+        ):
+            raise serializers.ValidationError({"error": "Invalid user"})
 
         # Validate token
         if not PasswordResetTokenGenerator().check_token(user, token):
-            raise serializers.ValidationError({'error': 'Invalid token'})
-        
+            raise serializers.ValidationError({"error": "Invalid token"})
+
         # You may add more validation logic here if needed
-        
+
         return data

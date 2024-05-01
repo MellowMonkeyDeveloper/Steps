@@ -52,14 +52,18 @@
 .deletedDark{
  margin-right: $margin-medium;
  color: map-get($map: $statusColor, $key: error);
+ cursor: pointer;
 }
 .deletedLight{
  margin-right: $margin-medium;
  color: map-get($map: $statusColor, $key: error);
+ cursor: pointer;
 }
 .keyboardDark{
-  color: map-get($map: $darkColors, $key: fourthDark)
+  color: map-get($map: $darkColors, $key: fourthDark);
+  cursor: pointer;
 }
 .keyboardLight{
-  color: map-get($map: $lightColors, $key: fourthLight)
+  color: map-get($map: $lightColors, $key: fourthLight);
+  cursor: pointer;
 }

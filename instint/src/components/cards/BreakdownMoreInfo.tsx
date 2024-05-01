@@ -21,12 +21,12 @@ export default function BreakdownMoreInfo({
   const [showForm, setShowForm] = useState<boolean>(false);
   const handleUpdate = () => {
     setShowForm(true);
-    console.log(data)
-    setPostModel(type)
+    console.log(data);
+    setPostModel(type);
   };
   useEffect(() => {
-    console.log(data)
-  }, [])
+    console.log(data);
+  }, []);
   return (
     <section
       className={colorMode ? styles.containerDark : styles.containerLight}
@@ -57,7 +57,7 @@ export default function BreakdownMoreInfo({
                 <div className={styles.pContainer}>
                   <p className={colorMode ? styles.pDark : styles.pLight}>
                     {type === "Dopamine"
-                      ? data.description
+                      ? data.todo.description
                       : type === "Strides"
                       ? data.strides_description
                       : type === "Steps"
@@ -78,13 +78,7 @@ export default function BreakdownMoreInfo({
                 </div>
                 <div className={styles.pContainer}>
                   <p className={colorMode ? styles.pDark : styles.pLight}>
-                    {type === "Dopamine"
-                      ? data.motivation
-                      : type === "Strides"
-                      ? data.strides_motivation
-                      : type === "Steps"
-                      ? data.steps_motivation
-                      : null}
+                    {data.todo.motivation}
                   </p>
                 </div>
               </div>
@@ -105,19 +99,7 @@ export default function BreakdownMoreInfo({
                     colorMode ? styles.subheaderDark : styles.subheaderLight
                   }
                 >
-                  {type === "Dopamine" && data.completed
-                    ? "Complete"
-                    : type === "Dopamine" && data.completed === false
-                    ? "Incomplete"
-                    : type === "Strides" && data.strides_completed
-                    ? "Complete"
-                    : type === "Strides" && data.strides_completed === false
-                    ? "Incomplete"
-                    : type === "Steps" && data.steps_completed
-                    ? "Complete"
-                    : type === "Steps" && data.steps_completed === false
-                    ? "Incomplete"
-                    : null}
+                  {data.todo.completed === false ? 'Incomplete' : 'Complete'}
                 </h5>
               </div>
             </div>
@@ -137,13 +119,7 @@ export default function BreakdownMoreInfo({
                     colorMode ? styles.subheaderDark : styles.subheaderLight
                   }
                 >
-                  {type === "Dopamine"
-                    ? data.deadline
-                    : type === "Strides"
-                    ? data.strides_deadline
-                    : type === "Steps"
-                    ? data.steps_deadline
-                    : null}
+                  {data.todo.deadline}
                 </h5>
               </div>
             </div>
@@ -152,14 +128,12 @@ export default function BreakdownMoreInfo({
             </div>
           </>
         ) : (
-          <CreateForm data={data} apiMethod="PATCH" update='Existing' />
+          <CreateForm data={data} apiMethod="PATCH" update="Existing" />
         )}
       </article>
       <article className={styles.breakdownContainer}>
         {type === "Dopamine" &&
-          data.strides.map((value: any) => (
-            <Breakdown data={value} type="Strides" />
-          ))}
+          data.map((value: any) => <Breakdown data={value} type="Strides" />)}
         {type === "Strides" &&
           data.steps.map((value: any) => (
             <Breakdown data={value} type="Steps" />

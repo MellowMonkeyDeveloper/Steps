@@ -1,4 +1,7 @@
 "use client";
+import { SnackbarModelMessage } from "@/types/Enums/Snackbar";
+import { SnackbarMessageProps } from "@/types/Interfaces/Snackbar";
+import { snackbarMessageObject, snackbarModelMessageObject, snackbarModelObject } from "@/types/Objects/Snackbar";
 import React, {
   Dispatch,
   useContext,
@@ -11,12 +14,20 @@ import { useStyleRegistry } from "styled-jsx";
 
 // Create a new context
 interface WrapperContext {
-  snackStatus: "Success" | "Error";
-  setSnackStatus: Dispatch<SetStateAction<"Success" | "Error">>;
-  snackShow: boolean;
-  setSnackShow: Dispatch<SetStateAction<boolean>>;
+  snackbar: boolean;
+  setSnackbar: Dispatch<SetStateAction<boolean>>;
+  snackbarStatus: "Success" | "Error" | "Warning";
+  setSnackbarStatus: Dispatch<SetStateAction<"Success" | "Warning" | "Error">>;
+  snackbarDetails: SnackbarMessageProps['message'];
+  setSnackbarDetails: Dispatch<
+    SetStateAction<SnackbarMessageProps['message']>
+  >;
   colorMode: boolean;
   setColorMode: Dispatch<SetStateAction<boolean>>;
+  dopamineID: string;
+  setDopamineID: Dispatch<SetStateAction<string>>;
+  stridesID: string;
+  setStridesID: Dispatch<SetStateAction<string>>;
   deleteModal: boolean;
   setDeleteModal: Dispatch<SetStateAction<boolean>>;
   dopamineTitle: string;
@@ -33,6 +44,8 @@ interface WrapperContext {
   setShowMenu: Dispatch<SetStateAction<boolean>>;
   csrfToken: string;
   setCsrfToken: Dispatch<SetStateAction<string>>;
+  userID: string;
+  setUserID: Dispatch<SetStateAction<string>>;
   postModel: "Dopamine" | "Strides" | "Steps";
   setPostModel: Dispatch<SetStateAction<"Dopamine" | "Strides" | "Steps">>;
 }
@@ -53,8 +66,12 @@ const WrapperProvider = ({ children }: ContextProviderProps) => {
   const [stepsTitle, setStepsTitle] = useState<string>("");
   const [showMenu, setShowMenu] = useState<boolean>(false);
   const [deleteItem, setDeleteItem] = useState<boolean>(false);
-  const [snackStatus, setSnackStatus] = useState<"Success" | "Error">("Error");
-  const [snackShow, setSnackShow] = useState<boolean>(false);
+  const [userID, setUserID] = useState<string>("");
+  const [dopamineID, setDopamineID] = useState<string>('');
+  const [stridesID, setStridesID] = useState<string>('');
+  const [snackbar, setSnackbar] = useState<boolean>(false);
+  const [snackbarStatus, setSnackbarStatus] = useState<'Success' | 'Warning' | 'Error'>('Success');
+  const [snackbarDetails, setSnackbarDetails] = useState<SnackbarMessageProps['message']>(snackbarModelMessageObject["Dopamine Completed"].message)
   const [postModel, setPostModel] = useState<"Dopamine" | "Strides" | "Steps">(
     "Dopamine"
   );
@@ -64,14 +81,20 @@ const WrapperProvider = ({ children }: ContextProviderProps) => {
   const [csrfToken, setCsrfToken] = useState<string>("");
 
   const wrapperContextValue: WrapperContext = {
+    dopamineID,
+    setDopamineID,
+    stridesID,
+    setStridesID,
     csrfToken,
     setCsrfToken,
     showMenu,
     setShowMenu,
-    snackStatus,
-    setSnackStatus,
-    snackShow,
-    setSnackShow,
+    snackbar,
+    setSnackbar,
+    snackbarStatus,
+    setSnackbarStatus,
+    snackbarDetails,
+    setSnackbarDetails,
     colorMode,
     setColorMode,
     deleteModal,
@@ -88,6 +111,8 @@ const WrapperProvider = ({ children }: ContextProviderProps) => {
     setPostModel,
     deleteItem,
     setDeleteItem,
+    userID,
+    setUserID,
   };
 
   // Define any other context-specific logic

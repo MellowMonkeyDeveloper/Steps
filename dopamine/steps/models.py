@@ -4,37 +4,39 @@ from rest_framework.authtoken.models import Token
 from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
 
+
 class CustomUserManager(BaseUserManager):
-    def create_user(self, email,username, password=None, **extra_fields):
+    def create_user(self, email, username, password=None, **extra_fields):
         """
         Creates and saves a User with the given email and password.
         """
         if not email:
-            raise ValueError('The Email field must be set')
+            raise ValueError("The Email field must be set")
         email = self.normalize_email(email)
         user = self.model(email=email, username=username, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email,username, password=None, **extra_fields):
+    def create_superuser(self, email, username, password=None, **extra_fields):
         """
         Creates and saves a superuser with the given email, username, and password.
         """
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
 
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError('Superuser must have is_staff=True.')
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError('Superuser must have is_superuser=True.')
+        if extra_fields.get("is_staff") is not True:
+            raise ValueError("Superuser must have is_staff=True.")
+        if extra_fields.get("is_superuser") is not True:
+            raise ValueError("Superuser must have is_superuser=True.")
 
-        return self.create_user(email,username, password, **extra_fields)
-    
+        return self.create_user(email, username, password, **extra_fields)
+
+
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
-    
-    USERNAME_FIELD = 'username'
+
+    USERNAME_FIELD = "username"
     REQUIRED_FIELDS = []
     objects = CustomUserManager()
     # Add any additional fields you may need for your user model
@@ -53,37 +55,51 @@ class CustomUser(AbstractUser):
         Check if the user has permission to modify the given Dopamine instance.
         """
         return dopamine_instance.user == self
-    
+
 
 class Dopamine(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1)
-    title = models.CharField(max_length=255, unique=True)
+    todo = models.OneToOneField("ToDo", on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+
+class ToDo(models.Model):
+    title = models.CharField(max_length=1000)
     deadline = models.DateField()
     completed = models.BooleanField()
-    description = models.CharField(max_length=400)
-    motivation = models.CharField(max_length=400)
+    description = models.CharField(max_length=1000)
+    motivation = models.CharField(max_length=1000)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     @classmethod
-    def create_dopamine(cls,username, title, deadline, completed, description, motivation):
+    def create_todo(
+        cls,
+        title,
+        deadline,
+        completed,
+        description,
+        motivation,
+    ):
         """
-        Create a new Dopamine instance associated with the given user.
+        Create a new Strides instance associated with the given dopamine.
         """
-        user_instance = settings.AUTH_USER_MODEL.objects.get(username=username)
-        try:
-            return cls.objects.create(
-                user=user_instance,
-                title=title,
-                deadline=deadline,
-                completed=completed,
-                description=description,
-                motivation=motivation,
-            )
-        except ObjectDoesNotExist:
-            pass
+        return cls.objects.create(
+            title=title,
+            deadline=deadline,
+            completed=completed,
+            description=description,
+            motivation=motivation,
+        )
 
-    def update_dopamine(self, title, deadline, completed, description, motivation):
+    def update(
+        self,
+        title,
+        deadline,
+        completed,
+        description,
+        motivation,
+    ):
         """
-        Update the attributes of the Dopamine instance.
+        Update the attributes of the Strides instance.
         """
         self.title = title
         self.deadline = deadline
@@ -92,118 +108,18 @@ class Dopamine(models.Model):
         self.motivation = motivation
         self.save()
 
-    def delete_dopamine(self):
-        """
-        Delete the Dopamine instance.
-        """
-        self.delete()
-
-
-class Strides(models.Model):
-    dopamine = models.ForeignKey('Dopamine', on_delete=models.CASCADE)
-    strides_title = models.CharField(max_length=255, unique=True)
-    strides_deadline = models.DateField()
-    strides_completed = models.BooleanField()
-    strides_description = models.CharField(max_length=400)
-    strides_motivation = models.CharField(max_length=400)
-
-    @classmethod
-    def create_strides(
-        cls,
-        dopamine,
-        strides_title,
-        strides_deadline,
-        strides_completed,
-        strides_description,
-        strides_motivation,
-    ):
-        """
-        Create a new Strides instance associated with the given dopamine.
-        """
-        return cls.objects.create(
-            dopamine=dopamine,
-            strides_title=strides_title,
-            strides_deadline=strides_deadline,
-            strides_completed=strides_completed,
-            strides_description=strides_description,
-            strides_motivation=strides_motivation,
-        )
-
-    def update_strides(
-        self,
-        strides_title,
-        strides_deadline,
-        strides_completed,
-        strides_description,
-        strides_motivation,
-    ):
-        """
-        Update the attributes of the Strides instance.
-        """
-        self.strides_title = strides_title
-        self.strides_deadline = strides_deadline
-        self.strides_completed = strides_completed
-        self.strides_description = strides_description
-        self.strides_motivation = strides_motivation
-        self.save()
-
-    def delete_strides(self):
+    def delete(self):
         """
         Delete the Strides instance.
         """
         self.delete()
 
 
+class Strides(models.Model):
+    dopamine = models.ForeignKey("Dopamine", on_delete=models.CASCADE)
+    todo = models.OneToOneField("ToDo", on_delete=models.CASCADE)
+
+
 class Steps(models.Model):
-    strides = models.ForeignKey('Strides', on_delete=models.CASCADE)
-    steps_title = models.CharField(max_length=255, unique=True)
-    steps_deadline = models.DateField()
-    steps_completed = models.BooleanField()
-    steps_description = models.CharField(max_length=400)
-    steps_motivation = models.CharField(max_length=400)
-
-    @classmethod
-    def create_steps(
-        cls,
-        strides,
-        steps_title,
-        steps_deadline,
-        steps_completed,
-        steps_description,
-        steps_motivation,
-    ):
-        """
-        Create a new Steps instance associated with the given strides.
-        """
-        return cls.objects.create(
-            strides=strides,
-            steps_title=steps_title,
-            steps_deadline=steps_deadline,
-            steps_completed=steps_completed,
-            steps_description=steps_description,
-            steps_motivation=steps_motivation,
-        )
-
-    def update_steps(
-        self,
-        steps_title,
-        steps_deadline,
-        steps_completed,
-        steps_description,
-        steps_motivation,
-    ):
-        """
-        Update the attributes of the Steps instance.
-        """
-        self.steps_title = steps_title
-        self.steps_deadline = steps_deadline
-        self.steps_completed = steps_completed
-        self.steps_description = steps_description
-        self.steps_motivation = steps_motivation
-        self.save()
-
-    def delete_steps(self):
-        """
-        Delete the Steps instance.
-        """
-        self.delete()
+    strides = models.ForeignKey("Strides", on_delete=models.CASCADE)
+    todo = models.OneToOneField("ToDo", on_delete=models.CASCADE)

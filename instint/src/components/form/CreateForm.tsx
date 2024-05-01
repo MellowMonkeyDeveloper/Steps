@@ -3,10 +3,12 @@ import { useWrapper } from "@/context/WrapperProvider";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import styles from "../../../styles/form.module.scss";
+import { handleSubmit } from "@/functions/form";
 interface CreateFormProps {
   apiMethod: "POST" | "PATCH";
   data?: any;
   update?: "Existing" | "Array";
+  type?: "Dopamine" | "Strides" | "Delete";
 }
 interface formProps {
   title: string | undefined;
@@ -14,31 +16,20 @@ interface formProps {
   motivation: string | undefined;
   deadline: string | undefined;
 }
-interface formStridesProps {
-  strides_title: string | undefined;
-  strides_description: string | undefined;
-  strides_motivation: string | undefined;
-  strides_deadline: string | undefined;
-}
-interface formStepsProps {
-  steps_title: string | undefined;
-  steps_description: string | undefined;
-  steps_motivation: string | undefined;
-  steps_deadline: string | undefined;
-}
+
 export default function CreateForm({
   apiMethod,
   data,
   update,
+  type,
 }: CreateFormProps) {
   const {
     colorMode,
     postModel,
-    dopamineTitle,
-    stridesTitle,
-    stepsTitle,
-    csrfToken,
-    setUpdateData,
+    dopamineID,
+    stridesID,
+
+    userID,
   } = useWrapper();
   const [formData, setFormData] = useState<any>({
     title: "",
@@ -46,169 +37,27 @@ export default function CreateForm({
     motivation: "",
     deadline: "",
   });
-  const [formStridesData, setFormStridesData] = useState<any>({
-    strides_deadline: "",
-    strides_description: "",
-    strides_motivation: "",
-    strides_title: "",
-  });
-  const [formStepsData, setFormStepsData] = useState<any>({
-    steps_deadline: "",
-    steps_description: "",
-    steps_motivation: "",
-    steps_title: "",
-  });
-  console.log(data, update, apiMethod);
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log(formData, formStepsData, formStridesData);
-    if (postModel === "Dopamine") {
-      if (apiMethod === "POST") {
-        try {
-          const response = await fetch(`/api/post/dopamine?csrf=${csrfToken}`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: 'include',
-            body: JSON.stringify(formData),
-          });
-          const fetchResponse = await response.json();
-          console.log(fetchResponse);
-          if (response.ok) {
-            console.log("ok");
-          } else {
-            console.log("error");
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      } else if (apiMethod === "PATCH" && update !== "Existing") {
-        try {
-          const response = await fetch(`/api/update/dopamine/add/strides?token=${csrfToken}`, {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({key: dopamineTitle,strides: formData }),
-          });
-          const fetchResponse = await response.json();
-          console.log(fetchResponse);
-        } catch (error) {
-          console.log(error);
-        }
-      } else if (apiMethod === "PATCH" && update === "Existing") {
-        try {
-          const response = await fetch(
-            "/api/update/dopamine/existing/dopamine",
-            {
-              method: "PATCH",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ data: formData, key: data?.title }),
-            }
-          );
-          const fetchResponse = await response.json();
-          console.log(fetchResponse);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    } else if (postModel === "Strides" && update === "Existing") {
-      try {
-        const response = await fetch(`/api/update/dopamine/existing/strides?token${csrfToken}`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            data: formStridesData,
-            strides: stridesTitle,
-            dopamine: dopamineTitle,
-          }),
-        });
-        const fetchResponse = await response.json();
-        console.log(fetchResponse);
-        setUpdateData(true);
-      } catch (error) {
-        console.log(error);
-      }
-    } else if (postModel === "Strides" && update !== "Existing") {
-      try {
-        const response = await fetch(`/api/update/dopamine/add/strides?token=${csrfToken}`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            data: formStepsData,
-            steps: stepsTitle,
-            strides: stridesTitle,
-            dopamine: dopamineTitle,
-          }),
-        });
-        const fetchResponse = await response.json();
-        console.log(fetchResponse);
-        setUpdateData(true);
-      } catch (error) {
-        console.log(error);
-      }
-    } else if (postModel === "Steps" && update === "Existing") {
-      try {
-        const response = await fetch(`/api/update/dopamine/existing/steps?token=${csrfToken}`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            data: formStepsData,
-            dopamine: dopamineTitle,
-            strides: stridesTitle,
-            steps: stepsTitle,
-          }),
-        });
-        const fetchResponse = await response.json();
-        console.log(fetchResponse);
-        setUpdateData(true);
-      } catch (error) {
-        console.log(error);
-      }
-    } else if (postModel === "Steps" && update !== "Existing") {
-      try {
-        const response = await fetch(`/api/update/dopamine/add/steps?token=${csrfToken}`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            data: formStepsData,
-            dopamine: dopamineTitle,
-            strides: stridesTitle,
-          }),
-        });
-        const fetchResponse = await response.json();
-        console.log(fetchResponse);
-        setUpdateData(true);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
-  const handleChange = (e) => {
 
-    console.log(formStridesData, stridesTitle);
+  console.log(postModel);
+
+  const handleChange = (e) => {
     if (postModel === "Strides") {
-      setFormStridesData({
-        ...formStridesData,
-        [`strides_${e.target.name}`]: e.target.value,
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value,
+        dopamine: dopamineID,
       });
     } else if (postModel === "Dopamine") {
-      setFormData({ ...formData, [e.target.name]: e.target.value });
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value,
+        user: userID,
+      });
     } else if (postModel === "Steps") {
-      setFormStepsData({
-        ...formStepsData,
-        [`steps_${e.target.name}`]: e.target.value,
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value,
+        strides: stridesID,
       });
     }
   };
@@ -221,12 +70,12 @@ export default function CreateForm({
     } else if (postModel === "Strides") {
       if (data === undefined) {
       } else if (data !== undefined) {
-        setFormStridesData(data);
+        setFormData(data);
       }
     } else if (postModel === "Steps") {
       if (data === undefined) {
       } else if (data !== undefined) {
-        setFormStepsData(data);
+        setFormData(data);
       }
       console.log(data);
     }
@@ -344,7 +193,11 @@ export default function CreateForm({
           </label>
         </div>
 
-        <button onClick={handleSubmit}>submit</button>
+        <button
+          onClick={() => handleSubmit(event, apiMethod, formData, apiRoute)}
+        >
+          submit
+        </button>
       </form>
     </section>
   );

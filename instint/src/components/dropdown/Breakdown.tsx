@@ -14,6 +14,7 @@ import { dividerClasses } from "@mui/material";
 import BreakdownMoreInfo from "../cards/BreakdownMoreInfo";
 import { Sedgwick_Ave } from "next/font/google";
 import CreateForm from "../form/CreateForm";
+import { handleAdd, handleDelete, handleDropdown } from "@/functions/breakdown";
 export interface BreakdownProps {
   data: any;
   type: "Dopamine" | "Strides" | "Steps";
@@ -25,54 +26,24 @@ export default function Breakdown({ data, type }: BreakdownProps) {
     colorMode,
     setDeleteModal,
     setPostModel,
-    setStepsTitle,
-    setStridesTitle,
-    setDopamineTitle,
+    setSnackbar,
+    setSnackbarDetails,
+    setSnackbarStatus
   } = useWrapper();
-  const handleDropdown = () => {
-    setDropdown((prev) => !prev);
-    if (type === "Dopamine") {
-      setDopamineTitle(data.title);
-    } else if (type === "Strides") {
-      setStridesTitle(data.strides_title);
-    } else if (type === "Steps") {
-      setStepsTitle(data.steps_title);
-    }
-  };
-  const handleDelete = () => {
-    if (type === "Dopamine") {
-      setDeleteModal(true);
-      setDopamineTitle(data.title);
-    } else if (type === "Strides") {
-      setDeleteModal(true);
-      setStridesTitle(data.strides_title);
-    } else if (type === "Steps") {
-      setDeleteModal(true);
-      setStepsTitle(data.steps_title);
-    }
-  };
-  const handleAdd = () => {
-    if (type === "Dopamine") {
-      setAdd(true);
-      setPostModel("Strides");
-      setDopamineTitle(data.title);
-    } else if (type === "Strides") {
-      setAdd(true);
-      setPostModel("Steps");
-      setStridesTitle(data.strides_title);
-    }
-  };
+  
+
+
   return (
     <>
       <div className={colorMode ? styles.containerDark : styles.containerLight}>
         <div className={styles.headerContainer}>
           <h2 className={colorMode ? styles.headerDark : styles.headerLight}>
             {type === "Dopamine"
-              ? data.title
+              ? data.todo.title
               : type === "Strides"
-              ? data.strides_title
+              ? data.todo.title
               : type === "Steps"
-              ? data.steps_title
+              ? data.todo.title
               : null}
           </h2>
           
@@ -81,16 +52,16 @@ export default function Breakdown({ data, type }: BreakdownProps) {
           {dropdown ? (
             <KeyboardArrowUp
               className={colorMode ? styles.keyboardDark : styles.keyboardLight}
-              onClick={handleDropdown}
+              onClick={() => handleDropdown(setDropdown, apiRoute, setDeleteModal, setSnackbar, setSnackbarDetails, setSnackbarStatus, getKey)}
             />
           ) : (
             <KeyboardArrowDown
               className={colorMode ? styles.keyboardDark : styles.keyboardLight}
-              onClick={handleDropdown}
+              onClick={() => handleDropdown(setDropdown, apiRoute, setDeleteModal, setSnackbar, setSnackbarDetails, setSnackbarStatus, getKey)}
             />
           )}
         </div>
-        {data.completed ? (
+        {data.todo.completed ? (
           <CheckCircle
             className={colorMode ? styles.completedDark : styles.completedLight}
           />
@@ -101,11 +72,11 @@ export default function Breakdown({ data, type }: BreakdownProps) {
         )}
         <NoteAdd
           className={colorMode ? styles.deletedDark : styles.deletedLight}
-          onClick={handleAdd}
+          onClick={() => handleAdd(type, setAdd, setPostModel)}
         />
         <Delete
           className={colorMode ? styles.deletedDark : styles.deletedLight}
-          onClick={handleDelete}
+          onClick={() => handleDelete(type, apiRoute, deleteKey, setSnackbar, setSnackbarStatus, setSnackbarDetails, setDeleteModal)}
         />
       </div>
       {dropdown && type === "Dopamine" && (

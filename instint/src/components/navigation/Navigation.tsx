@@ -29,13 +29,13 @@ export default function Navigation() {
       </div>
       <div className={styles.profileContainer}>
         <div>
-          <h4 onClick={() => route.push('/login')}>Login</h4>
+          <h4 className={styles.routerLink} onClick={() => route.push('/login')}>Login</h4>
         </div>
         <div>
-          <h4 onClick={handleSignUp}>Sign Up</h4>
+          <h4 className={styles.routerLink} onClick={handleSignUp}>Sign Up</h4>
         </div>
         <div>
-          <h4 onClick={handleLogout}>Logout</h4>
+          <h4 className={styles.routerLink} onClick={handleLogout}>Logout</h4>
         </div>
       </div>
       <div className={styles.infoContainer}>

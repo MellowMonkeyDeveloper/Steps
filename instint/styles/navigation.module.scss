@@ -35,3 +35,6 @@
 .imageContainer {
     margin-right: map-get($map: $margin, $key: marginHeavy);
 }
+.routerLink{
+    cursor: pointer;
+}
