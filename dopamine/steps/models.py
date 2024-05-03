@@ -116,10 +116,10 @@ class ToDo(models.Model):
 
 
 class Strides(models.Model):
-    dopamine = models.ForeignKey("Dopamine", on_delete=models.CASCADE)
+    key = models.ForeignKey("Dopamine", on_delete=models.CASCADE)
     todo = models.OneToOneField("ToDo", on_delete=models.CASCADE)
 
 
 class Steps(models.Model):
-    strides = models.ForeignKey("Strides", on_delete=models.CASCADE)
+    key = models.ForeignKey("Strides", on_delete=models.CASCADE)
     todo = models.OneToOneField("ToDo", on_delete=models.CASCADE)

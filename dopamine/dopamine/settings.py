@@ -41,9 +41,9 @@ INSTALLED_APPS = [
     "steps",
     "rest_framework",
     "corsheaders",
-    'rest_framework.authtoken'
+    "rest_framework.authtoken",
 ]
-AUTH_USER_MODEL = 'steps.CustomUser'
+AUTH_USER_MODEL = "steps.CustomUser"
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -52,7 +52,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "corsheaders.middleware.CorsMiddleware"
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = "dopamine.urls"
@@ -141,3 +141,5 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_METHODS = ["DELETE", "GET", "PATCH", "PUT", "POST"]

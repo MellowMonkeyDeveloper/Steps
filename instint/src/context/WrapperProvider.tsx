@@ -1,4 +1,5 @@
 "use client";
+import { retrieveCSRF } from "@/functions/fetchfunctions";
 import { SnackbarModelMessage } from "@/types/Enums/Snackbar";
 import { ModelProps } from "@/types/Interfaces/Models";
 import { SnackbarMessageProps } from "@/types/Interfaces/Snackbar";
@@ -16,7 +17,7 @@ import React, {
   useEffect,
 } from "react";
 import { useStyleRegistry } from "styled-jsx";
-
+import { parseCookies } from "nookies";
 // Create a new context
 interface WrapperContext {
   dopamineData: ModelProps[];
@@ -51,9 +52,10 @@ interface WrapperContext {
   setUpdateData: Dispatch<SetStateAction<boolean>>;
   showMenu: boolean;
   setShowMenu: Dispatch<SetStateAction<boolean>>;
-
-  userID: string;
-  setUserID: Dispatch<SetStateAction<string>>;
+  csrf: string;
+  setCsrf: Dispatch<SetStateAction<string>>;
+  userID: number;
+  setUserID: Dispatch<SetStateAction<number>>;
   postModel: "Dopamine" | "Strides" | "Steps";
   setPostModel: Dispatch<SetStateAction<"Dopamine" | "Strides" | "Steps">>;
 }
@@ -110,7 +112,7 @@ const WrapperProvider = ({ children }: ContextProviderProps) => {
   const [stepsTitle, setStepsTitle] = useState<string>("");
   const [showMenu, setShowMenu] = useState<boolean>(false);
   const [deleteItem, setDeleteItem] = useState<boolean>(false);
-  const [userID, setUserID] = useState<string>("");
+  const [userID, setUserID] = useState<number>(0);
   const [dopamineID, setDopamineID] = useState<string>("");
   const [stridesID, setStridesID] = useState<string>("");
   const [snackbar, setSnackbar] = useState<boolean>(false);
@@ -123,9 +125,14 @@ const WrapperProvider = ({ children }: ContextProviderProps) => {
   const [postModel, setPostModel] = useState<"Dopamine" | "Strides" | "Steps">(
     "Dopamine"
   );
+  const [csrf, setCsrf] = useState<string>("");
   useEffect(() => {
-    console.log(dopamineTitle, stridesTitle);
-  }, [dopamineTitle, stridesTitle]);
+    retrieveCSRF();
+  }, []);
+
+  useEffect(() => {
+
+  }, [])
 
   const wrapperContextValue: WrapperContext = {
     dopamineData,
@@ -138,7 +145,8 @@ const WrapperProvider = ({ children }: ContextProviderProps) => {
     setDopamineID,
     stridesID,
     setStridesID,
-
+    csrf,
+    setCsrf,
     showMenu,
     setShowMenu,
     snackbar,

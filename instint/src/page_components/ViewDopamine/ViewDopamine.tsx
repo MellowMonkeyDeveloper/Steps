@@ -13,18 +13,20 @@ export default function ViewDopamine() {
     setSnackbar,
     setSnackbarStatus,
     setSnackbarDetails,
+    userID
   } = useWrapper();
 
   useEffect(() => {
     retrieveData(
-      "/api/get/dopamine/",
+      "/api/get/dopamine",
       setDopamineData,
       setSnackbar,
       setSnackbarStatus,
-      setSnackbarDetails
+      setSnackbarDetails,
+      userID
     );
-    console.log(dopamineData);
-  }, [updateData]);
+    console.log(userID)
+  }, []);
   return (
     <section
       className={colorMode ? styles.containerDark : styles.containerLight}

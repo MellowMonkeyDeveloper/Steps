@@ -42,11 +42,10 @@ from django.utils.decorators import method_decorator
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
 
-
 @csrf_exempt
-def logout_view(request):
-    logout(request)
-    return JsonResponse({"message": "Logged out successfully"})
+def get_csrf_token(request):
+    csrf_token = get_token(request)
+    return JsonResponse({'csrf': csrf_token})
 
 
 class ToDoView(APIView):
@@ -78,9 +77,12 @@ class ToDoView(APIView):
 
 class DopamineRetrieveView(APIView):
     permission_classes = [IsAuthenticated]
-
-    def get(self, request, *args, **kwargs):
-        dopamine = Dopamine.objects.all()
+    print('get')
+    def get(self, request,pk, *args, **kwargs):
+        print(pk)
+        print(request)
+        user = get_object_or_404(settings.AUTH_USER_MODEL, pk=pk)
+        dopamine = Dopamine.objects.filter(user=user)
         serializer = DopamineSerializer(dopamine, many=True)
         return Response(serializer.data)
 
@@ -88,20 +90,19 @@ class DopamineRetrieveView(APIView):
 class DopamineCreateView(CreateAPIView):
     permission_classes = [IsAuthenticated]
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request,pk, *args, **kwargs):
 
-        print(request.data)
-        todo_serializer = ToDoSerializer(data=request.data)
+        todo_serializer = ToDoSerializer(data=request.data['todo'])
         if todo_serializer.is_valid():
-            todo = todo_serializer.save(user_id=request.data["user"])
+
+            todo = todo_serializer.save(user_id=pk)
         else:
             print(todo_serializer.errors)
             return Response(todo_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         dopamine_serializer = DopamineSerializer(
-            data={"todo": request.data, "user": request.data["user"]}
+            data={"todo": todo.id, "user": pk}
         )
-        print(todo.id)
         if dopamine_serializer.is_valid():
             dopamine_serializer.save()
             return Response(dopamine_serializer.data, status=status.HTTP_201_CREATED)
@@ -179,8 +180,9 @@ class StridesRetrieveView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, pk, *args, **kwargs):
-        strides = get_object_or_404(Strides, pk=pk)
-        serializer = StridesSerializer(strides)
+        dopamine = get_object_or_404(Dopamine, pk=pk)
+        strides = Strides.objects.filter(key=dopamine)
+        serializer = StridesSerializer(strides, many=True)
         return Response(serializer.data)
 
 
@@ -248,8 +250,9 @@ class StepsRetrieviewView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, pk, *args, **kwargs):
-        steps = get_object_or_404(Steps, pk=pk)
-        serializer = StepsSerializer(steps)
+        strides = get_object_or_404(Strides, pk=pk)
+        steps = Steps.objects.filter(key=strides)
+        serializer = StepsSerializer(steps, many=True)
         return Response(serializer.data)
 
 
@@ -288,7 +291,6 @@ class StepsDeleteView(DestroyAPIView):
 
 
 class UserRegistration(APIView):
-    @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(UserRegistration, self).dispatch(request, *args, **kwargs)
 
@@ -314,9 +316,7 @@ class UserRegistration(APIView):
 
 
 class UserLogin(APIView):
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs):
-        return super(UserLogin, self).dispatch(request, *args, **kwargs)
+
 
     def post(self, request):
         email = request.data.get("email")

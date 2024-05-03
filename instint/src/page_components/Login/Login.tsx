@@ -1,16 +1,15 @@
 "use client";
 
 import { useWrapper } from "@/context/WrapperProvider";
+import { setCookie } from "nookies";
 import { useEffect, useState } from "react";
 
 export default function Login() {
   const [useranme, setUsername] = useState<any>();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const {setCsrfToken, setUserID} = useWrapper()
-    const {csrfToken} = useWrapper()
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log(csrfToken)
+  const {setUserID} = useWrapper()
+ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formObject = {
       username: useranme,
@@ -27,8 +26,13 @@ export default function Login() {
         })
         const data = await response.json()
         console.log(data)
-        setCsrfToken(data.token)
-        setUserID(data.userID)
+        setCookie(null, 'auth_token', data.token, {
+          maxAge: 80000,
+          path: '/',
+          secure: true,
+          sameSite: 'strict'
+        })
+        setUserID(data.data.userID)
     }
     postRegister()
 };

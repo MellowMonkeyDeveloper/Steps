@@ -1,13 +1,16 @@
+import { APIMethodsProps } from "@/types/Interfaces/APIMethods";
 import { APIRoutePostPatchProps } from "@/types/Interfaces/APIRoutes";
 import { ChangeEvent } from "react";
-
+import { parseCookies } from "nookies";
 const handleSubmit = async (
-  e: ChangeEvent,
-  apiMethod: "POST" | "PATCH" | "PUT",
+  e: void,
+  apiMethod: APIMethodsProps['method'],
   formData: any,
-  apiRoute: APIRoutePostPatchProps['route']
+  apiRoute: APIRoutePostPatchProps['route'],
+  userID: number,
+  key: number,
 ) => {
-  e.preventDefault();
+  e
     try {
       const response = await fetch(`${apiRoute}`, {
         method: apiMethod,
@@ -15,9 +18,11 @@ const handleSubmit = async (
           "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify(formData),
+        body: JSON.stringify({todo: formData, user: userID, key: key}),
       });
       const fetchResponse = await response.json();
+      const cookies = parseCookies()
+      console.log(cookies)
       console.log(fetchResponse);
       if (response.ok) {
         console.log("ok");

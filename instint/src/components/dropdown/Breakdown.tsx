@@ -66,12 +66,12 @@ export default function Breakdown({ data, type }: BreakdownProps) {
                 handleDropdown(
                   false,
                   setDropdown,
-                  type === 'Strides' ? setStridesData : type === 'Steps' ? setStepsData : null,
+                  type === 'Dopamine' ? setStridesData : type === 'Strides' ? setStepsData : null,
                   setSnackbar,
                   setSnackbarDetails,
                   setSnackbarStatus,
-                  type === 'Strides' ? stridesData : type === 'Steps' ? stepsData.keys : ''
-                  type === 'Strides' ? apiRoutesGetObject.Strides.route : type === 'Steps' ? apiRoutesGetObject.Steps.route : null
+                  type === 'Dopamine' ? data.id : type === 'Strides' ? data.id : '',
+                  type === 'Dopamine' ? apiRoutesGetObject.Strides.route : type === 'Strides' ? apiRoutesGetObject.Steps.route : undefined
                 )
               }
             />
@@ -106,13 +106,13 @@ export default function Breakdown({ data, type }: BreakdownProps) {
         />
       </div>
       {dropdown && type === "Dopamine" && (
-        <BreakdownMoreInfo type="Dopamine" breakdownInfoData={stridesData} breakdownData={dopamineData} />
+        <BreakdownMoreInfo type="Dopamine" breakdownInfoData={data} breakdownData={stridesData} />
       )}
       {dropdown && type === "Strides" && (
-        <BreakdownMoreInfo type="Strides" breakdownInfoData={stepsData} breakdownData={stridesData} />
+        <BreakdownMoreInfo type="Strides" breakdownInfoData={data} breakdownData={stepsData} />
       )}
       {dropdown && type === "Steps" && (
-        <BreakdownMoreInfo type="Steps"  breakdownData={stepsData} />
+        <BreakdownMoreInfo type="Steps"  breakdownInfoData={data} />
       )}
       <div>{add && <CreateForm apiMethod="PATCH" />}</div>
     </>

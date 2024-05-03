@@ -13,8 +13,8 @@ import { ModelProps } from "@/types/Interfaces/Models";
 import { SnackbarModel } from "@/types/Enums/Snackbar";
 import { SnackbarModelProps } from "@/types/Interfaces/Snackbar";
 export interface BreakdownMoreInfoProps {
-  breakdownData: ModelProps;
-  breakdownInfoData: ModelProps[];
+  breakdownData?: ModelProps[];
+  breakdownInfoData?: ModelProps;
   type: SnackbarModelProps['model'];
 }
 export default function BreakdownMoreInfo({
@@ -58,7 +58,7 @@ export default function BreakdownMoreInfo({
                 </div>
                 <div className={styles.pContainer}>
                   <p className={colorMode ? styles.pDark : styles.pLight}>
-                    {breakdownData.todo.description}
+                    {breakdownInfoData.todo.description}
                   </p>
                 </div>
               </div>
@@ -74,7 +74,7 @@ export default function BreakdownMoreInfo({
                 </div>
                 <div className={styles.pContainer}>
                   <p className={colorMode ? styles.pDark : styles.pLight}>
-                    {breakdownData.todo.motivation}
+                    {breakdownInfoData.todo.motivation}
                   </p>
                 </div>
               </div>
@@ -95,7 +95,7 @@ export default function BreakdownMoreInfo({
                     colorMode ? styles.subheaderDark : styles.subheaderLight
                   }
                 >
-                  {breakdownData.todo.completed === false ? 'Incomplete' : 'Complete'}
+                  {breakdownInfoData.todo.completed === false ? 'Incomplete' : 'Complete'}
                 </h5>
               </div>
             </div>
@@ -115,7 +115,7 @@ export default function BreakdownMoreInfo({
                     colorMode ? styles.subheaderDark : styles.subheaderLight
                   }
                 >
-                  {breakdownData.todo.deadline.toLocaleDateString()}
+                  {breakdownInfoData.todo.deadline.toLocaleDateString()}
                 </h5>
               </div>
             </div>
@@ -124,14 +124,14 @@ export default function BreakdownMoreInfo({
             </div>
           </>
         ) : (
-          <CreateForm data={breakdownData} apiMethod="PATCH" update="Existing" />
+          <CreateForm data={breakdownInfoData} apiMethod="PATCH" update="Existing" />
         )}
       </article>
       <article className={styles.breakdownContainer}>
         {type === "Dopamine" &&
-          breakdownInfoData.map((value: any) => <Breakdown data={value} type="Strides" />)}
+          breakdownData.map((value: any) => <Breakdown data={value} type="Strides" />)}
         {type === "Strides" &&
-          breakdownInfoData.map((value: any) => (
+          breakdownData.map((value: any) => (
             <Breakdown data={value} type="Steps" />
           ))}
       </article>

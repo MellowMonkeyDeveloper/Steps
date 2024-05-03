@@ -7,7 +7,6 @@ export default function Register() {
   const [username, setUsername] = useState<any>();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const {setCsrfToken} = useWrapper()
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formObject = {
@@ -24,7 +23,6 @@ export default function Register() {
             body: JSON.stringify(formObject)
         })
         const data = await response.json()
-        setCsrfToken(data.token)
         console.log(response, data)
     }
     postRegister()

@@ -7,7 +7,7 @@ import {
 } from "@/types/Interfaces/Snackbar";
 import { snackbarMessageObject } from "@/types/Objects/Snackbar";
 import { Dispatch, SetStateAction } from "react";
-
+import { setCookie } from "nookies";
 async function retrieveData(
   apiRoute: APIRouteGetProps['route'] | undefined,
   setDataArray: Dispatch<SetStateAction<ModelProps[]>> | null,
@@ -17,7 +17,7 @@ async function retrieveData(
   key?: number
 ) {
   try {
-    const response = await fetch(`${apiRoute}${key}`, {
+    const response = await fetch(`${apiRoute}?key=${key}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -34,7 +34,11 @@ async function retrieveData(
 
     // Parse JSON data from response body
     const data = await response.json();
-    setDataArray(data)
+    if(apiRoute === '/api/get/dopamine'){
+      setDataArray(data)
+    }else if(apiRoute === '/api/get/steps' || apiRoute === '/api/get/strides'){
+      setDataArray(data)
+    }
     // Log the parsed JSON data
   } catch (error) {
     // Handle errors
@@ -45,4 +49,21 @@ async function retrieveData(
   }
 }
 
-export {retrieveData}
+async function retrieveCSRF() {
+  const response = await fetch('/api/get/csrf/', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  const token = await response.json()
+  console.log(token)
+  setCookie(null, 'csrftoken', token.csrf, {
+    maxAge: 80000,
+    path: '/',
+    secure: true,
+    sameSite: 'strict'
+  })
+}
+
+export {retrieveData, retrieveCSRF}

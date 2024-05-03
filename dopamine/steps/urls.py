@@ -8,7 +8,7 @@ from .views import (
     UserLogin,
     UserRegistration,
     ForgotPassword,
-    logout_view,
+    get_csrf_token,
     StridesCreateView,
     StridesRetrieveView,
     StridesDeleteView,
@@ -20,6 +20,7 @@ from .views import (
 )
 
 urlpatterns = [
+    path("api/get/csrf/", get_csrf_token, name="csrf"),
     path(
         "api/create/dopamine/<int:pk>/",
         DopamineCreateView.as_view(),
@@ -62,7 +63,7 @@ urlpatterns = [
     ),
     path(
         "api/get/steps/<int:pk>/",
-        StepsRetrieveView.as_view(),
+        StepsRetrieviewView.as_view(),
         name="steps-retrieve",
     ),
     path(
@@ -83,5 +84,4 @@ urlpatterns = [
     path("register/", UserRegistration.as_view(), name="register"),
     path("login/", UserLogin.as_view(), name="login"),
     path("forgot-password/", ForgotPassword.as_view(), name="forgot-password"),
-    path("logout/", logout_view, name="logout"),
 ]

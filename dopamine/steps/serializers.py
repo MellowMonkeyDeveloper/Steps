@@ -36,10 +36,15 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class DopamineSerializer(serializers.ModelSerializer):
-    todo = ToDoSerializer()
     class Meta:
         model = Dopamine
         fields = "__all__"
+        
+    def create(self, validated_data):
+        todo_data = validated_data.get('todo')
+        user_data = validated_data.get('user')
+        dopamine_instance = Dopamine.objects.create(todo=todo_data, user=user_data)
+        return dopamine_instance
 
 
 class PasswordResetSerializer(serializers.Serializer):

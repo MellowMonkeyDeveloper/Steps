@@ -13,7 +13,7 @@ export default function CreateDopamine() {
     <section
       className={colorMode ? styles.containerDark : styles.containerLight}
     >
-      <CreateForm apiMethod="POST" />
+      <CreateForm apiRoute='/api/post/dopamine' type='Dopamine' apiMethod="POST" />
     </section>
   );
 }

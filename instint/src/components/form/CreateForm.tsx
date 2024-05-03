@@ -4,72 +4,63 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import styles from "../../../styles/form.module.scss";
 import { handleSubmit } from "@/functions/form";
+import { APIRoutePostPatchProps } from "@/types/Interfaces/APIRoutes";
+import { SnackbarModelProps } from "@/types/Interfaces/Snackbar";
+import { ModelProps, ToDoProps } from "@/types/Interfaces/Models";
+import { APIMethods } from "@/types/Enums/APIMethods";
+import { APIMethodsProps } from "@/types/Interfaces/APIMethods";
 interface CreateFormProps {
-  apiMethod: "POST" | "PATCH";
-  data?: any;
-  update?: "Existing" | "Array";
-  type?: "Dopamine" | "Strides" | "Delete";
-}
-interface formProps {
-  title: string | undefined;
-  description: string | undefined;
-  motivation: string | undefined;
-  deadline: string | undefined;
+  apiMethod: APIMethodsProps["method"];
+  data: ModelProps["todo"];
+  type: SnackbarModelProps["model"];
+  apiRoute: APIRoutePostPatchProps["route"];
 }
 
 export default function CreateForm({
   apiMethod,
   data,
-  update,
   type,
+  apiRoute,
 }: CreateFormProps) {
-  const {
-    colorMode,
-    postModel,
-    dopamineID,
-    stridesID,
-
-    userID,
-  } = useWrapper();
+  const { colorMode, postModel, dopamineID, stridesID, stepsID, userID } =
+    useWrapper();
   const [formData, setFormData] = useState<any>({
     title: "",
     description: "",
     motivation: "",
     deadline: "",
+    completed: "",
   });
 
-  console.log(postModel);
-
   const handleChange = (e) => {
-    if (postModel === "Strides") {
-      setFormData({
-        ...formData,
-        [e.target.name]: e.target.value,
-        dopamine: dopamineID,
-        user: userID
-      });
-    } else if (postModel === "Dopamine") {
+    if (type === "Strides") {
       setFormData({
         ...formData,
         [e.target.name]: e.target.value,
         user: userID,
       });
-    } else if (postModel === "Steps") {
+    } else if (type === "Dopamine") {
+      console.log(e.target.value);
       setFormData({
         ...formData,
         [e.target.name]: e.target.value,
-        strides: stridesID,
-        user: userID
+        user: userID,
+      });
+    } else if (type === "Steps") {
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value,
+        user: userID,
       });
     }
   };
   useEffect(() => {
-    if (postModel === "Dopamine") {
+    if (type === "Dopamine") {
       if (data === undefined) {
       } else if (data !== undefined) {
         setFormData(data);
       }
-    } else if (postModel === "Strides") {
+    } else if (type === "Strides") {
       if (data === undefined) {
       } else if (data !== undefined) {
         setFormData(data);
@@ -88,7 +79,7 @@ export default function CreateForm({
     >
       <div>
         <h2 className={colorMode ? styles.textDark : styles.textLight}>
-          {update === "Existing" ? `Update ${postModel}` : `Add ${postModel}`}
+          {apiMethod === "PATCH" ? `Update ${type}` : `Add ${type}`}
         </h2>
       </div>
       <form className={colorMode ? styles.formDark : styles.formLight}>
@@ -110,15 +101,7 @@ export default function CreateForm({
               className={styles.textarea}
               onChange={handleChange}
               name="description"
-              value={
-                postModel === "Dopamine"
-                  ? formData?.description
-                  : postModel === "Strides"
-                  ? formStridesData?.strides_description
-                  : postModel === "Steps"
-                  ? formStepsData?.steps_description
-                  : ""
-              }
+              value={formData.description}
             />
           </label>
         </div>
@@ -129,15 +112,7 @@ export default function CreateForm({
             <textarea
               className={styles.textarea}
               onChange={handleChange}
-              value={
-                postModel === "Dopamine"
-                  ? formData?.motivation
-                  : postModel === "Strides"
-                  ? formStridesData?.strides_motivation
-                  : postModel === "Steps"
-                  ? formStepsData?.steps_motivation
-                  : ""
-              }
+              value={formData.motivation}
               name="motivation"
             />
           </label>
@@ -168,21 +143,34 @@ export default function CreateForm({
               onChange={handleChange}
               type="date"
               name="deadline"
-              value={
-                postModel === "Dopamine"
-                  ? formData?.deadline
-                  : postModel === "Strides"
-                  ? formStridesData?.strides_deadline
-                  : postModel === "Steps"
-                  ? formStepsData?.steps_deadline
-                  : ""
-              }
+              value={formData.deadline}
             />
           </label>
         </div>
 
         <button
-          onClick={() => handleSubmit(event, apiMethod, formData, apiRoute)}
+          onClick={(event) =>
+            handleSubmit(
+              event.preventDefault(),
+              apiMethod,
+              formData,
+              apiRoute,
+              userID,
+              type === "Dopamine" && apiMethod === "POST"
+                ? userID
+                : type === "Dopamine" && apiMethod === "PATCH"
+                ? dopamineID
+                : type === "Strides" && apiMethod === "POST"
+                ? dopamineID
+                : type === "Strides" && apiMethod === "PATCH"
+                ? stridesID
+                : type === "Steps" && apiMethod === "POST"
+                ? stridesID
+                : type === "Steps" && apiMethod === "PATCH"
+                ? stepsID
+                : 0
+            )
+          }
         >
           submit
         </button>
