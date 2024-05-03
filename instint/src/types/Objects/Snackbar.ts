@@ -20,18 +20,18 @@ const snackbarModelObject: Record<SnackbarModel, SnackbarModelProps> = {
 }
 
 const snackbarModelMessageObject: Record<SnackbarModelMessage, SnackbarMessageProps> = {
-    [SnackbarModelMessage.DopamineCreated]: {message: `${snackbarModelObject[0].model} ${snackbarMessageObject.Created.message}`},
-    [SnackbarModelMessage.StridesCreated]: {message: `${snackbarModelObject[1].model} ${snackbarMessageObject.Created.message}`},
-    [SnackbarModelMessage.StepsCreated]: {message: `${snackbarModelObject[2].model} ${snackbarMessageObject.Created.message}`},
-    [SnackbarModelMessage.DopamineUpdated]: {message: `${snackbarModelObject[0].model} ${snackbarMessageObject.Updated.message}`},
-    [SnackbarModelMessage.StridesUpdated]: {message: `${snackbarModelObject[1].model} ${snackbarMessageObject.Updated.message}`},
-    [SnackbarModelMessage.StepsUpdated]: {message: `${snackbarModelObject[2].model} ${snackbarMessageObject.Updated.message}`},
-    [SnackbarModelMessage.DopamineDeleted]: {message: `${snackbarModelObject[0].model} ${snackbarMessageObject.Deleted.message}`},
-    [SnackbarModelMessage.StridesDeleted]: {message: `${snackbarModelObject[1].model} ${snackbarMessageObject.Deleted.message}`},
-    [SnackbarModelMessage.StepsDeleted]: {message: `${snackbarModelObject[2].model} ${snackbarMessageObject.Deleted.message}`},
-    [SnackbarModelMessage.DopamineCompleted]: {message: `${snackbarModelObject[0].model} ${snackbarMessageObject["Goal Completed!"].message}`},
-    [SnackbarModelMessage.StridesCompleted]: {message: `${snackbarModelObject[1].model} ${snackbarMessageObject["Goal Completed!"].message}`},
-    [SnackbarModelMessage.StepsCompleted]: {message: `${snackbarModelObject[2].model} ${snackbarMessageObject["Goal Completed!"].message}`},
+    [SnackbarModelMessage.DopamineCreated]: {message: `${snackbarModelObject.Dopamine.model} ${snackbarMessageObject.Created.message}`},
+    [SnackbarModelMessage.StridesCreated]: {message: `${snackbarModelObject.Strides.model} ${snackbarMessageObject.Created.message}`},
+    [SnackbarModelMessage.StepsCreated]: {message: `${snackbarModelObject.Steps.model} ${snackbarMessageObject.Created.message}`},
+    [SnackbarModelMessage.DopamineUpdated]: {message: `${snackbarModelObject.Dopamine.model} ${snackbarMessageObject.Updated.message}`},
+    [SnackbarModelMessage.StridesUpdated]: {message: `${snackbarModelObject.Strides.model} ${snackbarMessageObject.Updated.message}`},
+    [SnackbarModelMessage.StepsUpdated]: {message: `${snackbarModelObject.Steps.model} ${snackbarMessageObject.Updated.message}`},
+    [SnackbarModelMessage.DopamineDeleted]: {message: `${snackbarModelObject.Dopamine.model} ${snackbarMessageObject.Deleted.message}`},
+    [SnackbarModelMessage.StridesDeleted]: {message: `${snackbarModelObject.Strides.model} ${snackbarMessageObject.Deleted.message}`},
+    [SnackbarModelMessage.StepsDeleted]: {message: `${snackbarModelObject.Steps.model} ${snackbarMessageObject.Deleted.message}`},
+    [SnackbarModelMessage.DopamineCompleted]: {message: `${snackbarModelObject.Dopamine.model} ${snackbarMessageObject["Goal Completed!"].message}`},
+    [SnackbarModelMessage.StridesCompleted]: {message: `${snackbarModelObject.Strides.model} ${snackbarMessageObject["Goal Completed!"].message}`},
+    [SnackbarModelMessage.StepsCompleted]: {message: `${snackbarModelObject.Steps.model} ${snackbarMessageObject["Goal Completed!"].message}`},
 
 }
 

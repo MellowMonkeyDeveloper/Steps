@@ -27,8 +27,9 @@ from django.utils.http import urlsafe_base64_decode
 from rest_framework.views import APIView
 from rest_framework.generics import (
     CreateAPIView,
-    RetrieveDestroyAPIView,
-    RetrieveUpdateAPIView,
+    RetrieveAPIView,
+    DestroyAPIView,
+    UpdateAPIView,
 )
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
@@ -112,6 +113,68 @@ class DopamineCreateView(CreateAPIView):
             )
 
 
+class DopamineDeleteView(DestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = DopamineSerializer
+
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class DopamineUpdateView(UpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = DopamineSerializer
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        todo_data = request.data.pop("todo", None)
+        if todo_data:
+            todo_instance = instance.todo
+            todo_serializer = ToDoSerializer(todo_instance, data=todo_data)
+            todo_serializer.save(user_id=request.data["user"])
+            if todo_serializer.is_valid():
+                todo_serializer.save()
+            else:
+                return Response(
+                    todo_serializer.errors, status=status.HTTP_400_BAD_REQUEST
+                )
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
+
+class StridesCreateView(CreateAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+
+        print(request.data)
+        todo_serializer = ToDoSerializer(data=request.data)
+        if todo_serializer.is_valid():
+            todo = todo_serializer.save(user_id=request.data["user"])
+        else:
+            print(todo_serializer.errors)
+            return Response(todo_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        strides_serializer = StridesSerializer(
+            data={"todo": request.data, "dopamine": request.data["dopamine"]}
+        )
+        print(todo.id)
+        if strides_serializer.is_valid():
+            strides_serializer.save()
+            return Response(strides_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            print(strides_serializer.errors)
+
+            return Response(
+                strides_serializer.errors, status=status.HTTP_400_BAD_REQUEST
+            )
+
+
 class StridesRetrieveView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -121,6 +184,66 @@ class StridesRetrieveView(APIView):
         return Response(serializer.data)
 
 
+class StridesUpdateView(UpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = StridesSerializer
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        todo_data = request.data.pop("todo", None)
+        if todo_data:
+            todo_instance = instance.todo
+            todo_serializer = ToDoSerializer(todo_instance, data=todo_data)
+            todo_serializer.save(user_id=request.data["user"])
+            if todo_serializer.is_valid():
+                todo_serializer.save()
+            else:
+                return Response(
+                    todo_serializer.errors, status=status.HTTP_400_BAD_REQUEST
+                )
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
+
+class StridesDeleteView(DestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = StridesSerializer
+
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class StepsCreateView(CreateAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+
+        print(request.data)
+        todo_serializer = ToDoSerializer(data=request.data)
+        if todo_serializer.is_valid():
+            todo = todo_serializer.save(user_id=request.data["user"])
+        else:
+            print(todo_serializer.errors)
+            return Response(todo_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        steps_serializer = StepsSerializer(
+            data={"todo": request.data, "strides": request.data["strides"]}
+        )
+        print(todo.id)
+        if steps_serializer.is_valid():
+            steps_serializer.save()
+            return Response(steps_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            print(steps_serializer.errors)
+
+            return Response(steps_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class StepsRetrieviewView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -128,6 +251,40 @@ class StepsRetrieviewView(APIView):
         steps = get_object_or_404(Steps, pk=pk)
         serializer = StepsSerializer(steps)
         return Response(serializer.data)
+
+
+class StepsUpdateView(UpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = StepsSerializer
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        todo_data = request.data.pop("todo", None)
+        if todo_data:
+            todo_instance = instance.todo
+            todo_serializer = ToDoSerializer(todo_instance, data=todo_data)
+            todo_serializer.save(user_id=request.data["user"])
+            if todo_serializer.is_valid():
+                todo_serializer.save()
+            else:
+                return Response(
+                    todo_serializer.errors, status=status.HTTP_400_BAD_REQUEST
+                )
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
+
+class StepsDeleteView(DestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = StepsSerializer
+
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class UserRegistration(APIView):
@@ -171,10 +328,9 @@ class UserLogin(APIView):
         if user:
             login(request, user)
             token, created = Token.objects.get_or_create(user=user)
-            return Response(
-                {"token": token.key, "userID": user.id, "message": "Login successful"},
-                status=status.HTTP_200_OK,
-            )
+            response = JsonResponse({"message": "Login successful", "userID": user.id})
+            response.set_cookie("auth_token", token.key, httponly=True)
+            return response
         else:
             return Response(
                 {"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED

@@ -3,34 +3,85 @@ from django.urls import path
 from .views import (
     DopamineRetrieveView,
     DopamineCreateView,
+    DopamineUpdateView,
+    DopamineDeleteView,
     UserLogin,
     UserRegistration,
     ForgotPassword,
-    logout_view
+    logout_view,
+    StridesCreateView,
+    StridesRetrieveView,
+    StridesDeleteView,
+    StridesUpdateView,
+    StepsCreateView,
+    StepsRetrieviewView,
+    StepsUpdateView,
+    StepsDeleteView,
 )
 
 urlpatterns = [
     path(
-        "api/create/dopamine/",
+        "api/create/dopamine/<int:pk>/",
         DopamineCreateView.as_view(),
-        name="dopamine-list-create",
+        name="dopamine-create",
     ),
-    
     path(
-        "api/get/dopamine",
+        "api/create/strides/<int:pk>/",
+        StridesCreateView.as_view(),
+        name="strides-create",
+    ),
+    path(
+        "api/create/steps/<int:pk>/",
+        StepsCreateView.as_view(),
+        name="steps-create",
+    ),
+    path(
+        "api/delete/dopamine/<int:pk>/",
+        DopamineDeleteView.as_view(),
+        name="dopamine-delete",
+    ),
+    path(
+        "api/delete/strides/<int:pk>/",
+        StridesDeleteView.as_view(),
+        name="strides-delete",
+    ),
+    path(
+        "api/delete/steps/<int:pk>/",
+        StepsDeleteView.as_view(),
+        name="steps-delete",
+    ),
+    path(
+        "api/get/dopamine/<int:pk>/",
         DopamineRetrieveView.as_view(),
         name="dopamine-retrieve",
     ),
     path(
-        'register/', UserRegistration.as_view(), name='register'
+        "api/get/strides/<int:pk>/",
+        StridesRetrieveView.as_view(),
+        name="strides-retrieve",
     ),
     path(
-        'login/', UserLogin.as_view(), name='login'
-    ),path(
-        'forgot-password/', ForgotPassword.as_view(), name='forgot-password'
+        "api/get/steps/<int:pk>/",
+        StepsRetrieveView.as_view(),
+        name="steps-retrieve",
     ),
-    
     path(
-        'logout/', logout_view, name='logout'
-    )
-   ]
+        "api/update/dopamine/<int:pk>/",
+        DopamineUpdateView.as_view(),
+        name="dopamine-update",
+    ),
+    path(
+        "api/update/strides/<int:pk>/",
+        StridesUpdateView.as_view(),
+        name="strides-update",
+    ),
+    path(
+        "api/update/steps/<int:pk>/",
+        StepsUpdateView.as_view(),
+        name="steps-update",
+    ),
+    path("register/", UserRegistration.as_view(), name="register"),
+    path("login/", UserLogin.as_view(), name="login"),
+    path("forgot-password/", ForgotPassword.as_view(), name="forgot-password"),
+    path("logout/", logout_view, name="logout"),
+]

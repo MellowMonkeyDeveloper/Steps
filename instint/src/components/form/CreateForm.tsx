@@ -46,6 +46,7 @@ export default function CreateForm({
         ...formData,
         [e.target.name]: e.target.value,
         dopamine: dopamineID,
+        user: userID
       });
     } else if (postModel === "Dopamine") {
       setFormData({
@@ -58,6 +59,7 @@ export default function CreateForm({
         ...formData,
         [e.target.name]: e.target.value,
         strides: stridesID,
+        user: userID
       });
     }
   };
@@ -97,21 +99,7 @@ export default function CreateForm({
               onChange={handleChange}
               name="title"
               type="text"
-              value={
-                postModel === "Dopamine" && data?.title !== undefined
-                  ? data?.title
-                  : postModel === "Dopamine" && data?.title === undefined
-                  ? formData?.title
-                  : postModel === "Strides" && data?.strides_title !== undefined
-                  ? data?.strides_title
-                  : postModel === "Strides" && data?.strides_title === undefined
-                  ? formStridesData.strides_title
-                  : postModel === "Steps" && data?.steps_title !== undefined
-                  ? data?.steps_title
-                  : postModel === "Steps" && data?.steps_title === undefined
-                  ? formStepsData.steps_title
-                  : ""
-              }
+              value={data?.title !== undefined ? data?.title : formData?.title}
             />
           </label>
         </div>

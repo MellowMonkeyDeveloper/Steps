@@ -9,24 +9,26 @@ import Breakdown from "../dropdown/Breakdown";
 import styles from "../../../styles/breakdownmoreinfo.module.scss";
 import { useWrapper } from "@/context/WrapperProvider";
 import CreateForm from "../form/CreateForm";
+import { ModelProps } from "@/types/Interfaces/Models";
+import { SnackbarModel } from "@/types/Enums/Snackbar";
+import { SnackbarModelProps } from "@/types/Interfaces/Snackbar";
 export interface BreakdownMoreInfoProps {
-  data: any;
-  type: "Dopamine" | "Strides" | "Steps";
+  breakdownData: ModelProps;
+  breakdownInfoData: ModelProps[];
+  type: SnackbarModelProps['model'];
 }
 export default function BreakdownMoreInfo({
-  data,
+  breakdownData,
+  breakdownInfoData,
   type,
 }: BreakdownMoreInfoProps) {
   const { colorMode, setPostModel } = useWrapper();
   const [showForm, setShowForm] = useState<boolean>(false);
   const handleUpdate = () => {
     setShowForm(true);
-    console.log(data);
     setPostModel(type);
   };
-  useEffect(() => {
-    console.log(data);
-  }, []);
+
   return (
     <section
       className={colorMode ? styles.containerDark : styles.containerLight}
@@ -56,13 +58,7 @@ export default function BreakdownMoreInfo({
                 </div>
                 <div className={styles.pContainer}>
                   <p className={colorMode ? styles.pDark : styles.pLight}>
-                    {type === "Dopamine"
-                      ? data.todo.description
-                      : type === "Strides"
-                      ? data.strides_description
-                      : type === "Steps"
-                      ? data.steps_description
-                      : null}
+                    {breakdownData.todo.description}
                   </p>
                 </div>
               </div>
@@ -78,7 +74,7 @@ export default function BreakdownMoreInfo({
                 </div>
                 <div className={styles.pContainer}>
                   <p className={colorMode ? styles.pDark : styles.pLight}>
-                    {data.todo.motivation}
+                    {breakdownData.todo.motivation}
                   </p>
                 </div>
               </div>
@@ -99,7 +95,7 @@ export default function BreakdownMoreInfo({
                     colorMode ? styles.subheaderDark : styles.subheaderLight
                   }
                 >
-                  {data.todo.completed === false ? 'Incomplete' : 'Complete'}
+                  {breakdownData.todo.completed === false ? 'Incomplete' : 'Complete'}
                 </h5>
               </div>
             </div>
@@ -119,7 +115,7 @@ export default function BreakdownMoreInfo({
                     colorMode ? styles.subheaderDark : styles.subheaderLight
                   }
                 >
-                  {data.todo.deadline}
+                  {breakdownData.todo.deadline.toLocaleDateString()}
                 </h5>
               </div>
             </div>
@@ -128,14 +124,14 @@ export default function BreakdownMoreInfo({
             </div>
           </>
         ) : (
-          <CreateForm data={data} apiMethod="PATCH" update="Existing" />
+          <CreateForm data={breakdownData} apiMethod="PATCH" update="Existing" />
         )}
       </article>
       <article className={styles.breakdownContainer}>
         {type === "Dopamine" &&
-          data.map((value: any) => <Breakdown data={value} type="Strides" />)}
+          breakdownInfoData.map((value: any) => <Breakdown data={value} type="Strides" />)}
         {type === "Strides" &&
-          data.steps.map((value: any) => (
+          breakdownInfoData.map((value: any) => (
             <Breakdown data={value} type="Steps" />
           ))}
       </article>

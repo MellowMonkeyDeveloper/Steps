@@ -15,13 +15,14 @@ class ToDoSerializer(serializers.ModelSerializer):
 
 
 class StepsSerializer(ToDoSerializer):
+    todo = ToDoSerializer()
     class Meta:
         model = Steps
         fields = "__all__"
 
 
 class StridesSerializer(ToDoSerializer):
-
+    todo = ToDoSerializer()
     class Meta:
         model = Strides
         fields = "__all__"
@@ -39,12 +40,6 @@ class DopamineSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dopamine
         fields = "__all__"
-    
-    def create(self, validated_data):
-        todo_data = validated_data.pop('todo')
-        todo = ToDo.objects.create(**todo_data)
-        dopamine = Dopamine.objects.create(todo = todo, **validated_data)
-        return dopamine
 
 
 class PasswordResetSerializer(serializers.Serializer):
