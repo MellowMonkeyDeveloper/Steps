@@ -7,5 +7,5 @@ export interface SnackbarActionProps {
 }
 
 export interface SnackbarModelProps{
-    model: 'Dopamine' | 'Strides' | 'Steps'
+    model: 'Dopamine' | 'Strides' | 'Steps' | undefined
 }

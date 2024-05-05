@@ -9,7 +9,7 @@ import Breakdown from "../dropdown/Breakdown";
 import styles from "../../../styles/breakdownmoreinfo.module.scss";
 import { useWrapper } from "@/context/WrapperProvider";
 import CreateForm from "../form/CreateForm";
-import { ModelProps } from "@/types/Interfaces/Models";
+import { ModelProps, ToDoProps } from "@/types/Interfaces/Models";
 import { SnackbarModel } from "@/types/Enums/Snackbar";
 import { SnackbarModelProps } from "@/types/Interfaces/Snackbar";
 export interface BreakdownMoreInfoProps {
@@ -22,7 +22,7 @@ export default function BreakdownMoreInfo({
   breakdownInfoData,
   type,
 }: BreakdownMoreInfoProps) {
-  const { colorMode, setPostModel } = useWrapper();
+  const { colorMode } = useWrapper();
   const [showForm, setShowForm] = useState<boolean>(false);
   const handleUpdate = () => {
     setShowForm(true);
@@ -115,7 +115,6 @@ export default function BreakdownMoreInfo({
                     colorMode ? styles.subheaderDark : styles.subheaderLight
                   }
                 >
-                  {breakdownInfoData.todo.deadline.toLocaleDateString()}
                 </h5>
               </div>
             </div>

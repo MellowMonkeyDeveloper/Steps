@@ -34,30 +34,24 @@ interface WrapperContext {
   setSnackbarDetails: Dispatch<SetStateAction<SnackbarMessageProps["message"]>>;
   colorMode: boolean;
   setColorMode: Dispatch<SetStateAction<boolean>>;
-  dopamineID: string;
-  setDopamineID: Dispatch<SetStateAction<string>>;
-  stridesID: string;
-  setStridesID: Dispatch<SetStateAction<string>>;
+  dopamineID: number;
+  setDopamineID: Dispatch<SetStateAction<number>>;
+  stridesID: number;
+  setStridesID: Dispatch<SetStateAction<number>>;
   deleteModal: boolean;
   setDeleteModal: Dispatch<SetStateAction<boolean>>;
-  dopamineTitle: string;
-  setDopamineTitle: Dispatch<SetStateAction<string>>;
-  stridesTitle: string;
-  setStridesTitle: Dispatch<SetStateAction<string>>;
-  stepsTitle: string;
-  setStepsTitle: Dispatch<SetStateAction<string>>;
+
   deleteItem: boolean;
   setDeleteItem: Dispatch<SetStateAction<boolean>>;
-  updateData: boolean;
-  setUpdateData: Dispatch<SetStateAction<boolean>>;
+
   showMenu: boolean;
   setShowMenu: Dispatch<SetStateAction<boolean>>;
-  csrf: string;
-  setCsrf: Dispatch<SetStateAction<string>>;
+
   userID: number;
   setUserID: Dispatch<SetStateAction<number>>;
-  postModel: "Dopamine" | "Strides" | "Steps";
-  setPostModel: Dispatch<SetStateAction<"Dopamine" | "Strides" | "Steps">>;
+
+  stepsID: number;
+  setStepsID: Dispatch<SetStateAction<number>>;
 }
 export const WrapperContextProvider = createContext<WrapperContext | null>(
   null
@@ -105,17 +99,15 @@ const WrapperProvider = ({ children }: ContextProviderProps) => {
     },
   ]);
   const [colorMode, setColorMode] = useState<boolean>(false);
-  const [updateData, setUpdateData] = useState<boolean>(false);
   const [deleteModal, setDeleteModal] = useState<boolean>(false);
-  const [dopamineTitle, setDopamineTitle] = useState<string>("");
-  const [stridesTitle, setStridesTitle] = useState<string>("");
-  const [stepsTitle, setStepsTitle] = useState<string>("");
+
   const [showMenu, setShowMenu] = useState<boolean>(false);
   const [deleteItem, setDeleteItem] = useState<boolean>(false);
   const [userID, setUserID] = useState<number>(0);
   const [dopamineID, setDopamineID] = useState<string>("");
   const [stridesID, setStridesID] = useState<string>("");
   const [snackbar, setSnackbar] = useState<boolean>(false);
+  const [stepsID, setStepsID] = useState<number>(0);
   const [snackbarStatus, setSnackbarStatus] = useState<
     "Success" | "Warning" | "Error"
   >("Success");
@@ -130,9 +122,7 @@ const WrapperProvider = ({ children }: ContextProviderProps) => {
     retrieveCSRF();
   }, []);
 
-  useEffect(() => {
-
-  }, [])
+  useEffect(() => {}, []);
 
   const wrapperContextValue: WrapperContext = {
     dopamineData,
@@ -145,8 +135,8 @@ const WrapperProvider = ({ children }: ContextProviderProps) => {
     setDopamineID,
     stridesID,
     setStridesID,
-    csrf,
-    setCsrf,
+    stepsID,
+    setStepsID,
     showMenu,
     setShowMenu,
     snackbar,
@@ -159,16 +149,7 @@ const WrapperProvider = ({ children }: ContextProviderProps) => {
     setColorMode,
     deleteModal,
     setDeleteModal,
-    updateData,
-    setUpdateData,
-    dopamineTitle,
-    setDopamineTitle,
-    stridesTitle,
-    setStridesTitle,
-    stepsTitle,
-    setStepsTitle,
-    postModel,
-    setPostModel,
+
     deleteItem,
     setDeleteItem,
     userID,

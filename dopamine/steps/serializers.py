@@ -14,18 +14,56 @@ class ToDoSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class StepsSerializer(ToDoSerializer):
+class DopamineSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Dopamine
+        fields = "__all__"
+
+    def create(self, validated_data):
+        todo_data = validated_data.get("todo")
+        user_data = validated_data.get("user")
+        dopamine_instance = Dopamine.objects.create(todo=todo_data, user=user_data)
+        return dopamine_instance
+
+
+class DopaminRetrieveSerializer(serializers.ModelSerializer):
+    private_id = serializers.IntegerField(source="id", read_only=True)
     todo = ToDoSerializer()
+
+    class Meta:
+        model = Dopamine
+        fields = ["private_id", "todo", "user"]
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep['private_id'] = instance.id
+        return rep
+
+
+class StepsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Steps
         fields = "__all__"
 
+    def create(self, validated_data):
+        todo_data = validated_data.get("todo")
+        strides_data = validated_data.get("key")
+        steps_instance = Steps.objects.create(todo=todo_data, strides=strides_data)
+        return steps_instance
 
-class StridesSerializer(ToDoSerializer):
-    todo = ToDoSerializer()
+
+class StridesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Strides
         fields = "__all__"
+
+    def create(self, validated_data):
+        todo_data = validated_data.get("todo")
+        dopamine_data = validated_data.get("key")
+        strides_instance = Strides.objects.create(
+            todo=todo_data, dopamine=dopamine_data
+        )
+        return strides_instance
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -33,18 +71,6 @@ class UserSerializer(serializers.ModelSerializer):
         model = settings.AUTH_USER_MODEL
         fields = ["email", "password", "username"]
         extra_kwargs = {"password": {"write_only": True}}
-
-
-class DopamineSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Dopamine
-        fields = "__all__"
-        
-    def create(self, validated_data):
-        todo_data = validated_data.get('todo')
-        user_data = validated_data.get('user')
-        dopamine_instance = Dopamine.objects.create(todo=todo_data, user=user_data)
-        return dopamine_instance
 
 
 class PasswordResetSerializer(serializers.Serializer):

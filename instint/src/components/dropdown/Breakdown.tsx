@@ -28,29 +28,23 @@ export default function Breakdown({ data, type }: BreakdownProps) {
   const {
     colorMode,
     setDeleteModal,
-    setPostModel,
     setSnackbar,
     setSnackbarDetails,
     setSnackbarStatus,
     setStridesData,
     setStepsData,
-    dopamineData,
     stridesData,
-    stepsData
+    stepsData,
   } = useWrapper();
+
+  useEffect(() => {}, []);
 
   return (
     <>
       <div className={colorMode ? styles.containerDark : styles.containerLight}>
         <div className={styles.headerContainer}>
           <h2 className={colorMode ? styles.headerDark : styles.headerLight}>
-            {type === "Dopamine"
-              ? data.todo.title
-              : type === "Strides"
-              ? data.todo.title
-              : type === "Steps"
-              ? data.todo.title
-              : null}
+            {data.todo.title}
           </h2>
         </div>
         <div className={styles.keyboardContainer}>
@@ -66,12 +60,24 @@ export default function Breakdown({ data, type }: BreakdownProps) {
                 handleDropdown(
                   false,
                   setDropdown,
-                  type === 'Dopamine' ? setStridesData : type === 'Strides' ? setStepsData : null,
+                  type === "Dopamine"
+                    ? setStridesData
+                    : type === "Strides"
+                    ? setStepsData
+                    : null,
                   setSnackbar,
                   setSnackbarDetails,
                   setSnackbarStatus,
-                  type === 'Dopamine' ? data.id : type === 'Strides' ? data.id : '',
-                  type === 'Dopamine' ? apiRoutesGetObject.Strides.route : type === 'Strides' ? apiRoutesGetObject.Steps.route : undefined
+                  type === "Dopamine"
+                    ? data.private_id
+                    : type === "Strides"
+                    ? data.private_id
+                    : "",
+                  type === "Dopamine"
+                    ? apiRoutesGetObject.Strides.route
+                    : type === "Strides"
+                    ? apiRoutesGetObject.Steps.route
+                    : undefined
                 )
               }
             />
@@ -88,7 +94,7 @@ export default function Breakdown({ data, type }: BreakdownProps) {
         )}
         <NoteAdd
           className={colorMode ? styles.deletedDark : styles.deletedLight}
-          onClick={() => handleAdd(type, setAdd, setPostModel)}
+          onClick={() => handleAdd(type, setAdd, setSnackbar, setSnackbarStatus, setSnackbarDetails)}
         />
         <Delete
           className={colorMode ? styles.deletedDark : styles.deletedLight}
@@ -106,15 +112,44 @@ export default function Breakdown({ data, type }: BreakdownProps) {
         />
       </div>
       {dropdown && type === "Dopamine" && (
-        <BreakdownMoreInfo type="Dopamine" breakdownInfoData={data} breakdownData={stridesData} />
+        <BreakdownMoreInfo
+          type="Dopamine"
+          breakdownInfoData={data}
+          breakdownData={stridesData}
+        />
       )}
       {dropdown && type === "Strides" && (
-        <BreakdownMoreInfo type="Strides" breakdownInfoData={data} breakdownData={stepsData} />
+        <BreakdownMoreInfo
+          type="Strides"
+          breakdownInfoData={data}
+          breakdownData={stepsData}
+        />
       )}
       {dropdown && type === "Steps" && (
-        <BreakdownMoreInfo type="Steps"  breakdownInfoData={data} />
+        <BreakdownMoreInfo type="Steps" breakdownInfoData={data} />
       )}
-      <div>{add && <CreateForm apiMethod="PATCH" />}</div>
+      <div>
+        {add && (
+          <CreateForm
+            parentID={data.private_id}
+            apiRoute={
+              type === "Dopamine"
+                ? "/api/post/strides"
+                : type === "Strides"
+                ? "/api/post/steps"
+                : undefined
+            }
+            type={
+              type === "Dopamine"
+                ? "Strides"
+                : type === "Strides"
+                ? "Steps"
+                : undefined
+            }
+            apiMethod="POST"
+          />
+        )}
+      </div>
     </>
   );
 }

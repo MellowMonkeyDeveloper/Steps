@@ -5,7 +5,8 @@ export interface APIRoutePostPatchProps {
     | "/api/post/steps"
     | "/api/update/dopamine"
     | "/api/update/strides"
-    | "/api/update/steps";
+    | "/api/update/steps"
+    | undefined;
 }
 
 export interface APIRouteDeleteProps {

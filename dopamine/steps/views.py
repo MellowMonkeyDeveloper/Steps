@@ -16,6 +16,7 @@ from .serializers import (
     StepsSerializer,
     UserSerializer,
     ToDoSerializer,
+    DopaminRetrieveSerializer
 )
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate, login
@@ -79,11 +80,9 @@ class DopamineRetrieveView(APIView):
     permission_classes = [IsAuthenticated]
     print('get')
     def get(self, request,pk, *args, **kwargs):
-        print(pk)
-        print(request)
-        user = get_object_or_404(settings.AUTH_USER_MODEL, pk=pk)
-        dopamine = Dopamine.objects.filter(user=user)
-        serializer = DopamineSerializer(dopamine, many=True)
+        
+        dopamine = Dopamine.objects.filter(user=pk)
+        serializer = DopaminRetrieveSerializer(dopamine, many=True)
         return Response(serializer.data)
 
 
@@ -91,7 +90,7 @@ class DopamineCreateView(CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def create(self, request,pk, *args, **kwargs):
-
+        print(self)
         todo_serializer = ToDoSerializer(data=request.data['todo'])
         if todo_serializer.is_valid():
 

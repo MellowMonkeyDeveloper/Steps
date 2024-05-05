@@ -4,6 +4,7 @@ export interface ToDoProps{
     motivation: string;
     completed: boolean;
     description: string;
+    user?: number;
 }
 
 export interface DopamineProps{
@@ -24,4 +25,5 @@ export interface StepsProps{
 export interface ModelProps{
     key: number;
     todo: ToDoProps;
+    id: number;
 }

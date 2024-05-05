@@ -22,6 +22,7 @@ async function retrieveData(
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: 'include'
     });
 
     // Check if response is successful
@@ -35,6 +36,7 @@ async function retrieveData(
     // Parse JSON data from response body
     const data = await response.json();
     if(apiRoute === '/api/get/dopamine'){
+      console.log(data)
       setDataArray(data)
     }else if(apiRoute === '/api/get/steps' || apiRoute === '/api/get/strides'){
       setDataArray(data)

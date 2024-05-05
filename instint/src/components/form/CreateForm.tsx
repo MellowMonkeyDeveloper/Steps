@@ -14,6 +14,7 @@ interface CreateFormProps {
   data: ModelProps["todo"];
   type: SnackbarModelProps["model"];
   apiRoute: APIRoutePostPatchProps["route"];
+  parentID: number;
 }
 
 export default function CreateForm({
@@ -21,8 +22,9 @@ export default function CreateForm({
   data,
   type,
   apiRoute,
+  parentID
 }: CreateFormProps) {
-  const { colorMode, postModel, dopamineID, stridesID, stepsID, userID } =
+  const { colorMode, dopamineID, stridesID, stepsID, userID } =
     useWrapper();
   const [formData, setFormData] = useState<any>({
     title: "",
@@ -65,7 +67,7 @@ export default function CreateForm({
       } else if (data !== undefined) {
         setFormData(data);
       }
-    } else if (postModel === "Steps") {
+    } else if (type === "Steps") {
       if (data === undefined) {
       } else if (data !== undefined) {
         setFormData(data);
@@ -157,17 +159,17 @@ export default function CreateForm({
               apiRoute,
               userID,
               type === "Dopamine" && apiMethod === "POST"
-                ? userID
+                ? parentID
                 : type === "Dopamine" && apiMethod === "PATCH"
-                ? dopamineID
+                ? parentID
                 : type === "Strides" && apiMethod === "POST"
-                ? dopamineID
+                ? parentID
                 : type === "Strides" && apiMethod === "PATCH"
-                ? stridesID
+                ? parentID
                 : type === "Steps" && apiMethod === "POST"
-                ? stridesID
+                ? parentID
                 : type === "Steps" && apiMethod === "PATCH"
-                ? stepsID
+                ? parentID
                 : 0
             )
           }

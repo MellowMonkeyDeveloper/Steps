@@ -7,6 +7,7 @@ export enum SnackbarMessage {
   Registered = "Registered",
   LoggedIn = "Logged In",
   Completed = "Goal Completed!",
+  Adding = 'Add'
 }
 
 export enum SnackbarAction {
@@ -25,13 +26,16 @@ export enum SnackbarModelMessage {
   DopamineCreated = "Dopamine Created",
   DopamineUpdated = "Dopamine Updated",
   DopamineDeleted = "Dopamine Deleted",
-  StridesCreated = "Strides Created",
-  StridesDeleted = "Strides Deleted",
-  StridesUpdated = "Strides Updated",
-  StepsCreated = "Steps Created",
-  StepsDeleted = "Steps Deleted",
-  StepsUpdated = "Steps Updated",
+  DopamineAdding = "Add Dopamine",
+  StridesCreated = "Stride Created",
+  StridesDeleted = "Stride Deleted",
+  StridesUpdated = "Stride Updated",
+  StridesAdding = "Add Stride",
+  StepsCreated = "Step Created",
+  StepsDeleted = "Step Deleted",
+  StepsUpdated = "Step Updated",
   DopamineCompleted = "Dopamine Completed",
-  StridesCompleted = "Strides Completed",
-  StepsCompleted = "Steps Completed",
+  StridesCompleted = "Stride Completed",
+  StepsCompleted = "Step Completed",
+  StepsAdd = "Add Steps",
 }
