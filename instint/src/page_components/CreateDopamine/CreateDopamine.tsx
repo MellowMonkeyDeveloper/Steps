@@ -5,15 +5,13 @@ import CreateForm from "@/components/form/CreateForm";
 import { useEffect } from "react";
 
 export default function CreateDopamine() {
-  const { colorMode, setPostModel } = useWrapper();
-  useEffect(() => {
-    setPostModel('Dopamine')
-  }, [])
+  const { colorMode, userID} = useWrapper();
+ 
   return (
     <section
       className={colorMode ? styles.containerDark : styles.containerLight}
     >
-      <CreateForm apiRoute='/api/post/dopamine' type='Dopamine' apiMethod="POST" />
+      <CreateForm data={'none'} parentID={userID} apiRoute='/api/post/dopamine' type='Dopamine' apiMethod="POST" />
     </section>
   );
 }

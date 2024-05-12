@@ -4,10 +4,19 @@ export enum SnackbarMessage {
   Deleted = "Deleted",
   Error = "Action Failed",
   Warning = "Warning",
+
+  Completed = "Goal Completed!",
+  Adding = "Add",
+}
+
+
+export enum SnackbarAuthEnum {
+  LoggedOut = "Logged Out",
+  LoggedOutFailed = "Failed Log Out",
+  LoggedInFailed = "Failed Login",
+  RegistrationFailed = "Failed Registration",
   Registered = "Registered",
   LoggedIn = "Logged In",
-  Completed = "Goal Completed!",
-  Adding = 'Add'
 }
 
 export enum SnackbarAction {

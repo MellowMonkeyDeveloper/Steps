@@ -1,7 +1,7 @@
 "use client";
 import { useWrapper } from "@/context/WrapperProvider";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import styles from "../../../styles/form.module.scss";
 import { handleSubmit } from "@/functions/form";
 import { APIRoutePostPatchProps } from "@/types/Interfaces/APIRoutes";
@@ -11,7 +11,7 @@ import { APIMethods } from "@/types/Enums/APIMethods";
 import { APIMethodsProps } from "@/types/Interfaces/APIMethods";
 interface CreateFormProps {
   apiMethod: APIMethodsProps["method"];
-  data: ModelProps["todo"];
+  data: ModelProps["todo"] | 'none';
   type: SnackbarModelProps["model"];
   apiRoute: APIRoutePostPatchProps["route"];
   parentID: number;
@@ -24,57 +24,36 @@ export default function CreateForm({
   apiRoute,
   parentID
 }: CreateFormProps) {
-  const { colorMode, dopamineID, stridesID, stepsID, userID } =
-    useWrapper();
-  const [formData, setFormData] = useState<any>({
-    title: "",
+  const formObject: ToDoProps = {
+    title: '',
     description: "",
     motivation: "",
-    deadline: "",
-    completed: "",
-  });
+    deadline: new Date(),
+    completed: false,
+  }
+  const { colorMode, dopamineID, stridesID, stepsID, userID } =
+    useWrapper();
+  const [formData, setFormData] = useState<ToDoProps>(formObject);
 
   const handleChange = (e) => {
-    if (type === "Strides") {
+    
       setFormData({
         ...formData,
         [e.target.name]: e.target.value,
         user: userID,
       });
-    } else if (type === "Dopamine") {
-      console.log(e.target.value);
-      setFormData({
-        ...formData,
-        [e.target.name]: e.target.value,
-        user: userID,
-      });
-    } else if (type === "Steps") {
-      setFormData({
-        ...formData,
-        [e.target.name]: e.target.value,
-        user: userID,
-      });
-    }
+    
   };
+
   useEffect(() => {
-    if (type === "Dopamine") {
-      if (data === undefined) {
-      } else if (data !== undefined) {
-        setFormData(data);
-      }
-    } else if (type === "Strides") {
-      if (data === undefined) {
-      } else if (data !== undefined) {
-        setFormData(data);
-      }
-    } else if (type === "Steps") {
-      if (data === undefined) {
-      } else if (data !== undefined) {
-        setFormData(data);
-      }
-      console.log(data);
+    if(data === 'none'){
+      setFormData(formObject)
+
+    }else{
+      setFormData(data)
+
     }
-  }, [data]);
+  }, []);
   return (
     <section
       className={colorMode ? styles.containerDark : styles.containerLight}
@@ -92,7 +71,7 @@ export default function CreateForm({
               onChange={handleChange}
               name="title"
               type="text"
-              value={data?.title !== undefined ? data?.title : formData?.title}
+              value={formData.title}
             />
           </label>
         </div>
@@ -145,7 +124,7 @@ export default function CreateForm({
               onChange={handleChange}
               type="date"
               name="deadline"
-              value={formData.deadline}
+              value={String(formData.deadline)}
             />
           </label>
         </div>

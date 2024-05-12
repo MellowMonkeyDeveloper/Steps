@@ -7,11 +7,9 @@ import styles from "../../../styles/viewdopamine.module.scss";
 export default function ViewDopamine() {
   const {
     colorMode,
-    updateData,
     setDopamineData,
     dopamineData,
     setSnackbar,
-    setSnackbarStatus,
     setSnackbarDetails,
     userID
   } = useWrapper();
@@ -21,7 +19,6 @@ export default function ViewDopamine() {
       "/api/get/dopamine",
       setDopamineData,
       setSnackbar,
-      setSnackbarStatus,
       setSnackbarDetails,
       userID
     );

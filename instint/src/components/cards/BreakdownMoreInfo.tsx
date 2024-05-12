@@ -10,12 +10,11 @@ import styles from "../../../styles/breakdownmoreinfo.module.scss";
 import { useWrapper } from "@/context/WrapperProvider";
 import CreateForm from "../form/CreateForm";
 import { ModelProps, ToDoProps } from "@/types/Interfaces/Models";
-import { SnackbarModel } from "@/types/Enums/Snackbar";
 import { SnackbarModelProps } from "@/types/Interfaces/Snackbar";
 export interface BreakdownMoreInfoProps {
   breakdownData?: ModelProps[];
   breakdownInfoData?: ModelProps;
-  type: SnackbarModelProps['model'];
+  type: SnackbarModelProps["model"];
 }
 export default function BreakdownMoreInfo({
   breakdownData,
@@ -24,10 +23,7 @@ export default function BreakdownMoreInfo({
 }: BreakdownMoreInfoProps) {
   const { colorMode } = useWrapper();
   const [showForm, setShowForm] = useState<boolean>(false);
-  const handleUpdate = () => {
-    setShowForm(true);
-    setPostModel(type);
-  };
+
 
   return (
     <section
@@ -95,7 +91,9 @@ export default function BreakdownMoreInfo({
                     colorMode ? styles.subheaderDark : styles.subheaderLight
                   }
                 >
-                  {breakdownInfoData.todo.completed === false ? 'Incomplete' : 'Complete'}
+                  {breakdownInfoData.todo.completed === false
+                    ? "Incomplete"
+                    : "Complete"}
                 </h5>
               </div>
             </div>
@@ -115,20 +113,27 @@ export default function BreakdownMoreInfo({
                     colorMode ? styles.subheaderDark : styles.subheaderLight
                   }
                 >
+                  {String(breakdownInfoData?.todo.deadline)}
                 </h5>
               </div>
             </div>
             <div>
-              <button onClick={handleUpdate}>Update</button>
+              <button onClick={() => setShowForm((prev: boolean) => !prev)}>Update</button>
             </div>
           </>
         ) : (
-          <CreateForm data={breakdownInfoData} apiMethod="PATCH" update="Existing" />
+          <CreateForm
+            data={breakdownInfoData}
+            apiMethod="PATCH"
+            update="Existing"
+          />
         )}
       </article>
       <article className={styles.breakdownContainer}>
         {type === "Dopamine" &&
-          breakdownData.map((value: any) => <Breakdown data={value} type="Strides" />)}
+          breakdownData.map((value: any) => (
+            <Breakdown data={value} type="Strides" />
+          ))}
         {type === "Strides" &&
           breakdownData.map((value: any) => (
             <Breakdown data={value} type="Steps" />

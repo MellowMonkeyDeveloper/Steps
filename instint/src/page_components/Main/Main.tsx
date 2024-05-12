@@ -188,16 +188,7 @@ export default function Main() {
           <span>ADDRESS</span>
         </div>
       </article>
-      <article className={styles.howitworksContainer}>
-        {dashboardCard.map((item: any) => (
-          <DashboardCard
-            title={item.title}
-            icon={item.icon}
-            href={item.href}
-            link={item.link}
-          />
-        ))}
-      </article>
+     
     </div>
   );
 }

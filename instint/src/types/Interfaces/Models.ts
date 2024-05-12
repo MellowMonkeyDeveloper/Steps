@@ -25,5 +25,5 @@ export interface StepsProps{
 export interface ModelProps{
     key: number;
     todo: ToDoProps;
-    id: number;
+    id?: number;
 }

@@ -2,23 +2,23 @@ import {
   SnackbarMessage,
   SnackbarModel,
   SnackbarModelMessage,
+  SnackbarAuthEnum
 } from "../Enums/Snackbar";
 import {
   SnackbarMessageProps,
   SnackbarModelProps,
 } from "../Interfaces/Snackbar";
 
-const snackbarMessageObject: Record<SnackbarMessage, SnackbarMessageProps> = {
-  [SnackbarMessage.Completed]: { message: "Completed" },
-  [SnackbarMessage.Created]: { message: "Created" },
-  [SnackbarMessage.Deleted]: { message: "Deleted" },
-  [SnackbarMessage.Error]: { message: "Action failed!" },
-  [SnackbarMessage.LoggedIn]: { message: "You are logged in!" },
-  [SnackbarMessage.Registered]: { message: "You are registered!" },
-  [SnackbarMessage.Updated]: { message: "Updated!" },
-  [SnackbarMessage.Warning]: { message: "Warning!" },
-  [SnackbarMessage.Adding]: { message: "Add" },
-};
+
+
+const snackbarAuthObject: Record<SnackbarAuthEnum,SnackbarMessageProps> = {
+  [SnackbarAuthEnum.LoggedIn]: {message: 'Login Successful', status: 'Success'},
+  [SnackbarAuthEnum.Registered]: { message: "Registration Successful", status: 'Success' },
+  [SnackbarAuthEnum.LoggedOut]: {message: 'Logout Successful', status: 'Success'},
+  [SnackbarAuthEnum.LoggedInFailed]: {message: 'Login Failed', status: 'Error'},
+  [SnackbarAuthEnum.LoggedOutFailed]: {message: 'Logout Failed', status: 'Error'},
+  [SnackbarAuthEnum.RegistrationFailed]: {message: 'Registration Failed', status: 'Error'}
+}
 
 const snackbarModelObject: Record<SnackbarModel, SnackbarModelProps> = {
   [SnackbarModel.Dopamine]: { model: "Dopamine" },
@@ -26,59 +26,78 @@ const snackbarModelObject: Record<SnackbarModel, SnackbarModelProps> = {
   [SnackbarModel.Steps]: { model: "Steps" },
 };
 
+const snackbarCRUDObject: Record<SnackbarCRUDEnum, SnackbarCRUDProps> = {
+
+}
+
 const snackbarModelMessageObject: Record<
   SnackbarModelMessage,
   SnackbarMessageProps
 > = {
   [SnackbarModelMessage.DopamineCreated]: {
-    message: `${snackbarModelObject.Dopamine.model} ${snackbarMessageObject.Created.message}`,
+    message: `${snackbarModelObject.Dopamine.model} Added`,
+    status: 'Success'
   },
   [SnackbarModelMessage.StridesCreated]: {
-    message: `${snackbarModelObject.Strides.model} ${snackbarMessageObject.Created.message}`,
+    message: `${snackbarModelObject.Strides.model} Added`,
+    status: 'Success'
   },
   [SnackbarModelMessage.StepsCreated]: {
-    message: `${snackbarModelObject.Steps.model} ${snackbarMessageObject.Created.message}`,
+    message: `${snackbarModelObject.Steps.model} Added`,
+    status: 'Success'
   },
   [SnackbarModelMessage.DopamineUpdated]: {
-    message: `${snackbarModelObject.Dopamine.model} ${snackbarMessageObject.Updated.message}`,
+    message: `${snackbarModelObject.Dopamine.model} Updated`,
+    status: 'Success'
   },
   [SnackbarModelMessage.StridesUpdated]: {
-    message: `${snackbarModelObject.Strides.model} ${snackbarMessageObject.Updated.message}`,
+    message: `${snackbarModelObject.Strides.model} Updated`,
+    status: 'Success'
   },
   [SnackbarModelMessage.StepsUpdated]: {
-    message: `${snackbarModelObject.Steps.model} ${snackbarMessageObject.Updated.message}`,
+    message: `${snackbarModelObject.Steps.model} Updated`,
+    status: 'Success'
   },
   [SnackbarModelMessage.DopamineDeleted]: {
-    message: `${snackbarModelObject.Dopamine.model} ${snackbarMessageObject.Deleted.message}`,
+    message: `${snackbarModelObject.Dopamine.model} Deleted`,
+    status: 'Success'
   },
   [SnackbarModelMessage.StridesDeleted]: {
-    message: `${snackbarModelObject.Strides.model} ${snackbarMessageObject.Deleted.message}`,
+    message: `${snackbarModelObject.Strides.model} Deleted`,
+    status: 'Success'
   },
   [SnackbarModelMessage.StepsDeleted]: {
-    message: `${snackbarModelObject.Steps.model} ${snackbarMessageObject.Deleted.message}`,
+    message: `${snackbarModelObject.Steps.model} Deleted`,
+    status: 'Success'
   },
   [SnackbarModelMessage.DopamineCompleted]: {
-    message: `${snackbarModelObject.Dopamine.model} ${snackbarMessageObject["Goal Completed!"].message}`,
+    message: `${snackbarModelObject.Dopamine.model} Completed`,
+    status: 'Success'
   },
   [SnackbarModelMessage.StridesCompleted]: {
-    message: `${snackbarModelObject.Strides.model} ${snackbarMessageObject["Goal Completed!"].message}`,
+    message: `${snackbarModelObject.Strides.model} Completed`,
+    status: 'Success'
   },
   [SnackbarModelMessage.StepsCompleted]: {
-    message: `${snackbarModelObject.Steps.model} ${snackbarMessageObject["Goal Completed!"].message}`,
+    message: `${snackbarModelObject.Steps.model} Completed`,
+    status: 'Success'
   },
   [SnackbarModelMessage.DopamineAdding]: {
-    message: `${snackbarMessageObject.Add.message} ${snackbarModelObject.Dopamine.model}`,
+    message: `Adding ${snackbarModelObject.Dopamine.model}`,
+    status: 'Warning'
   },
   [SnackbarModelMessage.StepsAdd]: {
-    message: `${snackbarMessageObject.Add} ${snackbarModelObject.Steps}`,
+    message: `Adding ${snackbarModelObject.Steps}`,
+    status: 'Warning'
   },
   [SnackbarModelMessage.StridesAdding]: {
-    message: `${snackbarMessageObject.Add} ${snackbarModelObject.Strides.model}`,
+    message: `Adding ${snackbarModelObject.Strides.model}`,
+    status: 'Warning'
   },
 };
 
 export {
-  snackbarMessageObject,
   snackbarModelMessageObject,
   snackbarModelObject,
+  snackbarAuthObject
 };

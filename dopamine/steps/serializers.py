@@ -26,7 +26,7 @@ class DopamineSerializer(serializers.ModelSerializer):
         return dopamine_instance
 
 
-class DopaminRetrieveSerializer(serializers.ModelSerializer):
+class DopamineRetrieveSerializer(serializers.ModelSerializer):
     private_id = serializers.IntegerField(source="id", read_only=True)
     todo = ToDoSerializer()
 
@@ -48,7 +48,7 @@ class StepsSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         todo_data = validated_data.get("todo")
         strides_data = validated_data.get("key")
-        steps_instance = Steps.objects.create(todo=todo_data, strides=strides_data)
+        steps_instance = Steps.objects.create(todo=todo_data, key=strides_data)
         return steps_instance
 
 
@@ -61,9 +61,24 @@ class StridesSerializer(serializers.ModelSerializer):
         todo_data = validated_data.get("todo")
         dopamine_data = validated_data.get("key")
         strides_instance = Strides.objects.create(
-            todo=todo_data, dopamine=dopamine_data
+            todo=todo_data, key=dopamine_data
         )
         return strides_instance
+    
+
+class StridesRetrieveSerializer(serializers.ModelSerializer):
+    todo = ToDoSerializer()
+
+    class Meta:
+        model = Strides
+        fields = ["todo", "key"]
+
+    def to_representation(self, instance):
+        print(self)
+        rep = super().to_representation(instance)
+        print(rep)
+        rep['id'] = instance.id
+        return rep
 
 
 class UserSerializer(serializers.ModelSerializer):

@@ -30,14 +30,12 @@ export default function Breakdown({ data, type }: BreakdownProps) {
     setDeleteModal,
     setSnackbar,
     setSnackbarDetails,
-    setSnackbarStatus,
     setStridesData,
     setStepsData,
     stridesData,
     stepsData,
   } = useWrapper();
 
-  useEffect(() => {}, []);
 
   return (
     <>
@@ -67,7 +65,6 @@ export default function Breakdown({ data, type }: BreakdownProps) {
                     : null,
                   setSnackbar,
                   setSnackbarDetails,
-                  setSnackbarStatus,
                   type === "Dopamine"
                     ? data.private_id
                     : type === "Strides"
@@ -131,6 +128,7 @@ export default function Breakdown({ data, type }: BreakdownProps) {
       <div>
         {add && (
           <CreateForm
+          data={'none'}
             parentID={data.private_id}
             apiRoute={
               type === "Dopamine"

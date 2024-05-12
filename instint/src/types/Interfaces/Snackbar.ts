@@ -1,9 +1,10 @@
 export interface SnackbarMessageProps {
   message: string;
+  status: SnackbarStatusProps['status']
 }
 
-export interface SnackbarActionProps {
-  action: "Error" | "Warning" | "Success";
+export interface SnackbarStatusProps {
+  status: "Error" | "Warning" | "Success";
 }
 
 export interface SnackbarModelProps{

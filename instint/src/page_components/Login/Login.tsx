@@ -37,15 +37,12 @@ export default function Login() {
     postRegister()
 };
   const handleEmail = (e: ChangeEventHandler<HTMLInputElement>) => {
-    console.log(e.target.value);
     setEmail(e.target.value);
   };
   const handlePassword = (e: ChangeEventHandler<HTMLInputElement>) => {
-    console.log(e.target.value);
     setPassword(e.target.value);
   };
   const handleUsername = (e: ChangeEventHandler<HTMLInputElement>) => {
-    console.log(e.target.value);
     setUsername(e.target.value);
   };
   return (

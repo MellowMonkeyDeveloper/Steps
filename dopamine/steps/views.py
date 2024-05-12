@@ -16,7 +16,8 @@ from .serializers import (
     StepsSerializer,
     UserSerializer,
     ToDoSerializer,
-    DopaminRetrieveSerializer
+    DopamineRetrieveSerializer,
+    StridesRetrieveSerializer
 )
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate, login
@@ -82,7 +83,7 @@ class DopamineRetrieveView(APIView):
     def get(self, request,pk, *args, **kwargs):
         
         dopamine = Dopamine.objects.filter(user=pk)
-        serializer = DopaminRetrieveSerializer(dopamine, many=True)
+        serializer = DopamineRetrieveSerializer(dopamine, many=True)
         return Response(serializer.data)
 
 
@@ -150,26 +151,23 @@ class DopamineUpdateView(UpdateAPIView):
 class StridesCreateView(CreateAPIView):
     permission_classes = [IsAuthenticated]
 
-    def create(self, request, *args, **kwargs):
-
-        print(request.data)
-        todo_serializer = ToDoSerializer(data=request.data)
+    def create(self, request, pk, *args, **kwargs):
+        print(request.data['todo'])
+        todo_serializer = ToDoSerializer(data=request.data['todo'])
         if todo_serializer.is_valid():
-            todo = todo_serializer.save(user_id=request.data["user"])
+            todo = todo_serializer.save(user_id=request.data['todo']["user"])
         else:
             print(todo_serializer.errors)
             return Response(todo_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         strides_serializer = StridesSerializer(
-            data={"todo": request.data, "dopamine": request.data["dopamine"]}
+            data={"todo": todo.id, "key": pk}
         )
-        print(todo.id)
         if strides_serializer.is_valid():
             strides_serializer.save()
             return Response(strides_serializer.data, status=status.HTTP_201_CREATED)
         else:
             print(strides_serializer.errors)
-
             return Response(
                 strides_serializer.errors, status=status.HTTP_400_BAD_REQUEST
             )
@@ -179,9 +177,9 @@ class StridesRetrieveView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, pk, *args, **kwargs):
-        dopamine = get_object_or_404(Dopamine, pk=pk)
-        strides = Strides.objects.filter(key=dopamine)
-        serializer = StridesSerializer(strides, many=True)
+        print(pk)
+        strides = Strides.objects.filter(key=pk)
+        serializer = StridesRetrieveSerializer(strides, many=True)
         return Response(serializer.data)
 
 
@@ -326,7 +324,11 @@ class UserLogin(APIView):
         print(user)
         if user:
             login(request, user)
-            token, created = Token.objects.get_or_create(user=user)
+            token_payload = {
+                'user_id': user.id,
+                'exp': datetime.utcnow() + timedelta(days=1)
+            }
+            
             response = JsonResponse({"message": "Login successful", "userID": user.id})
             response.set_cookie("auth_token", token.key, httponly=True)
             return response

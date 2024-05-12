@@ -1,6 +1,9 @@
+import { authCookie } from "@/functions/cookies"
+
 export const dynamic = 'force-dynamic' // defaults to auto
 export async function PATCH(request: Request) {
     const {searchParams} = new URL(request.url)
+    const token = authCookie(request)
     const key = searchParams.get('key')
   
     const json = await request.json()
@@ -9,6 +12,7 @@ export async function PATCH(request: Request) {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Token ${token}`
             },
             credentials: 'include',
             body: JSON.stringify(json)

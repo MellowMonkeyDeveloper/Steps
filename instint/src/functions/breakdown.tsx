@@ -60,21 +60,21 @@ const handleDropdown = async (
   setDataArray: Dispatch<SetStateAction<ModelProps[]>> | null,
   setSnackbar: Dispatch<SetStateAction<boolean>>,
   setSnackbarDetails: Dispatch<SetStateAction<string>>,
-  setSnackbarStatus: Dispatch<SetStateAction<SnackbarActionProps["action"]>>,
   getKey: ModelProps["key"],
   apiRoute?: APIRouteGetProps["route"] | undefined
 ) => {
+  console.log(dropdown)
   setDropdown((prev) => !prev);
-  if (dropdown) {
+  if (!dropdown) {
     retrieveData(
       apiRoute,
       setDataArray,
       setSnackbar,
-      setSnackbarStatus,
       setSnackbarDetails,
       getKey
     );
-  } else if (!dropdown) {
+
+  } else if (dropdown) {
     return;
   }
 };

@@ -2,18 +2,15 @@ import { SnackbarModelMessage } from "@/types/Enums/Snackbar";
 import { APIRouteGetProps } from "@/types/Interfaces/APIRoutes";
 import { ModelProps } from "@/types/Interfaces/Models";
 import {
-  SnackbarActionProps,
   SnackbarMessageProps,
 } from "@/types/Interfaces/Snackbar";
-import { snackbarMessageObject } from "@/types/Objects/Snackbar";
 import { Dispatch, SetStateAction } from "react";
 import { setCookie } from "nookies";
 async function retrieveData(
   apiRoute: APIRouteGetProps['route'] | undefined,
-  setDataArray: Dispatch<SetStateAction<ModelProps[]>> | null,
+  setDataArray: Dispatch<SetStateAction<ModelProps[]>>,
   setSnackbar: Dispatch<SetStateAction<boolean>>,
-  setSnackbarStatus: Dispatch<SetStateAction<SnackbarActionProps["action"]>>,
-  setSnackbarDetails: Dispatch<SetStateAction<SnackbarMessageProps["message"]>>,
+  setSnackbarDetails: Dispatch<SetStateAction<SnackbarMessageProps>>,
   key?: number
 ) {
   try {
@@ -28,8 +25,7 @@ async function retrieveData(
     // Check if response is successful
     if (!response.ok) {
       setSnackbar(true);
-      setSnackbarStatus("Error");
-      setSnackbarDetails(snackbarMessageObject["Action Failed"].message);
+      setSnackbarDetails(snackbarMessageObject["Action Failed"]);
       throw new Error("Network response was not ok");
     }
 
@@ -40,13 +36,13 @@ async function retrieveData(
       setDataArray(data)
     }else if(apiRoute === '/api/get/steps' || apiRoute === '/api/get/strides'){
       setDataArray(data)
+      console.log(data)
     }
     // Log the parsed JSON data
   } catch (error) {
     // Handle errors
     setSnackbar(true);
-    setSnackbarStatus('Error')
-    setSnackbarDetails(snackbarMessageObject["Action Failed"].message)
+    setSnackbarDetails(snackbarMessageObject["Action Failed"])
     console.error("There was a problem with the fetch operation:", error);
   }
 }

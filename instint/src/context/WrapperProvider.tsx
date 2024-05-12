@@ -1,23 +1,22 @@
 "use client";
 import { retrieveCSRF } from "@/functions/fetchfunctions";
-import { SnackbarModelMessage } from "@/types/Enums/Snackbar";
+
+import { JwtPayload, jwtDecode } from "jwt-decode";
 import { ModelProps } from "@/types/Interfaces/Models";
 import { SnackbarMessageProps } from "@/types/Interfaces/Snackbar";
 import {
-  snackbarMessageObject,
-  snackbarModelMessageObject,
-  snackbarModelObject,
+  snackbarModelMessageObject
 } from "@/types/Objects/Snackbar";
+import { parseCookie } from "next/dist/compiled/@edge-runtime/cookies";
+import { parseCookies } from "nookies";
 import React, {
   Dispatch,
-  useContext,
   SetStateAction,
   createContext,
-  useState,
+  useContext,
   useEffect,
+  useState,
 } from "react";
-import { useStyleRegistry } from "styled-jsx";
-import { parseCookies } from "nookies";
 // Create a new context
 interface WrapperContext {
   dopamineData: ModelProps[];
@@ -28,10 +27,9 @@ interface WrapperContext {
   setStepsData: Dispatch<SetStateAction<ModelProps[]>>;
   snackbar: boolean;
   setSnackbar: Dispatch<SetStateAction<boolean>>;
-  snackbarStatus: "Success" | "Error" | "Warning";
-  setSnackbarStatus: Dispatch<SetStateAction<"Success" | "Warning" | "Error">>;
-  snackbarDetails: SnackbarMessageProps["message"];
-  setSnackbarDetails: Dispatch<SetStateAction<SnackbarMessageProps["message"]>>;
+
+  snackbarDetails: SnackbarMessageProps;
+  setSnackbarDetails: Dispatch<SetStateAction<SnackbarMessageProps>>;
   colorMode: boolean;
   setColorMode: Dispatch<SetStateAction<boolean>>;
   dopamineID: number;
@@ -104,23 +102,25 @@ const WrapperProvider = ({ children }: ContextProviderProps) => {
   const [showMenu, setShowMenu] = useState<boolean>(false);
   const [deleteItem, setDeleteItem] = useState<boolean>(false);
   const [userID, setUserID] = useState<number>(0);
-  const [dopamineID, setDopamineID] = useState<string>("");
-  const [stridesID, setStridesID] = useState<string>("");
+  const [dopamineID, setDopamineID] = useState<number>(0);
+  const [stridesID, setStridesID] = useState<number>(0);
   const [snackbar, setSnackbar] = useState<boolean>(false);
   const [stepsID, setStepsID] = useState<number>(0);
-  const [snackbarStatus, setSnackbarStatus] = useState<
-    "Success" | "Warning" | "Error"
-  >("Success");
-  const [snackbarDetails, setSnackbarDetails] = useState<
-    SnackbarMessageProps["message"]
-  >(snackbarModelMessageObject["Dopamine Completed"].message);
-  const [postModel, setPostModel] = useState<"Dopamine" | "Strides" | "Steps">(
-    "Dopamine"
+
+  const [snackbarDetails, setSnackbarDetails] = useState<SnackbarMessageProps>(
+    snackbarModelMessageObject["Dopamine Completed"]
   );
-  const [csrf, setCsrf] = useState<string>("");
+  const {auth_token} = parseCookies()
+
   useEffect(() => {
-    retrieveCSRF();
-  }, []);
+    console.log(auth_token)
+    if(auth_token){
+      const decode = jwtDecode<JwtPayload>(auth_token)
+      console.log(decode)
+    }
+  }, [])
+
+
 
   useEffect(() => {}, []);
 
@@ -141,8 +141,7 @@ const WrapperProvider = ({ children }: ContextProviderProps) => {
     setShowMenu,
     snackbar,
     setSnackbar,
-    snackbarStatus,
-    setSnackbarStatus,
+
     snackbarDetails,
     setSnackbarDetails,
     colorMode,
