@@ -1,4 +1,5 @@
 import {
+  APIRouteAuth,
   APIRouteDelete,
   APIRouteGet,
   APIRoutePostPatch,
@@ -7,6 +8,7 @@ import {
   APIRoutePostPatchProps,
   APIRouteDeleteProps,
   APIRouteGetProps,
+  APIRouteAuthProps,
 } from "../Interfaces/APIRoutes";
 const apiRoutesPostPatchObject: Record<
   APIRoutePostPatch,
@@ -31,4 +33,12 @@ const apiRoutesGetObject: Record<APIRouteGet, APIRouteGetProps> = {
   [APIRouteGet.StridesGet]: { route: "/api/get/strides" },
   [APIRouteGet.StepsGet]: { route: "/api/get/steps" },
 };
-export { apiRoutesDeleteObject, apiRoutesPostPatchObject, apiRoutesGetObject };
+
+const apiRoutesAuthObject: Record<APIRouteAuth, APIRouteAuthProps> = {
+  [APIRouteAuth.Login]: {route: '/api/auth/login'},
+  [APIRouteAuth.Logout]: {route: '/api/auth/logout'},
+  [APIRouteAuth.Register]: {route: '/api/auth/register'},
+  [APIRouteAuth.Reset]: {route: '/api/auth/resetpassword'},
+  [APIRouteAuth.Verify]: {route: '/api/auth/verify'}
+}
+export {apiRoutesAuthObject, apiRoutesDeleteObject, apiRoutesPostPatchObject, apiRoutesGetObject };

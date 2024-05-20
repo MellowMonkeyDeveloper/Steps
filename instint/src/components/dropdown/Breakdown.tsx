@@ -20,11 +20,11 @@ import { APIRouteGet } from "@/types/Enums/APIRoutes";
 import { apiRoutesGetObject } from "@/types/Objects/APIRoutes";
 export interface BreakdownProps {
   data: any;
-  type: SnackbarModelProps["model"];
+  type: SnackbarModelProps["model"] | "Deadline";
 }
 export default function Breakdown({ data, type }: BreakdownProps) {
   const [dropdown, setDropdown] = useState<boolean>(false);
-  const [add, setAdd] = useState<boolean>(false);
+  const [showForm, setShowForm] = useState<boolean>(false);
   const {
     colorMode,
     setDeleteModal,
@@ -34,102 +34,102 @@ export default function Breakdown({ data, type }: BreakdownProps) {
     setStepsData,
     stridesData,
     stepsData,
+    form,
   } = useWrapper();
 
+  useEffect(() => {
+    console.log(data);
+  }, []);
 
   return (
     <>
       <div className={colorMode ? styles.containerDark : styles.containerLight}>
-        <div className={styles.headerContainer}>
-          <h2 className={colorMode ? styles.headerDark : styles.headerLight}>
-            {data.todo.title}
-          </h2>
+        <div className={styles.modelTitle}>
+          <h4
+            className={
+              colorMode ? styles.modelTitleDark : styles.modelTitleLight
+            }
+          >
+            {type}
+          </h4>
         </div>
-        <div className={styles.keyboardContainer}>
-          {dropdown ? (
-            <KeyboardArrowUp
-              className={colorMode ? styles.keyboardDark : styles.keyboardLight}
-              onClick={() => setDropdown((prev) => !prev)}
+        <div className={styles.breakdown}>
+          <div className={styles.headerContainer}>
+            <h2 className={colorMode ? styles.headerDark : styles.headerLight}>
+              {data.todo.title}
+            </h2>
+          </div>
+          <div className={styles.keyboardContainer}>
+            {dropdown ? (
+              <KeyboardArrowUp
+                className={
+                  colorMode ? styles.keyboardDark : styles.keyboardLight
+                }
+                onClick={() => setDropdown((prev) => !prev)}
+              />
+            ) : (
+              <KeyboardArrowDown
+                className={
+                  colorMode ? styles.keyboardDark : styles.keyboardLight
+                }
+                onClick={() =>
+                  handleDropdown(
+                    false,
+                    setDropdown,
+                    type === "Dopamine"
+                      ? setStridesData
+                      : type === "Strides"
+                      ? setStepsData
+                      : null,
+                    setSnackbar,
+                    setSnackbarDetails,
+                    type === "Dopamine"
+                      ? data.private_id
+                      : type === "Strides"
+                      ? data.key
+                      : "",
+                    type === "Dopamine"
+                      ? apiRoutesGetObject.Strides.route
+                      : type === "Strides"
+                      ? apiRoutesGetObject.Steps.route
+                      : undefined
+                  )
+                }
+              />
+            )}
+          </div>
+          {data.todo.completed ? (
+            <CheckCircle
+              className={
+                colorMode ? styles.completedDark : styles.completedLight
+              }
             />
           ) : (
-            <KeyboardArrowDown
-              className={colorMode ? styles.keyboardDark : styles.keyboardLight}
-              onClick={() =>
-                handleDropdown(
-                  false,
-                  setDropdown,
-                  type === "Dopamine"
-                    ? setStridesData
-                    : type === "Strides"
-                    ? setStepsData
-                    : null,
-                  setSnackbar,
-                  setSnackbarDetails,
-                  type === "Dopamine"
-                    ? data.private_id
-                    : type === "Strides"
-                    ? data.private_id
-                    : "",
-                  type === "Dopamine"
-                    ? apiRoutesGetObject.Strides.route
-                    : type === "Strides"
-                    ? apiRoutesGetObject.Steps.route
-                    : undefined
-                )
+            <CloseRounded
+              className={
+                colorMode ? styles.completedDark : styles.completedLight
               }
             />
           )}
+          <NoteAdd
+            className={colorMode ? styles.deletedDark : styles.deletedLight}
+            onClick={() =>
+              handleAdd(type, setShowForm, setSnackbar, setSnackbarDetails)
+            }
+          />
+          <Delete
+            onClick={() => handleDelete(type, type === 'Dopamine' ? data.private_id : data.key, setSnackbar, setSnackbarDetails, setDeleteModal)}
+            className={colorMode ? styles.deletedDark : styles.deletedLight}
+          />
         </div>
-        {data.todo.completed ? (
-          <CheckCircle
-            className={colorMode ? styles.completedDark : styles.completedLight}
-          />
-        ) : (
-          <CloseRounded
-            className={colorMode ? styles.completedDark : styles.completedLight}
-          />
-        )}
-        <NoteAdd
-          className={colorMode ? styles.deletedDark : styles.deletedLight}
-          onClick={() => handleAdd(type, setAdd, setSnackbar, setSnackbarStatus, setSnackbarDetails)}
-        />
-        <Delete
-          className={colorMode ? styles.deletedDark : styles.deletedLight}
-          onClick={() =>
-            handleDelete(
-              type,
-              apiRoute,
-              deleteKey,
-              setSnackbar,
-              setSnackbarStatus,
-              setSnackbarDetails,
-              setDeleteModal
-            )
-          }
-        />
       </div>
-      {dropdown && type === "Dopamine" && (
-        <BreakdownMoreInfo
-          type="Dopamine"
-          breakdownInfoData={data}
-          breakdownData={stridesData}
-        />
-      )}
-      {dropdown && type === "Strides" && (
-        <BreakdownMoreInfo
-          type="Strides"
-          breakdownInfoData={data}
-          breakdownData={stepsData}
-        />
-      )}
-      {dropdown && type === "Steps" && (
-        <BreakdownMoreInfo type="Steps" breakdownInfoData={data} />
-      )}
-      <div>
-        {add && (
+
+      <div className={styles.formContainer}>
+        {showForm && (
           <CreateForm
-          data={'none'}
-            parentID={data.private_id}
+            setShowForm={setShowForm}
+            data={"none"}
+            parentID={type === "Dopamine" ? data.private_id : data.key}
             apiRoute={
               type === "Dopamine"
                 ? "/api/post/strides"
@@ -148,6 +148,23 @@ export default function Breakdown({ data, type }: BreakdownProps) {
           />
         )}
       </div>
+      {dropdown && type === "Dopamine" && (
+        <BreakdownMoreInfo
+          type="Dopamine"
+          breakdownInfoData={data}
+          breakdownData={stridesData}
+        />
+      )}
+      {dropdown && type === "Strides" && (
+        <BreakdownMoreInfo
+          type="Strides"
+          breakdownInfoData={data}
+          breakdownData={stepsData}
+        />
+      )}
+      {dropdown && type === "Steps" && (
+        <BreakdownMoreInfo type="Steps" breakdownInfoData={data} />
+      )}
     </>
   );
 }

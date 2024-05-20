@@ -2,55 +2,69 @@ import {
   APIRouteDeleteProps,
   APIRouteGetProps,
 } from "@/types/Interfaces/APIRoutes";
+import { ModelProps } from "@/types/Interfaces/Models";
 import {
-  SnackbarActionProps,
   SnackbarMessageProps,
   SnackbarModelProps,
 } from "@/types/Interfaces/Snackbar";
 import {
-  snackbarMessageObject,
   snackbarModelMessageObject,
   snackbarModelObject,
+  snackbarNeutralObject,
 } from "@/types/Objects/Snackbar";
-import { SetStateAction, Dispatch } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { retrieveData } from "./fetchfunctions";
-import { ModelProps } from "@/types/Interfaces/Models";
-import { SettingsSharp } from "@mui/icons-material";
 
 const handleDelete = async (
-  type: "Dopamine" | "Strides" | "Steps",
-  apiRoute: APIRouteDeleteProps["route"],
+  type: "Dopamine" | "Strides" | "Steps" | 'Deadlines',
   deleteKey: any,
   setSnackbar: Dispatch<SetStateAction<boolean>>,
-  setSnackbarStatus: Dispatch<SetStateAction<"Success" | "Error" | "Warning">>,
   setSnackbarDetails: Dispatch<SetStateAction<any>>,
   setDeleteModal: Dispatch<SetStateAction<boolean>>
 ) => {
+  const apiRoute: APIRouteDeleteProps['route'] =
+    type === "Dopamine"
+      ? "/api/delete/dopamine"
+      : type === "Steps"
+      ? "/api/delete/steps"
+      : type === "Strides"
+      ? "/api/delete/strides"
+      : type === 'Deadlines'
+      ? '/api/delete/todo'
+      : '';
   try {
+    console.log(apiRoute)
     const response = await fetch(`${apiRoute}?key=${deleteKey}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: 'include'
     });
-    if (!response.ok) {
+    console.log(response)
+    if (response.ok) {
       console.log("fail");
       setDeleteModal(false);
       setSnackbar(true);
-      setSnackbarStatus("Error");
-      setSnackbarDetails(snackbarMessageObject["Action Failed"].message);
+      setSnackbarDetails(
+        type === "Dopamine"
+          ? snackbarModelMessageObject["Dopamine Deleted"]
+          : type === "Steps"
+          ? snackbarModelMessageObject["Step Deleted"]
+          : type === "Strides"
+          ? snackbarModelMessageObject["Stride Deleted"]
+          : snackbarModelMessageObject["Step Deleted"]
+      );
     } else {
       setDeleteModal(false);
       setSnackbar(true);
-      setSnackbarStatus("Success");
-      setSnackbarDetails(snackbarMessageObject.Deleted.message);
+      setSnackbarDetails(snackbarNeutralObject["Delete Failed"]);
     }
   } catch (error) {
     console.log(error);
     setDeleteModal(false);
     setSnackbar(true);
-    setSnackbarStatus("Error");
-    setSnackbarDetails(snackbarMessageObject["Action Failed"].message);
+    setSnackbarDetails(snackbarNeutralObject["Bad Response"]);
   }
 };
 
@@ -63,7 +77,7 @@ const handleDropdown = async (
   getKey: ModelProps["key"],
   apiRoute?: APIRouteGetProps["route"] | undefined
 ) => {
-  console.log(dropdown)
+  console.log(getKey, apiRoute);
   setDropdown((prev) => !prev);
   if (!dropdown) {
     retrieveData(
@@ -73,7 +87,6 @@ const handleDropdown = async (
       setSnackbarDetails,
       getKey
     );
-
   } else if (dropdown) {
     return;
   }
@@ -83,20 +96,17 @@ const handleAdd = (
   type: SnackbarModelProps["model"],
   setAdd: Dispatch<SetStateAction<boolean>>,
   setSnackbar: Dispatch<SetStateAction<boolean>>,
-  setSnackbarStatus: Dispatch<SetStateAction<SnackbarActionProps["action"]>>,
-  setSnackbarDetails: Dispatch<SetStateAction<SnackbarMessageProps["message"]>>
+  setSnackbarDetails: Dispatch<SetStateAction<SnackbarMessageProps>>
 ) => {
   if (type === "Dopamine") {
     setAdd(true);
     setSnackbar(true);
-    setSnackbarStatus("Success");
-    setSnackbarDetails(snackbarModelMessageObject["Add Stride"].message);
+    setSnackbarDetails(snackbarModelMessageObject["Add Stride"]);
   } else if (type === "Strides") {
     setAdd(true);
     setSnackbar(true);
-    setSnackbarStatus("Success");
-    setSnackbarDetails(snackbarModelMessageObject["Add Steps"].message);
+    setSnackbarDetails(snackbarModelMessageObject["Add Steps"]);
   }
 };
 
-export { handleDelete, handleDropdown, handleAdd };
+export { handleAdd, handleDelete, handleDropdown };

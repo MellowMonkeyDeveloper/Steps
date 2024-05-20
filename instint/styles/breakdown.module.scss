@@ -1,24 +1,52 @@
 @import "./base";
 
 .containerDark {
-  width: 95%;
+  width: 380px;
   outline: map-get($map: $border-width, $key: bwMedium) solid $fourthDark;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   background-color: $thirdDark;
   margin-top: $margin-heavy;
   border-radius: $br-medium;
 }
 .containerLight {
-  width: 95%;
+  width: 380px;
   outline: map-get($map: $border-width, $key: bwMedium) solid $fourthLight;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   background-color: $thirdLight;
   margin-top: $margin-heavy;
   border-radius: $br-medium;
+}
+.breakdown{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  margin-top: -20px;
+}
+.modelTitle{
+  display: flex;
+  width: 90%;
+  justify-content: flex-end;
+  letter-spacing: $ls-light;
+  font-weight: 600;
+  font-family: sans-serif;
+  margin-top: .5px;
+  font-size: 16px;
+}
+.modelTitleLight{
+  color: $primaryDark;
+}
+.modelTitleDark{
+  color: $fourthDark;
+}
+.formContainer{
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 .headerContainer {
   display: flex;
@@ -34,36 +62,44 @@
   margin-left: $margin-heavy;
   color: map-get($map: $lightColors, $key: fontLight);
 }
-.keyboardContainer{
-
+.keyboardContainer {
   justify-content: space-evenly;
   display: flex;
   width: $w25;
 }
-.completedDark{
-   margin-right: $margin-medium;
-   color: map-get($map: $statusColor, $key: notification);
+.completedDark {
+  margin-right: $margin-medium;
+  color: map-get($map: $statusColor, $key: notification);
 }
-.completedLight{
- margin-right: $margin-medium;
- color: map-get($map: $statusColor, $key: notification);
-
+.completedLight {
+  margin-right: $margin-medium;
+  color: map-get($map: $statusColor, $key: notification);
 }
-.deletedDark{
- margin-right: $margin-medium;
- color: map-get($map: $statusColor, $key: error);
- cursor: pointer;
+.deletedDark {
+  margin-right: $margin-medium;
+  color: map-get($map: $statusColor, $key: error);
+  cursor: pointer;
 }
-.deletedLight{
- margin-right: $margin-medium;
- color: map-get($map: $statusColor, $key: error);
- cursor: pointer;
+.deletedLight {
+  margin-right: $margin-medium;
+  color: map-get($map: $statusColor, $key: error);
+  cursor: pointer;
 }
-.keyboardDark{
+.keyboardDark {
   color: map-get($map: $darkColors, $key: fourthDark);
   cursor: pointer;
 }
-.keyboardLight{
+.keyboardLight {
   color: map-get($map: $lightColors, $key: fourthLight);
   cursor: pointer;
+}
+
+@media screen and (min-width: 780px) {
+  .containerDark{
+      width: $w90;
+  }
+  .containerLight{
+      width: $w90;
+  }
+
 }

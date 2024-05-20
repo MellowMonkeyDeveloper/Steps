@@ -6,6 +6,7 @@ import { useWrapper } from "@/context/WrapperProvider";
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { handleLogout } from "@/functions/navigation";
+import { parseCookies } from "nookies";
 export default function Navigation() {
   const route = useRouter();
 
@@ -15,11 +16,13 @@ export default function Navigation() {
     setShowMenu,
     setSnackbar,
     setSnackbarDetails,
+    loggedIn,
     userID,
   } = useWrapper();
 
+
   const determineAuth = useMemo(() => {
-    if (userID === 0) {
+    if (!loggedIn) {
       return (
         <>
           <div>
@@ -40,7 +43,7 @@ export default function Navigation() {
           </div>
         </>
       );
-    } else if (userID > 0) {
+    } else if (loggedIn) {
       return (
         <div>
           <h4
@@ -52,13 +55,13 @@ export default function Navigation() {
         </div>
       );
     }
-  }, [userID, colorMode]);
+  }, [loggedIn, colorMode]);
 
   return (
     <div className={colorMode ? styles.containerDark : styles.containerLight}>
       <div className={styles.bookendsContainer}>
         <Menu
-          onClick={() => setShowMenu((prev: boolean) => !prev)}
+          onClick={() => setShowMenu(true)}
           className={colorMode ? styles.modeDark : styles.modeLight}
         />
           <LightMode

@@ -17,12 +17,15 @@ from .views import (
     StepsRetrieviewView,
     StepsUpdateView,
     StepsDeleteView,
+    VerifyCookieView,
+    ToDoView
 )
 
 urlpatterns = [
     path("api/get/csrf/", get_csrf_token, name="csrf"),
+    path("api/verify/", VerifyCookieView.as_view(), name="verify-token"),
     path(
-        "api/create/dopamine/<int:pk>/",
+        "api/create/dopamine/",
         DopamineCreateView.as_view(),
         name="dopamine-create",
     ),
@@ -52,7 +55,7 @@ urlpatterns = [
         name="steps-delete",
     ),
     path(
-        "api/get/dopamine/<int:pk>/",
+        "api/get/dopamine/",
         DopamineRetrieveView.as_view(),
         name="dopamine-retrieve",
     ),
@@ -80,6 +83,21 @@ urlpatterns = [
         "api/update/steps/<int:pk>/",
         StepsUpdateView.as_view(),
         name="steps-update",
+    ),
+    path(
+        "api/get/deadlines",
+        ToDoView.as_view(),
+        name="get-deadlines",
+    ),
+    path(
+        'api/update/todo/<int:pk>/',
+        ToDoView.as_view(),
+        name="update-deadlines"
+    ),
+    path(
+        'api/delete/todo/<int:pk>/',
+        ToDoView.as_view(),
+        name='delete-deadlines'
     ),
     path("register/", UserRegistration.as_view(), name="register"),
     path("login/", UserLogin.as_view(), name="login"),

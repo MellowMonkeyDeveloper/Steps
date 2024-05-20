@@ -18,3 +18,11 @@ export enum APIRouteGet {
   StridesGet = 'Strides',
   StepsGet = 'Steps'
 }
+
+export enum APIRouteAuth {
+  Login = 'Login',
+  Register = 'Register',
+  Reset = 'Reset',
+  Logout = 'Logout',
+  Verify = 'Verify'
+}

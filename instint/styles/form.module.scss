@@ -1,51 +1,138 @@
 @import "./base";
 
 .containerDark {
-  @include container($width, w100);
-  background-color: $secondaryDark;
-  flex-direction: column;
-  margin-top: $margin-lite;
-  outline: 1px solid $fourthDark
+  @include containerCreateDopamine(w100, brMedium, secondaryDark);
 }
 .containerLight {
-  @include container($width, w100);
-  background-color: $secondaryLight;
-  flex-direction: column;
-  margin-top: $margin-lite;
+  @include containerCreateDopamine(w100, brMedium, secondaryLight);
 }
-.formDark {
-  @include container($width, w90);
-  flex-direction: column;
-  border-radius: $br-light;
-  font-family: sans-serif;
-  color: $fontDark;
-  padding: $padding-heavy;
-}
-.formLight {
-  @include container($width, w90);
-  flex-direction: column;
-  border-radius: $br-light;
-  color: $fontLight;
-  padding: $padding-heavy;
-}
-.inputContainer {
-  width: $w100;
-  justify-content: flex-start;
+.closeContainer {
   display: flex;
-  margin: $margin-lite;
+  width: 90%;
+  margin-top: 15px;
+  justify-content: flex-end;
 }
 
-.textDark{
-    font-family: sans-serif;
-    color: map-get($map: $darkColors, $key: fontDark);
-    letter-spacing: $ls-medium;
+.closeDark {
+  color: #ffd700;
+  cursor: pointer;
 }
-.textLight{
-    font-family: sans-serif;
-    color: map-get($map: $lightColors, $key: fontLight);
-    letter-spacing: $ls-medium;
+
+.closeLight {
+  color: black;
+  cursor: pointer;
 }
-.textareaContainer{
-    display: flex;
-    flex-direction: column;
+
+.formDark {
+  @include formCreateDopamine(w75);
+}
+.formLight {
+  @include formCreateDopamine(w75);
+}
+.inputContainerDark {
+  @include inputContainer(w100, marginLite, primaryLight, lsLite);
+}
+.inputContainerLight {
+  @include inputContainer(w100, marginLite, primaryDark, lsLite);
+}
+.inputDark {
+  @include input(w90, secondaryDark, brHeavy, primaryLight);
+  outline: 0.25px solid #ffd700;
+}
+
+.inputLight {
+  @include input(w90, primaryLight, brHeavy, primaryDark);
+  box-shadow: 1px 1px 6px $boxLightButton;
+}
+
+.inputLight[type="radio"]{
+  background-color: aqua
+}
+
+.textareaLight {
+  @include textarea(w100, primaryLight, primaryDark);
+  box-shadow: 3px 3px 5px $boxLightButton;
+}
+
+.textareaDark{
+  @include textarea(w100, primaryDark, primaryLight);
+  outline: 1px solid $fourthDark;
+}
+
+.submitContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.submitLight {
+  box-shadow: 3px 3px 10px $boxLightButton;
+  @include button(
+    w120px,
+    h40px,
+    primaryLight,
+    brLight
+  );
+  transition: 0.3s;
+  color: $primaryDark;
+}
+.submitDark {
+  @include button(
+    w120px,
+    h40px,
+    primaryDark,
+    brLight
+  );
+  color: $fourthDark;
+  transition: 0.3s;
+}
+.submitDark:active {
+  @include buttonActive($fourthDark, $primaryDark);
+  box-shadow: inset 3px 3px 5px $fourthDark;
+}
+.submitLight:active {
+  @include buttonActive($fourthLight, $primaryLight);
+  box-shadow: inset 3px 3px 5px $fourthLight;
+}
+
+.textDark {
+  font-family: sans-serif;
+  color: map-get($map: $darkColors, $key: fontDark);
+  letter-spacing: $ls-medium;
+}
+.textLight {
+  font-family: sans-serif;
+  color: map-get($map: $lightColors, $key: fontLight);
+  letter-spacing: $ls-medium;
+}
+.textareaContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+@media screen and (max-width: 780px) {
+  .formDark {
+    @include formCreateDopamine(w90);
+  }
+  .formLight {
+    @include formCreateDopamine(w90);
+  }
+  .containerDark {
+    @include containerCreateDopamine(
+      w90,
+      thirdDark,
+      brMedium
+    );
+  }
+  .containerLight {
+    box-shadow: 5px 5px 15px $boxLightButton;
+
+    @include containerCreateDopamine(
+      w90,
+      thirdLight,
+      brMedium
+    );
+  }
 }

@@ -1,5 +1,6 @@
 "use client";
 import {
+  Brightness1,
   CheckCircle,
   KeyboardArrowDown,
   KeyboardArrowUp,
@@ -23,14 +24,14 @@ export default function BreakdownMoreInfo({
 }: BreakdownMoreInfoProps) {
   const { colorMode } = useWrapper();
   const [showForm, setShowForm] = useState<boolean>(false);
-
+  const [form, setForm] = useState<ToDoProps>();
 
   return (
     <section
       className={colorMode ? styles.containerDark : styles.containerLight}
     >
       <article className={styles.infoContainer}>
-        {!showForm ? (
+        {!showForm && (
           <>
             <div className={styles.headerContainer}>
               <h5
@@ -54,7 +55,9 @@ export default function BreakdownMoreInfo({
                 </div>
                 <div className={styles.pContainer}>
                   <p className={colorMode ? styles.pDark : styles.pLight}>
-                    {breakdownInfoData.todo.description}
+                    {form !== undefined
+                      ? form.description
+                      : breakdownInfoData?.todo.description}
                   </p>
                 </div>
               </div>
@@ -70,7 +73,9 @@ export default function BreakdownMoreInfo({
                 </div>
                 <div className={styles.pContainer}>
                   <p className={colorMode ? styles.pDark : styles.pLight}>
-                    {breakdownInfoData.todo.motivation}
+                    {form !== undefined
+                      ? form.motivation
+                      : breakdownInfoData.todo.motivation}
                   </p>
                 </div>
               </div>
@@ -91,7 +96,9 @@ export default function BreakdownMoreInfo({
                     colorMode ? styles.subheaderDark : styles.subheaderLight
                   }
                 >
-                  {breakdownInfoData.todo.completed === false
+                  {form !== undefined
+                    ? form.completed
+                    : breakdownInfoData.todo.completed === false
                     ? "Incomplete"
                     : "Complete"}
                 </h5>
@@ -113,17 +120,42 @@ export default function BreakdownMoreInfo({
                     colorMode ? styles.subheaderDark : styles.subheaderLight
                   }
                 >
-                  {String(breakdownInfoData?.todo.deadline)}
+                  {form !== undefined
+                    ? String(form.deadline)
+                    : String(breakdownInfoData?.todo.deadline)}
                 </h5>
               </div>
             </div>
             <div>
-              <button onClick={() => setShowForm((prev: boolean) => !prev)}>Update</button>
+              <button
+                className={colorMode ? styles.updateDark : styles.updateLight}
+                onClick={() => setShowForm((prev: boolean) => !prev)}
+              >
+                Update
+              </button>
             </div>
           </>
-        ) : (
+        )}
+        {showForm && (
           <CreateForm
+            setShowForm={setShowForm}
+            setForm={setForm}
+            type={type}
+            parentID={
+              type === "Dopamine"
+                ? breakdownInfoData.private_id
+                : breakdownInfoData.key
+            }
             data={breakdownInfoData}
+            apiRoute={
+              type === "Dopamine"
+                ? "/api/update/dopamine"
+                : type === "Strides"
+                ? "/api/update/strides"
+                : type === "Steps"
+                ? "/api/update/steps"
+                : null
+            }
             apiMethod="PATCH"
             update="Existing"
           />

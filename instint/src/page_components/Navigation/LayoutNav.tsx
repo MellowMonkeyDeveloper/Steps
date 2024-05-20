@@ -4,7 +4,7 @@ import ModalBase from "../../components/modal/ModalBase";
 import { useWrapper } from "@/context/WrapperProvider";
 import Menu from "../Menu/Menu";
 export default function LayouNav() {
-  const { deleteModal, setDeleteModal, setDeleteItem, showMenu } = useWrapper();
+  const { deleteModal, setDeleteModal, setDeleteItem, showMenu, setShowMenu } = useWrapper();
   return (
     <>
       <Navigation />
@@ -17,7 +17,7 @@ export default function LayouNav() {
         />
       )}
       {showMenu && (
-        <Menu />
+        <Menu setShowModal={setShowMenu} />
       )}
     </>
   );

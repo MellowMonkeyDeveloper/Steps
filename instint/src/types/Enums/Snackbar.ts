@@ -47,4 +47,12 @@ export enum SnackbarModelMessage {
   StridesCompleted = "Stride Completed",
   StepsCompleted = "Step Completed",
   StepsAdd = "Add Steps",
+  DopamineRetrieved = 'Retrieved Dopamine',
+  StridesRetrieved = 'Retrieved Strides',
+  StepsRetrieved = 'Retrieved Steps'
+}
+
+export enum SnackbarNeutralResponses{
+  DeleteFailed = 'Delete Failed',
+  BadResponse = 'Bad Response'
 }

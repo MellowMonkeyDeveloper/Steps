@@ -55,6 +55,8 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
 ]
 
+SECURE_COOKIES = True
+
 ROOT_URLCONF = "dopamine.urls"
 
 TEMPLATES = [

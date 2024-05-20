@@ -1,20 +1,21 @@
 "use client";
 import { useWrapper } from "@/context/WrapperProvider";
-import axios from "axios";
-import { SetStateAction, useEffect, useState } from "react";
-import styles from "../../../styles/form.module.scss";
 import { handleSubmit } from "@/functions/form";
-import { APIRoutePostPatchProps } from "@/types/Interfaces/APIRoutes";
-import { SnackbarModelProps } from "@/types/Interfaces/Snackbar";
-import { ModelProps, ToDoProps } from "@/types/Interfaces/Models";
-import { APIMethods } from "@/types/Enums/APIMethods";
 import { APIMethodsProps } from "@/types/Interfaces/APIMethods";
+import { APIRoutePostPatchProps } from "@/types/Interfaces/APIRoutes";
+import { ModelProps, ToDoProps } from "@/types/Interfaces/Models";
+import { SnackbarModelProps } from "@/types/Interfaces/Snackbar";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import styles from "../../../styles/form.module.scss";
+import { Close } from "@mui/icons-material";
 interface CreateFormProps {
   apiMethod: APIMethodsProps["method"];
-  data: ModelProps["todo"] | 'none';
+  data: ModelProps["todo"] | "none";
   type: SnackbarModelProps["model"];
-  apiRoute: APIRoutePostPatchProps["route"];
+  apiRoute: APIRoutePostPatchProps["route"] | null;
   parentID: number;
+  setShowForm?: Dispatch<SetStateAction<boolean>>,
+  setForm: Dispatch<SetStateAction<ToDoProps>>
 }
 
 export default function CreateForm({
@@ -22,52 +23,56 @@ export default function CreateForm({
   data,
   type,
   apiRoute,
-  parentID
+  parentID,
+  setShowForm,
+  setForm,
 }: CreateFormProps) {
   const formObject: ToDoProps = {
-    title: '',
+    title: "",
     description: "",
     motivation: "",
     deadline: new Date(),
     completed: false,
-  }
-  const { colorMode, dopamineID, stridesID, stepsID, userID } =
-    useWrapper();
+    type: type,
+  };
+  const { colorMode, userID , setSnackbar, setSnackbarDetails} = useWrapper();
   const [formData, setFormData] = useState<ToDoProps>(formObject);
 
   const handleChange = (e) => {
-    
-      setFormData({
-        ...formData,
-        [e.target.name]: e.target.value,
-        user: userID,
-      });
-    
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+      user: userID,
+      type: type
+    });
   };
 
   useEffect(() => {
-    if(data === 'none'){
-      setFormData(formObject)
-
-    }else{
-      setFormData(data)
-
+    if (data === "none") {
+      setFormData(formObject);
+    } else {
+      setFormData(data.todo);
     }
+    console.log(data, apiRoute);
   }, []);
   return (
     <section
       className={colorMode ? styles.containerDark : styles.containerLight}
     >
+      <div className={styles.closeContainer}>
+        <Close className={colorMode ? styles.closeDark : styles.closeLight} onClick={() => setShowForm(false)} />
+      </div>
       <div>
         <h2 className={colorMode ? styles.textDark : styles.textLight}>
           {apiMethod === "PATCH" ? `Update ${type}` : `Add ${type}`}
         </h2>
       </div>
       <form className={colorMode ? styles.formDark : styles.formLight}>
-        <div className={styles.inputContainer}>
+        <div className={colorMode ? styles.inputContainerDark : styles.inputContainerLight}>
           <label>
             Title:
             <input
+              className={colorMode ? styles.inputDark : styles.inputLight}
               onChange={handleChange}
               name="title"
               type="text"
@@ -75,52 +80,53 @@ export default function CreateForm({
             />
           </label>
         </div>
-        <div className={styles.textareaContainer}>
+        <div className={colorMode ? styles.inputContainerDark : styles.inputContainerLight}>
           <label>
             Description:
             <textarea
-              className={styles.textarea}
+              className={colorMode ? styles.textareaDark : styles.textareaLight}
               onChange={handleChange}
               name="description"
               value={formData.description}
             />
           </label>
         </div>
-        <div className={styles.textareaContainer}>
+        <div className={colorMode ? styles.inputContainerDark : styles.inputContainerLight}>
           {" "}
           <label>
             Motivation:
             <textarea
-              className={styles.textarea}
+              className={colorMode ? styles.textareaDark : styles.textareaLight}
               onChange={handleChange}
               value={formData.motivation}
               name="motivation"
             />
           </label>
         </div>
-        <div className={styles.inputContainer}>
+        <div className={colorMode ? styles.inputContainerDark : styles.inputContainerLight}>
           <label>
             Completed:
             <input
               onChange={handleChange}
-              type="checkbox"
+              type="radio"
               name="completed"
               value="true"
-            />{" "}
+            />
             Complete
             <input
               onChange={handleChange}
-              type="checkbox"
+              type="radio"
               name="completed"
               value="false"
             />
             Incomplete
           </label>
         </div>
-        <div className={styles.inputContainer}>
+        <div className={colorMode ? styles.inputContainerDark : styles.inputContainerLight}>
           <label>
             Deadline:
             <input
+            className={colorMode ? styles.inputDark : styles.inputLight}
               onChange={handleChange}
               type="date"
               name="deadline"
@@ -128,33 +134,28 @@ export default function CreateForm({
             />
           </label>
         </div>
-
-        <button
-          onClick={(event) =>
-            handleSubmit(
-              event.preventDefault(),
-              apiMethod,
-              formData,
-              apiRoute,
-              userID,
-              type === "Dopamine" && apiMethod === "POST"
-                ? parentID
-                : type === "Dopamine" && apiMethod === "PATCH"
-                ? parentID
-                : type === "Strides" && apiMethod === "POST"
-                ? parentID
-                : type === "Strides" && apiMethod === "PATCH"
-                ? parentID
-                : type === "Steps" && apiMethod === "POST"
-                ? parentID
-                : type === "Steps" && apiMethod === "PATCH"
-                ? parentID
-                : 0
-            )
-          }
-        >
-          submit
-        </button>
+        <div className={styles.submitContainer}>
+          <button
+          className={colorMode ? styles.submitDark : styles.submitLight}
+            onClick={(event) =>
+              handleSubmit(
+                event.preventDefault(),
+                apiMethod,
+                formData,
+                apiRoute,
+                userID,
+                parentID,
+                setShowForm,
+                setSnackbar,
+                setSnackbarDetails,
+                type,
+                setForm
+              )
+            }
+          >
+            Submit
+          </button>
+        </div>
       </form>
     </section>
   );

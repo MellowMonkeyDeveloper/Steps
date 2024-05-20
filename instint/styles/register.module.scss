@@ -1,0 +1,87 @@
+@import './base';
+
+.pageDark{
+    @include pageCreateDopamine(w100, primaryDark)
+}
+
+.pageLight{
+    @include pageCreateDopamine(w100, primaryLight)
+}
+
+.containerDark{
+    @include containerCreateDopamine(w75, brLight, secondaryDark);
+    outline: 1px solid $fourthDark;
+    @include registrationContainer(paddingHeavy);
+}
+
+.containerLight{
+    @include containerCreateDopamine(w75, brLight, secondaryLight);
+    box-shadow: 5px 5px 10px $boxLightButton;
+    @include registrationContainer(paddingHeavy);
+}
+
+.formDark{
+    @include formCreateDopamine(w90);
+}
+
+.formLight{
+    @include formCreateDopamine(w90);
+}
+
+.h2Dark{
+    font-family: sans-serif;
+    letter-spacing: $ls-light;
+    color: $fourthDark;
+}
+.h2Light{
+    font-family: sans-serif;
+    letter-spacing: $ls-light;
+    color: $primaryDark;
+}
+
+.inputDark{
+    @include input(w75, primaryDark, brLight, primaryDark);
+    outline: 1px solid $fourthDark;
+}
+
+.inputLight{
+    @include input(w75, thirdLight, brLight, primaryDark);
+    box-shadow: 2px 2px 10px $boxLightButton;
+}
+
+.inputContainerDark{
+    @include inputContainer(w100, marginLite, fourthDark, lsLite);
+}
+
+.inputContainerLight{
+    @include inputContainer(w100, marginMedium, primaryDark, lsLite);
+}
+
+.submitDark{
+    @include button(w120px, h40px, fourthDark, brMedium);
+    transition: .3s;
+    margin-left: 15px;
+}
+.submitLight{
+    @include button(w120px, h40px, fourthLight, brMedium);
+    transition: .3s;
+    margin-left: 15px;
+}
+
+.submitDark:active{
+    @include buttonActive(fourthDark, primaryDark);
+    box-shadow: inset 3px 3px 5px $fourthDark;
+    
+}
+.submitLight:active{
+    @include buttonActive(fourthLight, primaryDark);
+    box-shadow: inset 3px 3px 5px $fourthLight;
+    
+}
+.submitContainer{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}

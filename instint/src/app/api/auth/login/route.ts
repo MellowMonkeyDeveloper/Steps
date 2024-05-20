@@ -1,10 +1,7 @@
-import axios from "axios";
+import { cookies } from "next/headers";
 export const dynamic = "force-dynamic"; // defaults to auto
-import type { NextApiRequest, NextApiResponse } from "next";
-import { parseCookies, setCookie } from "nookies";
 export async function POST(request: Request) {
   const json = await request.json();
-  console.log(json);
   try {
     const response = await fetch("http://localhost:8000/steps/login/", {
       method: "POST",
@@ -14,12 +11,20 @@ export async function POST(request: Request) {
       credentials: "include",
       body: JSON.stringify(json),
     });
-
-    const data = await response.json();
-    const token = response.headers.get("Set-Cookie");
-    const authToken = token?.split(";")[0].slice(11);
-    console.log(authToken);
-    return Response.json({ data: data, token: authToken });
+    console.log(json)
+    const token = response.headers
+      .get("Set-Cookie")
+      ?.split("=")[1]
+      ?.split(";")[0];
+    cookies().set({
+      name: "token",
+      value: token,
+      httpOnly: true,
+      path: "/",
+      secure: true,
+      maxAge: 3600,
+    });
+    return Response.json({message: 'Login Successful'});
   } catch (error) {
     console.log(error);
     throw error;

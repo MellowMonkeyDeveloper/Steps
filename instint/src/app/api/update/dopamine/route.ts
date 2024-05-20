@@ -1,17 +1,19 @@
 import { authCookie } from "@/functions/cookies"
+import { cookies } from "next/headers"
 
 export const dynamic = 'force-dynamic' // defaults to auto
 export async function PATCH(request: Request) {
-    const {searchParams} = new URL(request.url)
-    const key = searchParams.get('key')
-    const token = authCookie(request)
+
+    const cookie = cookies()
+    const token = cookie.get('token')
     const json = await request.json()
+    console.log(json)
     try{
-          const response = await fetch(`http://localhost:8000/steps/api/update/dopamine/${key}`, {
+          const response = await fetch(`http://localhost:8000/steps/api/update/dopamine/${json.key}/`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Token ${token}`
+                'Authorization': `Token ${token?.value}`
             },
             credentials: 'include',
             body: JSON.stringify(json)

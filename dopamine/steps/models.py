@@ -69,6 +69,7 @@ class ToDo(models.Model):
     description = models.CharField(max_length=1000)
     motivation = models.CharField(max_length=1000)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    type = models.CharField(max_length=255)
 
     @classmethod
     def create_todo(
@@ -98,9 +99,7 @@ class ToDo(models.Model):
         description,
         motivation,
     ):
-        """
-        Update the attributes of the Strides instance.
-        """
+        
         self.title = title
         self.deadline = deadline
         self.completed = completed
@@ -108,11 +107,6 @@ class ToDo(models.Model):
         self.motivation = motivation
         self.save()
 
-    def delete(self):
-        """
-        Delete the Strides instance.
-        """
-        self.delete()
 
 
 class Strides(models.Model):

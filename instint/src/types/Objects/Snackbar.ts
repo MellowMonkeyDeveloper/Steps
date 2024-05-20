@@ -2,7 +2,8 @@ import {
   SnackbarMessage,
   SnackbarModel,
   SnackbarModelMessage,
-  SnackbarAuthEnum
+  SnackbarAuthEnum,
+  SnackbarNeutralResponses
 } from "../Enums/Snackbar";
 import {
   SnackbarMessageProps,
@@ -26,8 +27,9 @@ const snackbarModelObject: Record<SnackbarModel, SnackbarModelProps> = {
   [SnackbarModel.Steps]: { model: "Steps" },
 };
 
-const snackbarCRUDObject: Record<SnackbarCRUDEnum, SnackbarCRUDProps> = {
-
+const snackbarNeutralObject: Record<SnackbarNeutralResponses, SnackbarMessageProps> = {
+  [SnackbarNeutralResponses.BadResponse]: {message: 'Bad response', status: 'Error'},
+  [SnackbarNeutralResponses.DeleteFailed]: {message: 'Delete failed', status: 'Error'}
 }
 
 const snackbarModelMessageObject: Record<
@@ -94,10 +96,22 @@ const snackbarModelMessageObject: Record<
     message: `Adding ${snackbarModelObject.Strides.model}`,
     status: 'Warning'
   },
+  [SnackbarModelMessage.StepsRetrieved]: {
+    message: `Retrieving ${snackbarModelObject.Steps.model}`,
+    status: 'Success'
+  },
+  [SnackbarModelMessage.StridesRetrieved]: {
+    message: `Retrieving ${snackbarModelObject.Strides.model}`,
+    status: 'Success'
+  },[SnackbarModelMessage.DopamineRetrieved]: {
+    message: `Retrieving ${snackbarModelObject.Dopamine.model}`,
+    status: 'Success'
+  },
 };
 
 export {
   snackbarModelMessageObject,
   snackbarModelObject,
-  snackbarAuthObject
+  snackbarAuthObject,
+  snackbarNeutralObject
 };

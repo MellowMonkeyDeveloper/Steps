@@ -1,14 +1,8 @@
-@import './base';
+@import "./base";
 
-.containerDark{
-    @include container($width, w100);
-    background-color: $primaryDark;
-    flex-direction: column;
-    height: 100vh;
+.containerDark {
+  @include pageCreateDopamine(w100, primaryDark);
 }
-.containerLight{
-    @include container($width, w100);
-    background-color: $primaryLight;
-    flex-direction: column;
-    height: 100vh;
+.containerLight {
+  @include pageCreateDopamine(w100, primaryLight);
 }

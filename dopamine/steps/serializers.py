@@ -6,6 +6,7 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 from rest_framework import serializers
 from django.conf import settings
+from django.contrib.auth import get_user_model
 
 
 class ToDoSerializer(serializers.ModelSerializer):
@@ -21,8 +22,9 @@ class DopamineSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         todo_data = validated_data.get("todo")
-        user_data = validated_data.get("user")
-        dopamine_instance = Dopamine.objects.create(todo=todo_data, user=user_data)
+        request = self.context.get('request')
+        user_instance = get_user_model().objects.get(pk=request.user.id)
+        dopamine_instance = Dopamine.objects.create(todo=todo_data, user=user_instance)
         return dopamine_instance
 
 
@@ -47,10 +49,26 @@ class StepsSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         todo_data = validated_data.get("todo")
-        strides_data = validated_data.get("key")
-        steps_instance = Steps.objects.create(todo=todo_data, key=strides_data)
-        return steps_instance
 
+        dopamine_data = validated_data.get("key")
+        strides_instance = Steps.objects.create(
+            todo=todo_data, key=dopamine_data
+        )
+        return strides_instance
+    
+class StepsRetrieveSerializer(serializers.ModelSerializer):
+    todo = ToDoSerializer()
+
+    class Meta:
+        model = Steps
+        fields = ["todo", "key"]
+
+    def to_representation(self, instance):
+        print(self)
+        rep = super().to_representation(instance)
+        print(rep)
+        rep['id'] = instance.id
+        return rep
 
 class StridesSerializer(serializers.ModelSerializer):
     class Meta:
@@ -59,6 +77,7 @@ class StridesSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         todo_data = validated_data.get("todo")
+
         dopamine_data = validated_data.get("key")
         strides_instance = Strides.objects.create(
             todo=todo_data, key=dopamine_data

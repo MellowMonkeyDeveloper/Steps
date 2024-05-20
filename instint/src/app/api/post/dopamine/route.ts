@@ -2,20 +2,22 @@ export const dynamic = "force-dynamic"; // defaults to auto
 import { parseCookies } from "nookies";
 import Document from "next/document";
 import { authCookie } from "@/functions/cookies";
+import { cookies } from "next/headers";
 export async function POST(request: Request) {
-  const token = authCookie(request)
   const json = await request.json();
+  const cookie = cookies()
+  const token = cookie.get('token')
   try {
     const response = await fetch(
-      `http://localhost:8000/steps/api/create/dopamine/${json.user}/`,
+      `http://localhost:8000/steps/api/create/dopamine/`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Token ${token}`,
+          "Authorization": `Token ${token?.value}`,
         },
         credentials: "include",
-        body: JSON.stringify({ todo: json.todo, user: json.user }),
+        body: JSON.stringify({ todo: json.todo, user: json.todo.user}),
       }
     );
     const data = await response.json();
