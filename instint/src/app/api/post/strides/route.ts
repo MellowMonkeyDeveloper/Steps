@@ -1,6 +1,7 @@
-import { authCookie } from "@/functions/cookies"
 import { cookies } from "next/headers"
-
+require('dotenv').config()
+const local = process.env.NEXT_PUBLIC_LOCAL
+const api = process.env.NEXT_PUBLIC_DOPROD
 export const dynamic = 'force-dynamic' // defaults to auto
 export async function POST(request: Request) {
     const cookie = cookies()
@@ -8,7 +9,7 @@ export async function POST(request: Request) {
     const json = await request.json()
     console.log(json)
     try{
-          const response = await fetch(`http://localhost:8000/steps/api/create/strides/${json.key}/`, {
+          const response = await fetch(`${api}/steps/api/create/strides/${json.key}/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

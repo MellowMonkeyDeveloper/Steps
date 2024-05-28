@@ -1,0 +1,75 @@
+
+.containerDark {
+  display: flex;
+  width: 300px;
+  outline: 3px solid #ffd700;
+  z-index: 5;
+  position: fixed;
+  justify-content: center;
+  background-color: rgb(43, 43, 43);
+  border-radius: 5px;
+  align-items: center;
+  animation: slideIn 0.3s linear;
+  animation-fill-mode: forwards;
+  transition: 0.3s;
+  margin-top: 150px;
+}
+.containerLight {
+  display: flex;
+  width: 300px;
+  outline: 3px solid rgb(36, 196, 102);
+  z-index: 5;
+  position: fixed;
+  justify-content: center;
+  background-color: rgb(241, 241, 241);
+  border-radius: 5px;
+  align-items: center;
+  animation: slideIn 0.3s linear;
+  animation-fill-mode: forwards;
+  transition: 0.3s;
+  margin-top: 150px;
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateX(-3000px);
+  }
+  100% {
+    transform: translateX(3px);
+  }
+}
+
+.messageContainer {
+  display: flex;
+  width: 80%;
+}
+.messageDark {
+  color: #ffd700;
+  font-family: sans-serif;
+  font-size: 14px;
+}
+.messageLight {
+  color: rgb(36, 36, 36);
+  font-family: sans-serif;
+  font-size: 14px;
+}
+.statusContainer {
+  width: 10%;
+}
+.success {
+  color: green;
+}
+.error {
+  color: red;
+}
+.warning {
+  color: yellow;
+}
+.closeLight {
+  color: black;
+  cursor: pointer;
+}
+.closeDark {
+  color: #ffd700;
+  cursor: pointer;
+}

@@ -1,66 +1,10 @@
 "use client";
 
-import axios from "axios";
-import DashboardCard, {
-  DashboardCardProps,
-} from "@/components/cards/DashboardCard";
-import {
-  CalendarMonth,
-  NoteAdd,
-  Add,
-  SportsScore,
-  Today,
-} from "@mui/icons-material";
-import styles from "../../../styles/main.module.scss";
+import styles from "../../styles/main.module.css";
 import { useWrapper } from "@/context/WrapperProvider";
-interface DopamineApiObjectProps {
-  title: string;
-  description: string;
-  date: string;
-  completed: boolean;
-  motivation: string;
-  strides: any;
-}
+
 export default function Main() {
   const { colorMode } = useWrapper();
-  const dashboardCard: DashboardCardProps[] = [
-    {
-      title: "Dopamine Goals",
-      icon: (
-        <SportsScore
-          className={colorMode ? styles.iconDark : styles.iconLight}
-        />
-      ),
-      href: "/dopamine",
-      link: "View",
-    },
-    {
-      title: "Calendar",
-      icon: (
-        <CalendarMonth
-          className={colorMode ? styles.iconDark : styles.iconLight}
-        />
-      ),
-      href: "/calendar",
-      link: "View",
-    },
-    {
-      title: "Create",
-      icon: (
-        <NoteAdd className={colorMode ? styles.iconDark : styles.iconLight} />
-      ),
-      href: "/create",
-      link: "Create",
-    },
-    {
-      title: "Today's Steps",
-      icon: (
-        <Today className={colorMode ? styles.iconDark : styles.iconLight} />
-      ),
-      href: "/today",
-      link: "View",
-    },
-  ];
 
   return (
     <div className={colorMode ? styles.containerDark : styles.containerLight}>
@@ -161,10 +105,18 @@ export default function Main() {
       </article>
       <article className={styles.howitworksContainer}>
         <div className={styles.headerContainer}>
-          <h2 className={colorMode ? styles.textDark : styles.textLight}>Is this a finished product?</h2>
+          <h2 className={colorMode ? styles.textDark : styles.textLight}>
+            Is this a finished product?
+          </h2>
         </div>
         <div className={styles.pContainer}>
-          <p className={colorMode ? `${styles.textDark} ${styles.p}` : `${styles.textLight} ${styles.p}`}>
+          <p
+            className={
+              colorMode
+                ? `${styles.textDark} ${styles.p}`
+                : `${styles.textLight} ${styles.p}`
+            }
+          >
             As I'm sure you'll notice this isn't a feature rich app. This is the
             first version of the app and I'll be working on this in my free
             time. In the future I envision integrating this with the Cardano
@@ -176,10 +128,18 @@ export default function Main() {
       </article>
       <article className={styles.howitworksContainer}>
         <div className={styles.headerContainer}>
-          <h2 className={colorMode ? styles.textDark : styles.textLight}>How can I help?</h2>
+          <h2 className={colorMode ? styles.textDark : styles.textLight}>
+            How can I help?
+          </h2>
         </div>
         <div className={styles.pContainer}>
-          <p className={colorMode ? `${styles.textDark} ${styles.p}`: `${styles.textLight} ${styles.p}`}>
+          <p
+            className={
+              colorMode
+                ? `${styles.textDark} ${styles.p}`
+                : `${styles.textLight} ${styles.p}`
+            }
+          >
             If you'd like to donate send me whatever anything Cardano you'd like
             to the address below.
           </p>
@@ -188,7 +148,6 @@ export default function Main() {
           <span>ADDRESS</span>
         </div>
       </article>
-     
     </div>
   );
 }

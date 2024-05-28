@@ -9,22 +9,18 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@emotion/react": "^11.11.3",
-    "@emotion/styled": "^11.11.0",
-    "@meshsdk/core": "^1.5.11-beta.3",
-    "@meshsdk/react": "^1.1.10-beta.3",
-    "@mui/icons-material": "^5.15.10",
-    "@mui/material": "^5.15.10",
-    "axios": "^1.6.7",
+   
+    "dotenv": "^16.4.5",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
-    "next": "^14.1.0",
+    "next": "13.4.0",
     "next-auth": "^4.24.7",
     "next-cookies": "^2.0.3",
     "nookies": "^2.5.2",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "sharp": "^0.33.4"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -33,7 +29,6 @@
     "cookie": "^0.6.0",
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
-    "sass": "^1.71.0",
     "typescript": "^5"
   }
 }

@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import styles from "../../../styles/menu.module.scss";
+import styles from "../../styles/menu.module.css";
 import { useWrapper } from "@/context/WrapperProvider";
 import { SetStateAction, Dispatch } from "react";
 export interface MenuProps {
@@ -14,13 +14,15 @@ export default function Menu({ setShowModal }: MenuProps) {
       | "View Dopamine"
       | "Calendar"
       | "Today"
+      | "Home"
       | "Deadlines";
-    href: "/create" | "/dopamine" | "/calendar" | "/today" | "/deadlines";
+    href: "/create" | "/dopamine" | "/calendar" | "/today" | "/deadlines" | "/";
   }
   const linkArray: LinkMenuProps[] = [
     { label: "Create Dopamine", href: "/create" },
     { label: "View Dopamine", href: "/dopamine" },
     { label: "Deadlines", href: "/deadlines" },
+    { label: "Home", href: "/" },
   ];
   return (
     <section className={styles.section}>

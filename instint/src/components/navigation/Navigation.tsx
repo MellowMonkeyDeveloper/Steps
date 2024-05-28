@@ -1,12 +1,10 @@
 "use client";
-import { LightMode, Menu } from "@mui/icons-material";
-import Image from "next/image";
-import styles from "../../../styles/navigation.module.scss";
 import { useWrapper } from "@/context/WrapperProvider";
-import { useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import { handleLogout } from "@/functions/navigation";
-import { parseCookies } from "nookies";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useMemo } from "react";
+import styles from "../../styles/navigation.module.css";
 export default function Navigation() {
   const route = useRouter();
 
@@ -17,6 +15,7 @@ export default function Navigation() {
     setSnackbar,
     setSnackbarDetails,
     loggedIn,
+    setLoggedIn,
     userID,
   } = useWrapper();
 
@@ -48,7 +47,7 @@ export default function Navigation() {
         <div>
           <h4
             className={colorMode ? styles.modeDark : styles.modeLight}
-            onClick={() => handleLogout(setSnackbar, setSnackbarDetails)}
+            onClick={() => handleLogout(setLoggedIn, setSnackbar, setSnackbarDetails)}
           >
             Logout
           </h4>
@@ -60,11 +59,11 @@ export default function Navigation() {
   return (
     <div className={colorMode ? styles.containerDark : styles.containerLight}>
       <div className={styles.bookendsContainer}>
-        <Menu
+        <div
           onClick={() => setShowMenu(true)}
           className={colorMode ? styles.modeDark : styles.modeLight}
         />
-          <LightMode
+          <div
             className={colorMode ? styles.modeDark : styles.modeLight}
             onClick={() => setColorMode((prev: boolean) => !prev)}
           />

@@ -1,0 +1,17 @@
+
+.containerDark{
+    display: flex;
+    width: 100%;
+    background-color: rgb(36, 36, 36);
+    flex-direction: column;
+    min-height: 100vh;
+    align-items: center;
+}
+.containerLight{
+    display: flex;
+    width: 100%;
+    background-color: rgb(241, 241, 241);
+    flex-direction: column;
+    min-height: 100vh;
+    align-items: center;
+}

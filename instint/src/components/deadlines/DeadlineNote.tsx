@@ -1,17 +1,21 @@
+'use client'
 import { useWrapper } from "@/context/WrapperProvider";
 import { ToDoProps } from "@/types/Interfaces/Models";
-import { CheckCircle, Delete, Warning } from "@mui/icons-material";
-import styles from "../../../styles/deadline.module.scss";
+import styles from "../../styles/deadline.module.css";
 import { handleCompleted } from "@/functions/deadline";
 import { handleDelete } from "@/functions/breakdown";
+import { useState } from "react";
 export interface DeadlineNoteProps {
   data: ToDoProps;
 }
 export default function DeadlineNote({ data }: DeadlineNoteProps) {
   const { colorMode, setSnackbar, setSnackbarDetails, setDeleteModal } =
     useWrapper();
+    const [itemDeleted, setItemDeleted] = useState<boolean>(false)
   return (
-    <article
+    <>
+    {!itemDeleted ? (
+      <article
       className={
         colorMode
           ? styles.deadlineNoteContainerDark
@@ -33,13 +37,13 @@ export default function DeadlineNote({ data }: DeadlineNoteProps) {
         </div>
         <div className={styles.deadlineCompletedContainer}>
           {data.completed ? (
-            <CheckCircle
+            <div
               className={
                 colorMode ? styles.checkCircleDark : styles.checkCircleLight
               }
             />
           ) : (
-            <Warning
+            <div
               onClick={() =>
                 handleCompleted(
                   data,
@@ -53,14 +57,15 @@ export default function DeadlineNote({ data }: DeadlineNoteProps) {
           )}
         </div>
         <div className={styles.deadlineDeletedContainer}>
-          <Delete
+          <div
             onClick={() =>
               handleDelete(
                 "Deadlines",
                 data.id,
                 setSnackbar,
                 setSnackbarDetails,
-                setDeleteModal
+                setDeleteModal,
+                setItemDeleted
               )
             }
             className={colorMode ? styles.deletedDark : styles.deletedLight}
@@ -68,5 +73,11 @@ export default function DeadlineNote({ data }: DeadlineNoteProps) {
         </div>
       </div>
     </article>
+    ): (
+      <>
+      </>
+    )}
+    </>
+    
   );
 }

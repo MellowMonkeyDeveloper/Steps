@@ -3,7 +3,7 @@ import Breakdown from "@/components/dropdown/Breakdown";
 import { useWrapper } from "@/context/WrapperProvider";
 import { retrieveData } from "@/functions/fetchfunctions";
 import { useEffect } from "react";
-import styles from "../../../styles/viewdopamine.module.scss";
+import styles from "../../styles/viewdopamine.module.css";
 export default function ViewDopamine() {
   const {
     colorMode,

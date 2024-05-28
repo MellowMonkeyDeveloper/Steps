@@ -1,15 +1,15 @@
 export const dynamic = "force-dynamic"; // defaults to auto
-import { parseCookies } from "nookies";
-import Document from "next/document";
-import { authCookie } from "@/functions/cookies";
 import { cookies } from "next/headers";
+require('dotenv').config()
+const local = process.env.NEXT_PUBLIC_LOCAL
+const api = process.env.NEXT_PUBLIC_DOPROD
 export async function POST(request: Request) {
   const json = await request.json();
   const cookie = cookies()
   const token = cookie.get('token')
   try {
     const response = await fetch(
-      `http://localhost:8000/steps/api/create/dopamine/`,
+      `${api}/steps/api/create/dopamine/`,
       {
         method: "POST",
         headers: {

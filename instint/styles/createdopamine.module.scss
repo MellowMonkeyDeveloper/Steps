@@ -1,8 +1,0 @@
-@import "./base";
-
-.containerDark {
-  @include pageCreateDopamine(w100, primaryDark);
-}
-.containerLight {
-  @include pageCreateDopamine(w100, primaryLight);
-}

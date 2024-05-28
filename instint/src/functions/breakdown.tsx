@@ -20,7 +20,8 @@ const handleDelete = async (
   deleteKey: any,
   setSnackbar: Dispatch<SetStateAction<boolean>>,
   setSnackbarDetails: Dispatch<SetStateAction<any>>,
-  setDeleteModal: Dispatch<SetStateAction<boolean>>
+  setDeleteModal: Dispatch<SetStateAction<boolean>>,
+  setItemDeleted: Dispatch<SetStateAction<boolean>>
 ) => {
   const apiRoute: APIRouteDeleteProps['route'] =
     type === "Dopamine"
@@ -41,10 +42,11 @@ const handleDelete = async (
       },
       credentials: 'include'
     });
-    console.log(response)
-    if (response.ok) {
-      console.log("fail");
+    const data = await response.json()
+    if (data.message === 'Deleted') {
+      console.log("Deleted");
       setDeleteModal(false);
+      setItemDeleted(true)
       setSnackbar(true);
       setSnackbarDetails(
         type === "Dopamine"
@@ -58,12 +60,14 @@ const handleDelete = async (
     } else {
       setDeleteModal(false);
       setSnackbar(true);
+      setItemDeleted(false)
       setSnackbarDetails(snackbarNeutralObject["Delete Failed"]);
     }
   } catch (error) {
     console.log(error);
     setDeleteModal(false);
     setSnackbar(true);
+    setItemDeleted(false)
     setSnackbarDetails(snackbarNeutralObject["Bad Response"]);
   }
 };
@@ -104,6 +108,7 @@ const handleAdd = (
     setSnackbarDetails(snackbarModelMessageObject["Add Stride"]);
   } else if (type === "Strides") {
     setAdd(true);
+    console.log('steps')
     setSnackbar(true);
     setSnackbarDetails(snackbarModelMessageObject["Add Steps"]);
   }

@@ -89,7 +89,7 @@ const snackbarModelMessageObject: Record<
     status: 'Warning'
   },
   [SnackbarModelMessage.StepsAdd]: {
-    message: `Adding ${snackbarModelObject.Steps}`,
+    message: `Adding ${snackbarModelObject.Steps.model}`,
     status: 'Warning'
   },
   [SnackbarModelMessage.StridesAdding]: {

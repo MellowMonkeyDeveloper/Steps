@@ -1,0 +1,94 @@
+.deadlinePageLight {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  background-color: white;
+}
+
+.deadlinePageDark {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  background-color: rgb(29, 29, 29);
+}
+
+.deadlineNoteContainerDark {
+  display: flex;
+  width: 380px;
+  border-radius: 10px;
+  outline: 1px solid #ffd700;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 15px;
+  background-color: rgb(68, 68, 68);
+}
+.deadlineNoteContainerLight {
+  display: flex;
+  width: 380px;
+  box-shadow: 5px 5px 10px rgb(210, 210, 210);
+  border-radius: 10px;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 15px;
+  background-color: rgb(230, 230, 230);
+}
+.deadlineTypeContainer {
+  display: flex;
+  margin-bottom: -25px;
+}
+.typeHeaderDark {
+  color: #ffd700;
+  font-family: sans-serif;
+}
+.typeHeaderLight {
+  color: black;
+  font-family: sans-serif;
+}
+.deadlineInfoContainer {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+}
+.deadlineHeaderContainer {
+  display: flex;
+  width: 75%;
+  font-family: sans-serif;
+  letter-spacing: 1.05px;
+}
+.deadlineHeaderDark {
+  color: #ffd700;
+  margin-left: 12.5px;
+}
+.deadlineHeaderLight {
+  margin-left: 12.5px;
+}
+.deadlineCompletedContainer {
+  width: 12.5%;
+}
+.deadlineCheckCircleDark {
+  color: rgb(36, 196, 102);
+}
+.deadlineCheckCircleLight {
+  color: rgb(36, 196, 102);
+}
+.warningDark {
+  color: red;
+}
+.warningLight {
+  color: red;
+}
+.deadlineDeletedContainer {
+}
+.deletedDark {
+  color: #ffd700;
+}
+.deletedLight {
+  color: black;
+}

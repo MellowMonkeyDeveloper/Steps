@@ -4,11 +4,14 @@ export const dynamic = "force-dynamic"; // defaults to auto
 import type { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
+require('dotenv').config()
+const local = process.env.NEXT_PUBLIC_LOCAL
+const api = process.env.NEXT_PUBLIC_DOPROD
 export async function POST(request: Request) {
   const json = await request.json();
   console.log(json);
   try {
-    const response = await fetch("http://localhost:8000/steps/register/", {
+    const response = await fetch(`${api}/steps/register/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

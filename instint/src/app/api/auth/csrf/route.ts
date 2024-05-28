@@ -1,10 +1,13 @@
 import axios from "axios";
 export const dynamic = "force-dynamic"; // defaults to auto
 import type { NextApiRequest, NextApiResponse } from "next";
+require('dotenv').config()
+const local = process.env.NEXT_PUBLIC_LOCAL
+const api = process.env.NEXT_PUBLIC_DOPROD
 export async function GET(request: Request) {
   try {
     const response = await fetch(
-      "http://localhost:8000/steps/csrf/", {
+      `${api}/steps/csrf/`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'

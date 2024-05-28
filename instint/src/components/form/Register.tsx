@@ -1,25 +1,23 @@
 "use client";
 
 import { useWrapper } from "@/context/WrapperProvider";
-import { APIMethods } from "@/types/Enums/APIMethods";
-import { parseCookies } from "nookies";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import styles from "../../../styles/register.module.scss";
-import { APIRouteAuthProps } from "@/types/Interfaces/APIRoutes";
 import { AuthFormProps, handleAuth } from "@/functions/form";
-import { SnackbarMessageProps } from "@/types/Interfaces/Snackbar";
+import { APIRouteAuthProps } from "@/types/Interfaces/APIRoutes";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import styles from "../../styles/register.module.css";
 export interface RegisterProps {
   apiRoute: APIRouteAuthProps["route"];
   authHeader: "Register" | "Login";
   type: "Register" | "Login";
-  
 }
 export default function Register({
   apiRoute,
   authHeader,
-  type
+  type,
 }: RegisterProps) {
-  const { colorMode, setSnackbar, setSnackbarDetails, setLoggedIn } = useWrapper();
+  const { colorMode, setSnackbar, setSnackbarDetails, setLoggedIn } =
+    useWrapper();
   const [username, setUsername] = useState<any>();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -135,6 +133,11 @@ export default function Register({
           </form>
         </div>
         <div></div>
+      </div>
+      <div>
+        <Link href={'/forgot'}>
+          <h3>Forgot Password?</h3>
+        </Link>
       </div>
     </section>
   );

@@ -2,6 +2,9 @@ import { authCookie } from "@/functions/cookies";
 import { cookies } from "next/headers";
 
 export const dynamic = "force-dynamic"; // defaults to auto
+require('dotenv').config()
+const local = process.env.NEXT_PUBLIC_LOCAL
+const api = process.env.NEXT_PUBLIC_DOPROD
 export async function PATCH(request: Request) {
 
   const cookie = cookies();
@@ -9,7 +12,7 @@ export async function PATCH(request: Request) {
   const json = await request.json();
   try {
     const response = await fetch(
-      `http://localhost:8000/steps/api/update/steps/${json.key}/`,
+      `${api}/steps/api/update/steps/${json.key}/`,
       {
         method: "PATCH",
         headers: {

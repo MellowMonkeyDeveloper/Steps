@@ -1,0 +1,47 @@
+.section {
+  background-color: rgba(0, 0, 0, 0.37);
+  height: 100vh;
+  position: fixed;
+  z-index: 0;
+  display: flex;
+  width: 100vw;
+  justify-content: flex-start;
+}
+.containerDark {
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  width: 33%;
+  align-items: center;
+}
+.containerLight {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  width: 33%;
+  align-items: center;
+}
+.headerContainer {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+.textDark {
+  font-family: sans-serif;
+  text-decoration: none;
+  color: white;
+}
+.textLight {
+  font-family: sans-serif;
+  text-decoration: none;
+  color: black;
+}
+.linkContainer {
+  margin: 7.5px;
+}
+.linkContainer:hover .textLight {
+  color: green;
+}
+.linkContainer:hover .textDark {
+  color: #ffd700;
+}

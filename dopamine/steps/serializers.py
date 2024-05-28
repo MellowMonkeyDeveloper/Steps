@@ -107,32 +107,5 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {"password": {"write_only": True}}
 
 
-class PasswordResetSerializer(serializers.Serializer):
-    uid = serializers.CharField()
-    token = serializers.CharField()
-    new_password = serializers.CharField(min_length=8)  # Adjust min_length as needed
-
-    def validate(self, data):
-        uid = data.get("uid")
-        token = data.get("token")
-        new_password = data.get("new_password")
-
-        # Validate UID
-        try:
-            uid = force_str(urlsafe_base64_decode(uid))
-            user = settings.AUTH_USER_MODEL.objects.get(pk=uid)
-        except (
-            TypeError,
-            ValueError,
-            OverflowError,
-            settings.AUTH_USER_MODEL.DoesNotExist,
-        ):
-            raise serializers.ValidationError({"error": "Invalid user"})
-
-        # Validate token
-        if not PasswordResetTokenGenerator().check_token(user, token):
-            raise serializers.ValidationError({"error": "Invalid token"})
-
-        # You may add more validation logic here if needed
-
-        return data
+class ForgotPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField()

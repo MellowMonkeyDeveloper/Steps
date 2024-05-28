@@ -1,17 +1,11 @@
 "use client";
-import {
-  Brightness1,
-  CheckCircle,
-  KeyboardArrowDown,
-  KeyboardArrowUp,
-} from "@mui/icons-material";
-import { useEffect, useState } from "react";
-import Breakdown from "../dropdown/Breakdown";
-import styles from "../../../styles/breakdownmoreinfo.module.scss";
 import { useWrapper } from "@/context/WrapperProvider";
-import CreateForm from "../form/CreateForm";
 import { ModelProps, ToDoProps } from "@/types/Interfaces/Models";
 import { SnackbarModelProps } from "@/types/Interfaces/Snackbar";
+import { useEffect, useState } from "react";
+import styles from "../../styles/breakdownmoreinfo.module.css";
+import Breakdown from "../dropdown/Breakdown";
+import CreateForm from "../form/CreateForm";
 export interface BreakdownMoreInfoProps {
   breakdownData?: ModelProps[];
   breakdownInfoData?: ModelProps;
@@ -26,6 +20,9 @@ export default function BreakdownMoreInfo({
   const [showForm, setShowForm] = useState<boolean>(false);
   const [form, setForm] = useState<ToDoProps>();
 
+  useEffect(() => {
+    console.log(breakdownData)
+  }, [])
   return (
     <section
       className={colorMode ? styles.containerDark : styles.containerLight}
@@ -162,13 +159,13 @@ export default function BreakdownMoreInfo({
         )}
       </article>
       <article className={styles.breakdownContainer}>
-        {type === "Dopamine" &&
-          breakdownData.map((value: any) => (
-            <Breakdown data={value} type="Strides" />
+        {type === "Dopamine" && breakdownData?.length > 0 &&
+          breakdownData.map((value: any, ind) => (
+            <Breakdown key={ind} data={value} type="Strides" />
           ))}
-        {type === "Strides" &&
-          breakdownData.map((value: any) => (
-            <Breakdown data={value} type="Steps" />
+        {type === "Strides" && breakdownData?.length > 0 &&
+          breakdownData.map((value: any, ind) => (
+            <Breakdown key={ind} data={value} type="Steps" />
           ))}
       </article>
     </section>

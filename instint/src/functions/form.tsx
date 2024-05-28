@@ -16,6 +16,7 @@ import {
   snackbarNeutralObject,
 } from "@/types/Objects/Snackbar";
 import { ToDoProps } from "@/types/Interfaces/Models";
+import { SensorDoor } from "@mui/icons-material";
 const handleSubmit = async (
   e: void,
   apiMethod: APIMethodsProps["method"],
@@ -29,7 +30,6 @@ const handleSubmit = async (
     | Dispatch<SetStateAction<SnackbarMessageProps>>
     | NonNullable,
   type: SnackbarModelProps["model"],
-  setForm: Dispatch<SetStateAction<ToDoProps>>
 ) => {
   e;
   const okResponse: SnackbarMessageProps | null =
@@ -61,24 +61,16 @@ const handleSubmit = async (
     });
     console.log(formData);
     const fetchResponse = await response.json();
-    console.log(fetchResponse);
-    if (response.ok) {
-      setForm(fetchResponse);
-
-      setTimeout(() => {
-        setShowForm(false);
-      }, 100);
-      setSnackbarDetails(okResponse);
-      setSnackbar(true);
-    } else {
-      setShowForm(false);
-      setSnackbarDetails(badResponse);
-      setSnackbar(true);
-    }
-  } catch (error) {
-    setShowForm(false);
-    setSnackbarDetails(badResponse);
+    console.log(fetchResponse, response.ok);
+    console.log('good')
+    setSnackbarDetails(okResponse);
     setSnackbar(true);
+    setShowForm(false)
+  } catch (error) {
+    console.log(error)
+    setShowForm(false)
+    setSnackbar(true)
+    setSnackbarDetails(badResponse)
   }
 };
 
@@ -114,6 +106,7 @@ const handleAuth = async (
     },
     body: JSON.stringify(formObject),
   });
+  console.log(response.ok)
   if (response.ok) {
     setLoggedIn(true);
     setSnackbarDetails(okResponse);

@@ -1,0 +1,102 @@
+.containerDark {
+  width: 380px;
+  outline: 1px solid #ffd700;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgb(51, 51, 51);
+  margin-top: 10px;
+  border-radius: 7.5px;
+}
+.containerLight {
+  width: 380px;
+  outline: 1px solid rgb(36, 196, 102);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgb(230, 230, 230);
+  margin-top: 10px;
+  border-radius: 7.5px;
+}
+.breakdown {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  margin-top: -20px;
+}
+.modelTitle {
+  display: flex;
+  width: 90%;
+  justify-content: flex-end;
+  letter-spacing: 1.05px;
+  font-weight: 600;
+  font-family: sans-serif;
+  margin-top: 0.5px;
+  font-size: 16px;
+}
+.modelTitleLight {
+  color: black;
+}
+.modelTitleDark {
+  color: #ffd700;
+}
+.formContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.headerContainer {
+  display: flex;
+  width: 75%;
+}
+.headerDark {
+  font-family: sans-serif;
+  margin-left: 10px;
+  color: #ffd700;
+}
+.headerLight {
+  font-family: sans-serif;
+  margin-left: 10px;
+  color: black;
+}
+.keyboardContainer {
+  justify-content: space-evenly;
+  display: flex;
+  width: 25%;
+}
+.completedDark {
+  margin-right: 5px;
+  color: #ffd700;
+}
+.completedLight {
+  margin-right: 5px;
+  color: blue;
+}
+.deletedDark {
+  margin-right: 5px;
+  color: red;
+  cursor: pointer;
+}
+.deletedLight {
+  margin-right: 5px;
+  color: red;
+  cursor: pointer;
+}
+.keyboardDark {
+  color: #ffd700;
+  cursor: pointer;
+}
+.keyboardLight {
+  color: rgb(36, 196, 102);
+  cursor: pointer;
+}
+
+@media screen and (min-width: 780px) {
+  .containerDark {
+    width: 90%;
+  }
+  .containerLight {
+    width: 90%;
+  }
+}

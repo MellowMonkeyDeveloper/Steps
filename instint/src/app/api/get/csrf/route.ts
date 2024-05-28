@@ -1,10 +1,12 @@
 export const dynamic = "force-dynamic"; // defaults to auto'
-
+require('dotenv').config()
+const local = process.env.NEXT_PUBLIC_LOCAL
+const api = process.env.NEXT_PUBLIC_DOPROD
 export async function GET(request: Request) {
   
   try {
     const response = await fetch(
-      `http://localhost:8000/steps/api/get/csrf/`, {
+      `${api}/steps/api/get/csrf/`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

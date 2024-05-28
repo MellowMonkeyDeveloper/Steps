@@ -1,12 +1,10 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
-import DeadlineTop from "./DeadlineTop";
-import { ToDoProps } from "@/types/Interfaces/Models";
-import Breakdown from "../dropdown/Breakdown";
-import { retrieveDeadline } from "@/functions/fetchfunctions";
-import DeadlineNote from "./DeadlineNote";
-import styles from "../../../styles/deadline.module.scss";
 import { useWrapper } from "@/context/WrapperProvider";
+import { retrieveDeadline } from "@/functions/fetchfunctions";
+import { ToDoProps } from "@/types/Interfaces/Models";
+import { useEffect, useState } from "react";
+import styles from "../../styles/deadline.module.css";
+import DeadlineNote from "./DeadlineNote";
 export interface DeadlineProps {}
 export default function Deadline() {
   const [dateData, setDateData] = useState<ToDoProps[]>([]);

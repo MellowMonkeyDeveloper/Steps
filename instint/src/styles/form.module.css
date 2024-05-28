@@ -1,0 +1,244 @@
+.containerDark {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 80%;
+  border-radius: 7.5px;
+  margin-top: 25px;
+  flex-direction: column;
+  background-color: rgb(32, 32, 32);
+}
+.containerLight {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 80%;
+  border-radius: 7.5px;
+  margin-top: 25px;
+  flex-direction: column;
+  background-color: rgb(240, 240, 240);
+}
+.closeContainer {
+  display: flex;
+  width: 90%;
+  margin-top: 15px;
+  justify-content: flex-end;
+}
+
+.closeDark {
+  color: #ffd700;
+  cursor: pointer;
+}
+
+.closeLight {
+  color: black;
+  cursor: pointer;
+}
+
+.formDark {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  font-family: sans-serif;
+  font-weight: 600;
+  letter-spacing: 1.05px;
+  width: 80%;
+}
+.formLight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  font-family: sans-serif;
+  font-weight: 600;
+  letter-spacing: 1.05px;
+  width: 80%;
+}
+.inputContainerDark {
+  width: 100%;
+  justify-content: flex-start;
+  display: flex;
+  margin: 7.5px;
+  font-family: sans-serif;
+  align-items: center;
+  color: #ffd700;
+  letter-spacing: 1.05px;
+  font-weight: 600;
+}
+.inputContainerLight {
+  width: 100%;
+  justify-content: flex-start;
+  display: flex;
+  margin: 7.5px;
+  font-family: sans-serif;
+  align-items: center;
+  color: black;
+  letter-spacing: 1.05px;
+  font-weight: 600;
+  margin-left: 25px;
+}
+.inputDark {
+  font-family: sans-serif;
+  width: 100%;
+  background-color: black;
+  border: none;
+  padding: 12.5px;
+  border-radius: 7.5px;
+  color: #ffd700;
+  font-size: 16px;
+  letter-spacing: 1.05px;
+  outline: 0.25px solid #ffd700;
+}
+
+.inputLight {
+  font-family: sans-serif;
+  width: 100%;
+  background-color: white;
+  border: none;
+  padding: 12.5px;
+  border-radius: 7.5px;
+  color: black;
+  font-size: 16px;
+  letter-spacing: 1.05px;
+  box-shadow: 1px 1px 6px rgb(210, 210, 210);
+}
+
+.inputLight[type="radio"] {
+  background-color: aqua;
+}
+
+.textareaLight {
+  width: 100%;
+  border: none;
+  padding: 12.5px;
+  font-size: 16px;
+  letter-spacing: 1.05px;
+  background-color: white;
+  border-radius: 7.5px;
+  font-family: sans-serif;
+  color: black;
+  box-shadow: 3px 3px 5px rgb(210, 210, 210);
+}
+
+.textareaDark {
+  width: 100%;
+  border: none;
+  padding: 12.5px;
+  font-size: 16px;
+  letter-spacing: 1.05px;
+  background-color: black;
+  border-radius: 7.5px;
+  font-family: sans-serif;
+  color: #ffd700;
+  outline: 1px solid #ffd700;
+}
+
+.submitContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.submitLight {
+  box-shadow: 3px 3px 10px rgb(210, 210, 210);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 7.5px;
+  height: 40px;
+  width: 120px;
+  border: none;
+  background-color: rgb(36, 196, 102);
+  font-size: 17px;
+  font-family: sans-serif;
+  letter-spacing: 1.05px;
+  cursor: pointer;
+  transition: 0.3s;
+  color: black;
+}
+.submitDark {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 7.5px;
+  height: 40px;
+  width: 120px;
+  border: none;
+  background-color: #ffd700;
+  font-size: 17px;
+  font-family: sans-serif;
+  letter-spacing: 1.05px;
+  cursor: pointer;
+  color: black;
+  transition: 0.3s;
+}
+.submitDark:active {
+  background-color: #ffd700;
+  color: black;
+  box-shadow: inset 3px 3px 5px #ffd700;
+}
+.submitLight:active {
+  background-color: rgb(36, 196, 102);
+  color: black;
+  box-shadow: inset 3px 3px 5px rgb(210, 210, 210);
+}
+
+.textDark {
+  font-family: sans-serif;
+  color: #ffd700;
+  letter-spacing: 1.05px;
+}
+.textLight {
+  font-family: sans-serif;
+  color: black;
+  letter-spacing: 1.05px;
+}
+.textareaContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+@media screen and (max-width: 780px) {
+  .formDark {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    font-family: sans-serif;
+    font-weight: 600;
+    letter-spacing: 1.05px;
+    width: 90%;
+  }
+  .formLight {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    font-family: sans-serif;
+    font-weight: 600;
+    letter-spacing: 1.05px;
+    width: 90%;
+  }
+  .containerDark {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 90%;
+    border-radius: 7.5px;
+    margin-top: 25px;
+    flex-direction: column;
+  }
+  .containerLight {
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 90%;
+    border-radius: 7.5px;
+    margin-top: 25px;
+    flex-direction: column;
+  }
+}

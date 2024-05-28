@@ -6,8 +6,7 @@ import { APIRoutePostPatchProps } from "@/types/Interfaces/APIRoutes";
 import { ModelProps, ToDoProps } from "@/types/Interfaces/Models";
 import { SnackbarModelProps } from "@/types/Interfaces/Snackbar";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import styles from "../../../styles/form.module.scss";
-import { Close } from "@mui/icons-material";
+import styles from "../../styles/form.module.css";
 interface CreateFormProps {
   apiMethod: APIMethodsProps["method"];
   data: ModelProps["todo"] | "none";
@@ -15,7 +14,6 @@ interface CreateFormProps {
   apiRoute: APIRoutePostPatchProps["route"] | null;
   parentID: number;
   setShowForm?: Dispatch<SetStateAction<boolean>>,
-  setForm: Dispatch<SetStateAction<ToDoProps>>
 }
 
 export default function CreateForm({
@@ -25,7 +23,6 @@ export default function CreateForm({
   apiRoute,
   parentID,
   setShowForm,
-  setForm,
 }: CreateFormProps) {
   const formObject: ToDoProps = {
     title: "",
@@ -53,14 +50,13 @@ export default function CreateForm({
     } else {
       setFormData(data.todo);
     }
-    console.log(data, apiRoute);
   }, []);
   return (
     <section
       className={colorMode ? styles.containerDark : styles.containerLight}
     >
       <div className={styles.closeContainer}>
-        <Close className={colorMode ? styles.closeDark : styles.closeLight} onClick={() => setShowForm(false)} />
+        <div className={colorMode ? styles.closeDark : styles.closeLight} onClick={() => setShowForm(false)} />
       </div>
       <div>
         <h2 className={colorMode ? styles.textDark : styles.textLight}>
@@ -149,7 +145,6 @@ export default function CreateForm({
                 setSnackbar,
                 setSnackbarDetails,
                 type,
-                setForm
               )
             }
           >

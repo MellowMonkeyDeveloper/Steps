@@ -7,7 +7,6 @@ from .views import (
     DopamineDeleteView,
     UserLogin,
     UserRegistration,
-    ForgotPassword,
     get_csrf_token,
     StridesCreateView,
     StridesRetrieveView,
@@ -18,7 +17,10 @@ from .views import (
     StepsUpdateView,
     StepsDeleteView,
     VerifyCookieView,
-    ToDoView
+    ToDoView,
+    LogoutView,
+    ForgotPasswordView,
+    ResetPasswordView
 )
 
 urlpatterns = [
@@ -101,5 +103,7 @@ urlpatterns = [
     ),
     path("register/", UserRegistration.as_view(), name="register"),
     path("login/", UserLogin.as_view(), name="login"),
-    path("forgot-password/", ForgotPassword.as_view(), name="forgot-password"),
+    path("forgot/", ForgotPasswordView.as_view(), name="forgot-password"),
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('reset/', ResetPasswordView.as_view(), name='reset-password')
 ]

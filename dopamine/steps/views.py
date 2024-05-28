@@ -7,11 +7,10 @@ from django.contrib.auth import get_user_model
 from django.utils.encoding import force_str, force_bytes
 from rest_framework import generics, status
 from rest_framework.response import Response
-from .models import Dopamine, Strides, Steps, ToDo
+from .models import Dopamine, Strides, Steps, ToDo, CustomUser
 from rest_framework.filters import SearchFilter
 from .serializers import (
     DopamineSerializer,
-    PasswordResetSerializer,
     StridesSerializer,
     StepsSerializer,
     UserSerializer,
@@ -49,6 +48,10 @@ import jwt
 from django.utils import timezone
 from rest_framework.exceptions import AuthenticationFailed
 import pytz
+from django.urls import reverse
+from django.core.mail import send_mail
+from django.utils.http import urlsafe_base64_encode
+from django.contrib.auth.tokens import default_token_generator
 
 
 @csrf_exempt
@@ -97,23 +100,22 @@ class ToDoView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def patch(self, request, pk, *args, **kwargs):
-            try:
-                todo_instance = ToDo.objects.get(id=pk)
-            except ToDo.DoesNotExist:
-                return Response({'message': 'Error finding ToDo Instance'})
-            serializer = ToDoSerializer(todo_instance, data=request.data, partial=True)
-            print(request.data['completed'], todo_instance)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+        try:
+            todo_instance = ToDo.objects.get(id=pk)
+        except ToDo.DoesNotExist:
+            return Response({"message": "Error finding ToDo Instance"})
+        serializer = ToDoSerializer(todo_instance, data=request.data, partial=True)
+        print(request.data["completed"], todo_instance)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, *argw, **kwargs):
         print(request, pk)
         todo = ToDo.objects.get(id=pk)
         todo.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({'message': 'Deleted'}, status=status.HTTP_204_NO_CONTENT)
 
 
 class DopamineRetrieveView(APIView):
@@ -168,7 +170,7 @@ class DopamineDeleteView(DestroyAPIView):
         instance = queryset
         print(instance, request, self)
         self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({'message': 'Deleted'}, status=status.HTTP_204_NO_CONTENT)
 
 
 class DopamineUpdateView(UpdateAPIView):
@@ -283,7 +285,7 @@ class StridesDeleteView(DestroyAPIView):
         queryset = Strides.objects.filter(key=pk)
         instance = queryset
         self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({'message': 'Deleted'},status=status.HTTP_204_NO_CONTENT)
 
 
 class StepsCreateView(CreateAPIView):
@@ -313,8 +315,7 @@ class StepsRetrieviewView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, pk, *args, **kwargs):
-        strides = get_object_or_404(Strides, pk=pk)
-        steps = Steps.objects.filter(key=strides)
+        steps = Steps.objects.filter(key=pk)
         serializer = StepsRetrieveSerializer(steps, many=True)
         return Response(serializer.data)
 
@@ -361,7 +362,7 @@ class StepsDeleteView(DestroyAPIView):
         queryset = Steps.objects.filter(key=pk)
         instance = queryset
         self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({'message': 'Deleted'}, status=status.HTTP_204_NO_CONTENT)
 
 
 class UserRegistration(APIView):
@@ -439,94 +440,67 @@ class VerifyCookieView(APIView):
             )
 
 
-class ForgotPassword(APIView):
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs):
-        return super(ForgotPassword, self).dispatch(request, *args, **kwargs)
-
+class ResetPasswordView(APIView):
     def post(self, request):
-        email = request.data.get("email")
+        uidb64 = request.data.get("uidb64")
+        token = request.data.get("token")
+        password = request.data.get("password")
+        print(token, password)
         try:
-            user = settings.AUTH_USER_MODEL.objects.get(email=email)
-        except settings.AUTH_USER_MODEL.DoesNotExist:
-            return Response(
-                {"error": "User not found"}, status=status.HTTP_404_NOT_FOUND
-            )
-        token_generator = PasswordResetTokenGenerator()
-        uid = urlsafe_base64_decode(force_bytes(user.pk))
-        token = token_generator.make_token(user)
-        # Send the reset password link with the token to the user's email
-        # Example: reset_password_link = f"https://example.com/reset-password/{token}"
-        # Use your own logic to send emails
-        resetlink = f"https://dopaminegoals.com/resetpassword/{uid}/{token}"
-        send_mail(
-            "Reset your password",
-            f"Use this link to reset your password: {resetlink}",
-            "dopaminesteps@gmail.com",
-            [email],
-            fail_silently=False,
-        )
-        return Response(
-            {"message": "Reset password email sent"}, status=status.HTTP_200_OK
-        )
-
-
-class PasswordResetAPIView(APIView):
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs):
-        return super(PasswordResetAPIView, self).dispatch(request, *args, **kwargs)
-
-    def get(self, request, uidb64, token):
-        try:
-            # Decode UID from base64 and get the user
             uid = force_str(urlsafe_base64_decode(uidb64))
-            user = settings.AUTH_USER_MODEL.objects.get(pk=uid)
-        except (
-            TypeError,
-            ValueError,
-            OverflowError,
-            settings.AUTH_USER_MODEL.DoesNotExist,
-        ):
+            user = CustomUser.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
             user = None
 
-        # Verify the token and the user
-        token_generator = PasswordResetTokenGenerator()
-        if user is not None and token_generator.check_token(user, token):
-            # Display the password reset form or send the password reset token to the frontend
-            return Response({"uid": uidb64, "token": token}, status=status.HTTP_200_OK)
-        else:
-            # Invalid token or user, display an error message
-            return Response(
-                {"error": "Invalid token or user"}, status=status.HTTP_400_BAD_REQUEST
-            )
-
-    def post(self, request):
-        serializer = PasswordResetSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        uidb64 = serializer.validated_data.get("uid")
-        token = serializer.validated_data.get("token")
-        new_password = serializer.validated_data.get("new_password")
-
-        try:
-            # Decode UID from base64 and get the user
-            uid = force_str(urlsafe_base64_decode(uidb64))
-            user = settings.AUTH_USER_MODEL.objects.get(pk=uid)
-        except (
-            TypeError,
-            ValueError,
-            OverflowError,
-            settings.AUTH_USER_MODEL.DoesNotExist,
-        ):
-            user = None
-
-        # Verify the token and the user
-        if user is not None and PasswordResetTokenGenerator().check_token(user, token):
-            # Handle password reset
-            user.set_password(new_password)
+        if user is not None and default_token_generator.check_token(user, token):
+            user.set_password(password)
             user.save()
             return Response(
-                {"message": "Password reset successful"}, status=status.HTTP_200_OK
+                {"message": "Password reset success"}, status=status.HTTP_200_OK
             )
         else:
-            # Invalid token or user, display an error message
-            return
+            return Response(
+                {"error": "Invalid reset link"}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+class ForgotPasswordView(APIView):
+    def post(self, request):
+        email = request.data.get("email")
+        user = CustomUser.objects.filter(email=email).first()
+        print(email, user)
+        if user:
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
+          
+            reset_url = request.build_absolute_uri(f'http://localhost:3000/reset?uidb64={uid}&token={token}')
+            subject = "Reset Your Password"
+            message = f"Click the following link to reset your password: {reset_url}"
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[user.email],
+                fail_silently=False,
+            )
+            return Response(
+                {"message": "Password reset link has been sent to email"},
+                status=status.HTTP_200_OK,
+            )
+        else:
+            return Response(
+                {"error": "Invalid email"}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    def post(self, request):
+        try:
+            token = request.auth
+            token.delete()
+            return Response({"message": "logout success"}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
